@@ -35,7 +35,7 @@
 \fi
 
 \newcommand{\knote}[1]{{\authnote{\textcolor{green}{Alex notes}}{#1}}}
-\newcommand{\jnote}[1]{{\authnote{\textcolor{red}{Jan notes}}{#1}}}
+\newcommand{\dnote}[1]{{\authnote{\textcolor{blue}{Dima notes}}{#1}}}
 
 % type user-defined commands here
 \usepackage[T1]{fontenc}
@@ -94,14 +94,27 @@
 
 \begin{document}
 
-\title{IODB, A Multi-Versioned Key-Value Database}
-\author{Jan Kotek and Alexander Chepurnoy, IOHK Research}
+\title{Spece-economy model for cryptocurrencies}
+\author{Dmitry Meshkov and Alexander Chepurnoy, IOHK Research}
 \maketitle
 
 \section{Introduction}
 
+\subsection{Motivation}
+
+Problems
+\begin{itemize}
+  \item It's possible to put some data to state forever, e.g. create an output nobody can spend
+  \item Without inflation it's profitable to keep you money
+\end{itemize}
+
+
+
 \section{Related Work}
 
 \section{Conclusion}
+
+\bibliographystyle{elsarticle-num}
+\bibliography{sources.bib}
 
 \end{document}	
