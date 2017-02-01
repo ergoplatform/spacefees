@@ -17,6 +17,8 @@
 
 \newtheorem{proposition}{Proposition}
 \newtheorem{definition}{Definition}
+\newtheorem{assumption}{Assumption}
+
 
 \def\shownotes{1}
 \def\notesinmargins{0}
@@ -104,10 +106,53 @@
 
 Problems
 \begin{itemize}
-  \item It's possible to put some data to state forever, e.g. create an output nobody can spend
-  \item Without inflation it's profitable to keep you money
+  \item It's possible to put some data to be kept forever, e.g. create an output nobody can spend. UTXO is ever growing~(https://blockchain.info/charts/utxo-count).
+  \item Without emission it's about deflation due to lost keys etc, so it is profitable to keep your money in a deflationary economy
 \end{itemize}
 
+
+\section{The Model}
+
+State-centric design
+
+$fee = max(fee_{validation\_cost} + fee_{transaction\_size} + fee_{space\_time\_difference}, 0)$
+
+$fee_{space\_time\_difference} = K \cdot (\sum{(new\_output\_size \cdot lifetime - S_s)} - \sum{(old\_output\_size \cdot remaining\_lifetime - S_s)})$
+
+$S_s$ is a subsidified space-time amount (e.g. 500 byte-years which is about free storage for 10 years for a standard 50 bytes output)
+
+Space-time is a new concept, where object to be put into state for some time with a fee to be paid based on both parameters~(space and time). 
+
+
+%Associated value must be not less than $K \cdot S_s$ 
+
+
+\assumption{For simplicity, we can assume $fee_{transaction\_size} = T \cdot (constant\_factor + \sum{new\_output\_size})$}, where $T$ is a price for 1 byte broadcasting \& mempool storage costs.
+
+\assumption{We assume all the money are issued, so total system balance is constant. We can emulate Bitcoin emission with outputs being pre-created in genesis and being releasing 1 output per block.}
+
+
+\section{Analysis of The Model}
+
+TODO:
+
+\begin{itemize}
+
+\item{What is an output value when miner is interested in collecting it?}
+
+\item{Max and expected state size}
+
+\item{Minimal money flow}
+
+\item{Expected minimum miner rewards with no coins ever lost in some UTXO model(constant? growing?)}
+
+\item{All the money can be issued in genesis, with release 1 output per block}
+
+\item{Comparison with Gesell's money~(money with demurrage)}
+
+\item{Miners are getting a new kind of profit}
+
+\end{itemize}
 
 
 \section{Related Work}
