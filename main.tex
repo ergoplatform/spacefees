@@ -104,7 +104,7 @@
 
 \section{Introduction}
 
-Bitcoin \cite{nakamoto2008bitcoin} has been invented in 2008 by Nakamoto as a purely peer-to-peer version of electronic cash. \dnote{more words about bitcoin as an economy}
+Bitcoin \cite{Nakamoto2008} has been invented in 2008 by Nakamoto as a purely peer-to-peer version of electronic cash. \dnote{more words about bitcoin as an economy}
 
 Any cryptocurrency should satisfy at least 2 properties needed by the ledger assuming an honest majority and arbitrary adversarial behavior \cite{Garay2015}. First of them, \textit{Persistence} states that once a transaction goes more than k blocks "deep" into the blockchain of one honest player, then it will be included in every honest player's blockchain with overwhelming probability, and it will be assigned a permanent position in the ledger. Another basic property \textit{Liveness} says that all transactions originating from honest account holders will eventually end up at a depth more than k blocks in an honest player's blockchain, and hence the adversary cannot perform a selective denial of service attack against honest account holders.
 
@@ -112,34 +112,34 @@ Bitcoin satisfies \textit{Liveness} property when honest miners are expected to 
 
 Besides of network utilization, transaction processing requires computations from miner. For most of cryptocurrencies transactional language is limited \cite{script}, their validation is very fast and this cost may not be considered, but for cryptocurencies with rich transaction language \dnote{more links e.g. for sigma-state} this cost is not negligible. In so-called smart contract languages \cite{seijas2016scripting, tezosScript, solidity} transaction processing may require a lot of computations and computational costs are included to transaction fees there. This cost is specific to concrete transactional language and is out of scope of this paper.
 
-The main purpose of this paper is to consider third component of the transaction fee, that is related with increasing local miners \state{}. In all known cryptocurrencies, when a miner accepts a transaction that increases it's current \state{}, he takes on a liability equal to the present value of the cost of storing those new outputs indefinitely far into the future. This in not healthy situation that is leading to continuously increasing state \state{} \cite{utxoChart}, e.g. number of unspent transaction outputs increases by 12000 every year in Bitcoins. Moreover state size may increase very fast during spam attack, e.g. 15000 additional outputs where added to Bitcoins UTXO during spam attacks in July 2015 \cite{bitcoin2015flood} and most of this outputs are not spent yet. Thus miner's \state{} may significantly increases during attacks and this attacks are free for adversary, meaning that transaction fee for increasing \state{} size is 0. Note, that for efficient block processing, \state{} should be kept in memory, otherwise attacks where miner generate block that will be validated for a long time by other miners come into being \dnote{link to ethereum DoS, + others?}. Big \state{} size leads to centralization, where hardware requirements are too big for common users, and to SPV mining, where miners are tring to generate a new block without transaction validation of previous one. In July 2015 this resulted in invalid chain of 6 blocks\cite{spvMining}, that is enough to perform double-spend attack in most of Bitcoin applications.
+The main purpose of this paper is to consider third component of the transaction fee, that is related with increasing local miners \state{}. In all known cryptocurrencies, when a miner accepts a transaction that increases it's current \state{}, he takes on a liability equal to the present value of the cost of storing those new outputs indefinitely far into the future. This in not healthy situation that is leading to continuously increasing \state{} \cite{utxoChart}, e.g. number of unspent transaction outputs increases by 12000 every year in Bitcoins. Moreover state size may increase very fast during spam attack, e.g. 15000 additional outputs where added to Bitcoins UTXO during spam attacks in July 2015 \cite{bitcoin2015flood} and most of this outputs are not spent yet. Thus miner's \state{} may significantly increases during attacks and this attacks are free for adversary, meaning that transaction fee for increasing \state{} size is 0. Note, that for efficient block processing, \state{} should be kept in memory, otherwise attacks where miner generate block that will be validated for a long time by other miners come into being \dnote{link to ethereum DoS, + others?}. Big \state{} size leads to centralization, where hardware requirements are too big for common users, and to SPV mining, where miners are tring to generate a new block without transaction validation of previous one. In July 2015 this resulted in invalid chain of 6 blocks\cite{spvMining}, that is enough to perform double-spend attack in most of Bitcoin applications. To prevent \state{} growing, this third fee component should depend from size of inputs, destroyed by this transaction, size of outputs, create be it and their expected time to live. Later in this paper we will call it a \textit{state space-time fee}.
 
-We propose a model, where users should pay fee for multiplication of the time output data should be kept in \state{} to it's size. This is very usual for most of storage services, where users pay for gigabyte of data per month. \dnote{paper structure}
+In this paper we propose a model, where users should pay fee for multiplication of the time output data should be kept in \state{} to it's size. This is very usual for most of storage services, where users pay for the gigabyte of data per month. Such an approach prevents putting any data to miners storage forever, leading to situation, where miners can control their \state{} size with fee. Our model design is described in section~\ref{sec:model} while it's consequences for cryptocurrency economy are described in section~\ref{sec:analysis}.  \dnote{paper structure}
 
 \dnote{write somewhere about lost coins and deflation}
 
-%\subsection{Motivation}
-%
-%Problems
-%\begin{itemize}
-%  \item It's possible to put some data to be kept forever, e.g. create an output nobody can spend. UTXO is ever growing~(https://blockchain.info/charts/utxo-count).
-%  \item Without emission it's about deflation due to lost keys etc, so it is profitable to keep your money in a deflationary economy
-%  \item Being quite simple by design, \esse{} provides plenty of outstanding results. With it, miners are getting a \textbf{new way to be rewarded} by collecting garbage. With this reward, fixed block reward is not required any more for network stability \dnote{link to instability of Bitcoin without block reward} and allows \ergo to stop emission quite soon. Moreover with this economy miners will have \textbf{lower-bound for their rewards}, providing more stable mining and, therefore, secure network. Another \esse{} feature, important for miners, is that it provides fee \textbf{mechanism to control state size}, preventing network centralization on a few amount of very powerful computers. From economy point of view, \esse{} provide an incentive to move your coins, \textbf{preventing economy stagnation}, and a way to return lost coins back to economy, \textbf{prevenring deflation}.
-%\end{itemize}
-
-
 \section{The Model}
+\label{sec:model}
 
-State-centric design
+Most of users think about blockchain as something enough for a fullnode to work successfully~(and efficiently). In fact, the blockchain itself is not enough for performance and even security reasons. Nodes in Bitcoin are holding a set of unspent outputs in order to validate efficiently an arbitrary transaction. Similarly, Ethereum\cite{ethyp} has a concept of ``world state'', and some aspects of a particular state representation are inbuilt into the protocol. \esse model is based on \state{}-centric design and have the main purpose to make \state{} size controllable by miners.
 
-$fee = max(fee_{validation\_cost} + fee_{transaction\_size} + fee_{space\_time\_difference}, 0)$
+As we have already mentioned above, in our model transaction fee consists of 3 parts: \textit{validation cost}, \textit{propogation cost} and \textit{state space-time difference cost}. Validation and propogation costs are strictly positive, while transaction may decrease state size and space-time fee may be nagative, so full transaction fee formula is as follows:
 
-$fee_{space\_time\_difference} = K \cdot (\sum{(new\_output\_size \cdot lifetime - S_s)} - \sum{(old\_output\_size \cdot remaining\_lifetime - S_s)})$
+$fee = max(fee_{validation\_cost} + fee_{propogation\_cost} + fee_{space-time\_fee}, 0)$ \dnote{why can't total fee be negative?}
+
+Validation and transaction fees are out of scope of this paper and assumed to be independent from space-time fee. We also assume, that are positive and space-time fee impact to total fee may range from negliable to dominant.
+
+space-time\_fee
+%TODO как обеспечивать время жизни транзакций
+
+$fee_{space-time\_fee} = K \cdot (\sum{(new\_output\_size \cdot lifetime - S_s)} - \sum{(old\_output\_size \cdot remaining\_lifetime - S_s)})$
 
 $S_s$ is a subsidified space-time amount (e.g. 500 byte-years which is about free storage for 10 years for a standard 50 bytes output)
 
 Space-time is a new concept, where object to be put into state for some time with a fee to be paid based on both parameters~(space and time). 
 
+
+%  \item Being quite simple by design, \esse{} provides plenty of outstanding results. With it, miners are getting a \textbf{new way to be rewarded} by collecting garbage. With this reward, fixed block reward is not required any more for network stability \dnote{link to instability of Bitcoin without block reward} and allows \ergo to stop emission quite soon. Moreover with this economy miners will have \textbf{lower-bound for their rewards}, providing more stable mining and, therefore, secure network. Another \esse{} feature, important for miners, is that it provides fee \textbf{mechanism to control state size}, preventing network centralization on a few amount of very powerful computers. From economy point of view, \esse{} provide an incentive to move your coins, \textbf{preventing economy stagnation}, and a way to return lost coins back to economy, \textbf{prevenring deflation}.
 
 %Associated value must be not less than $K \cdot S_s$ 
 
@@ -150,6 +150,7 @@ Space-time is a new concept, where object to be put into state for some time wit
 
 
 \section{Analysis of The Model}
+\label{sec:analysis}
 
 TODO:
 
