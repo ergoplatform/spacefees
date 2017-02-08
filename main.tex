@@ -129,22 +129,23 @@ $fee = fee_{validation} + fee_{propogation} + fee_{space\_time}$ \dnote{should w
 
 Validation and propogation costs are strictly positive, and assumed to be independent from space-time fee. We also assume, that space-time fee impact to total fee may range from negliable to dominant. Space-time fee component may be both positive and negative, since transaction may both increase and decrease \state{} size. It's dependency from size of inputs, outputs and their time to live may vary depending on the cryptocurrency purpose. In this paper we analize "natural" dependency, where user pays for multiplication of the time output data should be kept in \state{} to it's size. Each transactoin delete some data from state and can fill this freed space-time for free and resulting space-time fee can be calculated.
 
-$fee_{space\_time} = K \cdot (ST_new - ST_old)$
+$fee_{space\_time} = K \cdot (ST_{new} - ST_{old})$
 
-where \textit{ST_new} and \textit{ST_old} are new and old space-time multiplications respectively, \textit{K} is a space-time price in fee tokens. This price depends on hardware price for miners and token exchange rate, so \textit{K} is not a static value. We assume, that miners can change this pricing via mechanism like ``gas'' in Ethereum and thus control cost of blockchain support.
+where \textit{$ST_{new}$} and \textit{$ST_{old}$} are new and old space-time multiplications respectively, \textit{K} is a space-time price in fee tokens. This price depends on hardware price for miners and token exchange rate, so \textit{K} is not a static value. We assume, that miners can change this pricing via mechanism like ``gas'' in Ethereum and thus control cost of blockchain support.
 
-In most of existing cryptocurrencies it's not clear, how to calculate \textit{ST_new} and \textit{ST_old}. Sizes of old and new outputs are known, while it is not possible to calculare expected lifetime without additional restrictions. To ensure output maximum lifetime we propose rent-a-box model of outputs, where each output represents a box of fixed size \textit{BS} in a \state{} and pre-payed until explicitly known period of time \textit{LT}. After \textit{LT} anyone ~(presumably miner, generated first block after that) will be able spend this overdue output. Thus spending script for all outoputs will be a combination of regular spending scrypt and an envirnoment, for example
 
-$(currentHeight > LT) \lor (regular\_scrypt)$
+In most of existing cryptocurrencies it's not clear, how to calculate \textit{$ST_{new}$} and \textit{$ST_{old}$}. Sizes of old and new outputs are known, while it is not possible to calculare expected lifetime without additional restrictions. To ensure output maximum lifetime we propose rent-a-box model of outputs, where each output represents a box of fixed size \textit{BS} in a \state{} and pre-payed until explicitly known period of time \textit{LT}. After \textit{LT} anyone ~(presumably miner, generated first block after that) will be able spend this overdue output. Thus spending script for all outoputs will be a combination of regular spending scrypt and an envirnoment, for example
 
-where \textit{currentHeight} is current blockchain height and \textit{regular\_scrypt} is user-defined output spending script. After that it's possible to define space-time transaction fee:
+$(Height > LT) \lor (regular\_scrypt)$
 
-$fee_{space\_time} = K \cdot (\sum{BS_i \cdot (LT_i - currentHeight))} - \sum{BS_j \cdot (LT_j - currentHeight)})$
+where \textit{Height} is current blockchain height and \textit{regular\_scrypt} is user-defined output spending script. After that it's possible to define space-time transaction fee:
+
+$fee_{space\_time} = K \cdot (\sum_i{(BS_i \cdot (LT_i - Height))} - \sum_j{(BS_j \cdot (LT_j - Height)}))$
 
 \dnote{current height is problem here, as transaction may not be included to current block}
-\dnote{this fee is a part of consensus}
+\dnote{this fee is a part of consensus, everyone should check it, otherwise miner can put some data forever}
 
-Space-time is a new concept, where object to be put into state for some time with a fee to be paid based on both parameters~(space and time). 
+Space-time is a new concept, where object to be put into state for some time with a fee to be paid based on both space and time.
 
 %\assumption{For simplicity, we can assume $fee_{transaction\_size} = T \cdot (constant\_factor + \sum{new\_output\_size})$}, where $T$ is a price for 1 byte broadcasting \& mempool storage costs.
 
