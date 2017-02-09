@@ -135,24 +135,21 @@ where \textit{K} is a space-time price in the fee tokens. This price depends on 
 
 In most of existing cryptocurrencies it's not clear, how to calculate \textit{$ST_{filled}$} and \textit{$ST_{cleared}$}. Sizes of old and new outputs are known, while it is not possible to calculare expected in existing blockchain setups. To do this, transactional language should support both regular cryptography operations, like signature validation, and environment operations, like blockchain height and transaction, that is trying to spend this output. Later we assume cryptocurency, that support this operations, and will try to analize different variants of \textit{$fee_{space\_time}} dependency. In all of them \textit{$ST$} is proportional for multiplication of the time output data should be kept in \state{} to it's size, while concrete rules how to enforce user to pay space-time fee are different.
 
-\subsection{Pre-payed boxed}
+\subsection{Pre-payed outputs}
 
-\dnote{описать}
-
-
-To ensure output maximum lifetime we propose rent-a-box model of outputs, where each output represents a box of fixed size \textit{BS} in a \state{} and pre-payed until explicitly known period of time \textit{LT}. After \textit{LT} anyone ~(presumably miner, generated first block after that) will be able spend this overdue output. Thus spending script for all outoputs will be a combination of regular spending scrypt and an envirnoment, for example
+First model we are going to analyze is pre-payed outputs. In it each output represents a box of fixed size \textit{BS} in a \state{} and pre-payed until explicitly known period of time \textit{LT}. After \textit{LT} anyone ~(presumably miner, generated first block after that) will be able spend this overdue output. Thus spending script for all outoputs will be a combination of regular spending scrypt and loan period \textit{LT}:
 
 $(Height > LT) \lor (regular\_scrypt)$
 
-where \textit{Height} is current blockchain height and \textit{regular\_scrypt} is user-defined output spending script. After that it's possible to define space-time transaction fee:
+where \textit{Height} is current blockchain height and \textit{regular\_scrypt} is user-defined output spending script. This lifetime part of a scrypt is a part of consensus, and space-time transaction fee is payed at the time of output creation. :
 
-$fee_{space\_time} = K \cdot (\sum_i{(BS_i \cdot (LT_i - Height))} - \sum_j{(BS_j \cdot (LT_j - Height)}))$
+$fee_{pre\-payed} = K \cdot (\sum_i{(BS_i \cdot (LT_i - Height))} - \sum_j{(BS_j \cdot (LT_j - Height)}))$
 
-\subsection{Flowing balance}
+\subsection{Leacking balance}
 
 \dnote{Боксы с утекающим балансом. Типа "после блока N потратить может кто угодно, но с учетом того, что 90% вернется исходному владельцу"}
 
-\subsection{Post-payed boxed}
+\subsection{Pay-as-you-go outputs}
 
 \dnote{Боксы с пост-оплатой, типа когда тратишь аутпут, можешь из него потратить только часть, которая не израсходована за хранение этого аутпута в стейте}
 
