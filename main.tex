@@ -173,27 +173,37 @@ $(Height > H_{max}) \lor (regular\_script)$
 
 In this section we are going to provide comprehensive analysis of \esse model. Besides of it's main goal to control state size, it provides additional benefits as side-effects, that can be used in cryptocurrency design. Our further analysis will be based on the following stats from current Bitcoin network:
 
-\dnote{UTXO size = 46M}
-\dnote{bitcoins in circulation = 16M}
-\dnote{mean output size = 0.35}
-\dnote{1 to 1 transaction fee = 0.0002 BTC}
-
 \begin{itemize}
-  \item number of unspent transaction outputs: $N_{UTXO}=46000000$
-  \item number of coins in circullation: $N_{coins}=16000000$
-  \item mean number of coins in one output: $V_{output}=0.35$
-  \item simple payment transaction fee: $fee_{propogation}=0.0002$
+  \item Number of unspent transaction outputs: $N_{UTXO}=45000000$
+  \item Number of coins in circulation: $N_{coins}=16000000$ BTC
+  \item Mean number of coins in one output: $V_{output}=0.35$ BTC
+  \item Simple payment transaction fee: $fee_{propagation}=0.0002$ BTC
+  \item Mean output size: $BS=36$ Bytes
+  \item Per cent of coins, moved in every block: $M_{flow}=0.013$ \%
 \end{itemize}
 
 \subsection{Money flow}
 
 From users point of view, the longer you keep some output, the bigger space-time fee you pay. Thus \esse{} provides an incentive to move your coins stimulating economic activity. In both prepaid and postpaid fee models, user pays ${K \cdot BS}$ coins every block for keeping his output into \state{}. If he use blockchain with \esse{} as a money chain, output size \textit{BS} is relatively small and do not depend on output value.
 
-To estimate money flow let's assume, that user will move his money when space-time fee will start dominanting over other transactional costs an therefore creation of transaction will be almost free for him. \dnote{}
+To estimate money flow let's assume, that user will move his money when space-time fee will start dominate over other transactional costs an therefore creation of transaction will be almost free for him. Thus we can estimate expected mean output lifetime as
 
+$H_{om}={fee_{propagation} \over K \cdot BS}$
 
+Since there are $N_{UTXO}$ in a system and each of them contains $V_{output}$ coins, we can estimate per cent of coins, that will be moved in each block incentivised by \esse{} model:
 
-\dnote{Max and expected state size}
+$M_{flow}={N_{UTXO} \cdot V_{output} \over H_{om} \cdot N_{coins}}=K \cdot {N_{UTXO} \cdot V_{output} \cdot BS \over fee_{propagation} \cdot N_{coins}} = K \cdot {BS \over fee_{propagation}}$
+
+Thus, money flow may be controlled with \textit{K} parameter. This formula provide a way to estimate \textit{K} based on current Bitcoin statistics:
+
+$K={M_{flow} \cdot fee_{propagation} \over BS} = {10^{-9}}{(BTC / (Byte \cdot Block))} $
+
+For regular outputs of 36 Bytes space-time fee part will exceed propagation fee after 56000 blocks or 388 days. This means, that for active users, who spend their money more often than once a year, space-time fee will be negligible relative to propagation fee.
+
+We can conclude, that \esse{} model make sense even in cash-only chains, where output size is fixed and very slow - cryptocurrency can control it's money flow, changing space-time price and encourage active economy participants.
+
+%Considering total $1.6\cdot10^7$ of Bitcois in c circulation, we can conclude, that user should pay for about $6\cdot10^{-17}$ of total supply every block for every byte in output.
+
 
 \subsection{Miner rewards}
 
@@ -219,6 +229,7 @@ To estimate money flow let's assume, that user will move his money when space-ti
 
 
 \subsection{State size}
+\dnote{Max and expected state size}
 
 %Another \esse{} feature, important for miners, is that it provides fee \textbf{mechanism to control state size}, preventing network centralization on a few amount of very powerful computers
 
