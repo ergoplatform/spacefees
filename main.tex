@@ -133,31 +133,31 @@ $fee_{space\_time} = K \cdot (ST_{filled} - ST_{cleared})$
 
 where \textit{K} is a space-time price in the fee tokens. This price depends on hardware price for miners and token exchange rate, so \textit{K} is not a static value. We assume, that miners can change this pricing via mechanism like ``gas'' in Ethereum and thus control cost of blockchain support.
 
-In most of existing cryptocurrencies it's not clear, how to calculate \textit{$ST_{filled}$} and \textit{$ST_{cleared}$}. Sizes of old and new outputs are known, while it is not possible to calculare expected in existing blockchain setups. To do this, transactional language should support both regular cryptography operations, like signature validation, and environment operations, like blockchain height and transaction, that is trying to spend this output. Later we assume cryptocurency, that support this operations, and will try to analize different variants of \textit{$fee_{space\_time}} dependency. In all of them \textit{$ST$} is proportional for multiplication of the time output data should be kept in \state{} to it's size, while concrete rules how to enforce user to pay space-time fee are different.
+In most of existing cryptocurrencies it's not clear, how to calculate \textit{$ST_{filled}$} and \textit{$ST_{cleared}$}. Sizes of old and new outputs are known, while it is not possible to calculare expected in existing blockchain setups. To do this, transactional language should support both regular cryptography operations, like signature validation, and environment operations, like blockchain height and transaction, that is trying to spend this output. Later we assume cryptocurency, that support this operations, and will try to analize different variants of \textit{$fee_{space\_time}$} dependency. In all of them \textit{$ST$} is proportional for multiplication of the time output data should be kept in \state{} to it's size, while concrete rules how to enforce user to pay space-time fee are different.
 
-\subsection{Pre-paid outputs}
+\subsection{Prepaid outputs}
 
-First model we are going to analyze is pre-paid outputs. In it each output represents a box of fixed size \textit{BS} in a \state{} and pre-paid until explicitly known period of time \textit{LT}. After \textit{LT} anyone ~(presumably miner, generated first block after that) will be able spend this overdue output. Thus spending script for all outoputs will be a combination of regular spending scrypt and loan period \textit{LT}:
+First model we are going to analyze is prepaid outputs. In it each output represents a box of fixed size \textit{BS} in a \state{} and prepaid until explicitly known period of time \textit{LT}. After \textit{LT} anyone ~(presumably miner, generated first block after that) will be able spend this overdue output. Thus spending script for all outputs will be a combination of regular spending script and loan period \textit{LT}:
 
-$(Height > LT) \lor (regular\_scrypt)$
+$(Height > LT) \lor (regular\_script)$
 
-where \textit{Height} is current blockchain height and \textit{regular\_scrypt} is user-defined output spending script. This lifetime part of a scrypt is a part of consensus, and space-time transaction fee is paid at the time of output creation. :
+where \textit{Height} is current blockchain height and \textit{regular\_script} is user-defined output spending script. This lifetime part of a script is a part of consensus, and space-time transaction fee is paid at the time of output creation. :
 
-$fee_{pre\-paid} = K \cdot (\sum_i{(BS_i \cdot (LT_i - Height))} - \sum_j{(BS_j \cdot (LT_j - Height)}))$
+$fee_{prepaid} = K \cdot (\sum_i{(BS_i \cdot (LT_i - Height))} - \sum_j{(BS_j \cdot (LT_j - Height)}))$
 
-\subsection{Post-paid outputs}
+\subsection{Postpaid outputs}
 
-In the second model, user should pay fee for taken scace-time in \state{} when he spends output. When output is spended it's lifetime is known, so resulting transaction fee can be calculated:
+In the second model, user should pay fee for taken space-time in \state{} when he spends output. When output is spent it's lifetime is known, so resulting transaction fee can be calculated:
 
-$fee_{post\-paid} = \sum_i{(K_i \cdot BS_i \cdot (HS_i - HC_i))}$
+$fee_{postpaid} = \sum_i{(K_i \cdot BS_i \cdot (HS_i - HC_i))}$
 
-where \textit{HS_i} and \textit{HC_i} are heights, where i-th output was created and spended respectively. Note, that each output has it's own space-time \textit{K_i}, correspondind to \textit{K} value at it's creation time. Here we can note, that if output value is \textit{V}, then height \textit{H_{max}} exists, where all the transaction value will be taken by space-time fee.
+where \textit{$HS_i$} and \textit{$HC_i$} are heights, where i-th output was created and spent respectively. Note, that each output has it's own space-time \textit{$K_i$}, corresponding to \textit{K} value at it's creation time. Here we can note, that if output value is \textit{V}, then height \textit{$H_{max}$} exists, where all the transaction value will be taken by space-time fee.
 
-$(H_{max} = HC + V \over {K \cdot BS})$
+$H_{max} = {{HC + V} \over {K \cdot BS}}$
 
 After that anyone should be able to spend this output, sending all it's value to transaction fee and spending script will looks like
 
-$(Height > H_{max}) \lor (regular\_scrypt)$
+$(Height > H_{max}) \lor (regular\_script)$
 
 %\subsection{Leacking balance}
 
