@@ -12,7 +12,6 @@
 
 \usepackage{hyperref}
 
-
 \newtheorem{axiom}{Axiom}
 
 \newtheorem{proposition}{Proposition}
@@ -141,7 +140,7 @@ First model we are going to analyze is prepaid outputs. In it each output repres
 
 $(Height > LT) \lor (regular\_script)$
 
-where \textit{Height} is current blockchain height and \textit{regular\_script} is user-defined output spending script. This lifetime part of a script is a part of consensus, and space-time transaction fee is paid at the time of output creation. :
+where \textit{Height} is current blockchain height and \textit{regular\_script} is user-defined output spending script. This lifetime part of a script is a part of consensus, and space-time transaction fee is paid at the time of output creation:
 
 $fee_{prepaid} = K \cdot (\sum_i{(BS_i \cdot (LT_i - Height))} - \sum_j{(BS_j \cdot (LT_j - Height)}))$
 
@@ -159,14 +158,9 @@ After that anyone should be able to spend this output, sending all it's value to
 
 $(Height > H_{max}) \lor (regular\_script)$
 
-%\subsection{Leacking balance}
+\subsection{Leaking balance}
 
-%\dnote{По сути то же, что и Post-paid outputs? Transaction creates output with the same script with a value decreased by \textit{LB} Типа "после блока N потратить может кто угодно, но с учетом того, что 90\% вернется исходному владельцу"}
-
-
-%\assumption{For simplicity, we can assume $fee_{transaction\_size} = T \cdot (constant\_factor + \sum{new\_output\_size})$}, where $T$ is a price for 1 byte broadcasting \& mempool storage costs.
-
-%\assumption{We assume all the money are issued, so total system balance is constant. We can emulate Bitcoin emission with outputs being pre-created in genesis and being releasing 1 output per block.}
+The last model we are going to analyze is a combination of prepaid and postpaid models. Like in postpaid model, user pays for each his output when we spends it in an outgoing transaction, but is enforced to move his coins before a known time \textit{$HS$}. If the user do not do this, anyone can create a transaction with this output, returning them to owner without fee-space fee ${K \cdot BS \cdot LT}$. In this model \textit{LT} is another protocol parameter, that may be fixed by protocol design or changed via miners voting like \textit{K}.
 
 \section{Analysis of The Model}
 \label{sec:analysis}
@@ -184,15 +178,15 @@ In this section we are going to provide comprehensive analysis of \esse model. B
 
 \subsection{Money flow}
 
-From users point of view, the longer you keep some output, the bigger space-time fee you pay. Thus \esse{} provides an incentive to move your coins stimulating economic activity. In both prepaid and postpaid fee models, user pays ${K \cdot BS}$ coins every block for keeping his output into \state{}. If he use blockchain with \esse{} as a money chain, output size \textit{BS} is relatively small and do not depend on output value.
+From users point of view, the longer you keep some output, the bigger space-time fee you pay. Thus \esse{} provides an incentive to move your coins stimulating economic activity. In all fee models, described in section~\ref{sec:model}, user pays ${K \cdot BS}$ coins every block for keeping his output into \state{}. If he use blockchain with \esse{} as a money chain, output size \textit{BS} is relatively small and do not depend on output value.
 
 To estimate money flow let's assume, that user will move his money when space-time fee will start dominate over other transactional costs an therefore creation of transaction will be almost free for him. Thus we can estimate expected mean output lifetime as
 
-$H_{om}={fee_{propagation} \over K \cdot BS}$
+$LT_{mean}={fee_{propagation} \over K \cdot BS}$
 
 Since there are $N_{UTXO}$ in a system and each of them contains $V_{output}$ coins, we can estimate per cent of coins, that will be moved in each block incentivised by \esse{} model:
 
-$M_{flow}={N_{UTXO} \cdot V_{output} \over H_{om} \cdot N_{coins}}=K \cdot {N_{UTXO} \cdot V_{output} \cdot BS \over fee_{propagation} \cdot N_{coins}} = K \cdot {BS \over fee_{propagation}}$
+$M_{flow}={N_{UTXO} \cdot V_{output} \over LT_{mean} \cdot N_{coins}}=K \cdot {N_{UTXO} \cdot V_{output} \cdot BS \over fee_{propagation} \cdot N_{coins}} = K \cdot {BS \over fee_{propagation}}$
 
 Thus, money flow may be controlled with \textit{K} parameter. This formula provide a way to estimate \textit{K} based on current Bitcoin statistics:
 
@@ -200,10 +194,30 @@ $K={M_{flow} \cdot fee_{propagation} \over BS} = {10^{-9}}{(BTC / (Byte \cdot Bl
 
 For regular outputs of 36 Bytes space-time fee part will exceed propagation fee after 56000 blocks or 388 days. This means, that for active users, who spend their money more often than once a year, space-time fee will be negligible relative to propagation fee.
 
-We can conclude, that \esse{} model make sense even in cash-only chains, where output size is fixed and very slow - cryptocurrency can control it's money flow, changing space-time price and encourage active economy participants.
+From money flow analysis we can conclude, that \esse{} model make sense even in cash-only chains, where output size is fixed and very slow - cryptocurrency can control it's money flow, changing space-time price and encourage active economy participants. Another money flow analysis result is the dependency between $LT$ and $K$ \dnote{link to formula $LT={fee_{propagation} \over K \cdot BS}$} that can particularly by used in the \textit{Leaking balance} model to reduce number of model parameters.
 
 %Considering total $1.6\cdot10^7$ of Bitcois in c circulation, we can conclude, that user should pay for about $6\cdot10^{-17}$ of total supply every block for every byte in output.
 
+\subsection{Lost coins recirculation}
+
+The need of recirculating lost coins was widely discussed in cryptocurrencies \cite{gjermundrod2014recirculating, gjermundrod2016going} in order to combat deflation that will inevitably occur in cryptocurrencies with the fixed amount of coins to be circulated. Coins declared supply is known by cryptocurrency design, but available supply is unknown due to lost coins, locked in outputs that will never be spended \cite{ron2013quantitative}. On the other hand deflation is a real problem in the traditional monetary system, but it is still open problem, whether it will also be a problem in the Bitcoin economy \cite{bitcoinDeflationarySpiral, barber2012bitter}.
+
+While negative impact of deflation to cryptocurrencies is not proven, most of researchers agree in need of lost coins recirculating. \esse{} model provide lost coins recirculation mechanism by design, while it's properties vary from model implementation and parameters. In this section we are going to estimate lost coins recirculation dependency from chosen model and it's parameters and will compare results.
+
+Fee for keeping output of size \textit{BS} is the \state{} for \textit{LT} blocks is ${K \cdot BS \cdot LT}$. In \textit{Postpaid} and \textit{Leaking balance} models space-time fee is taken from output value itself, so when keys for output with \textit{$V_{output}$} coins are lost, they will return to economy after \textit{LT} blocks, where
+
+${LT_{max} = {V_{output} \over K \cdot BS}}$
+
+Maximum lifetime of a concrete outputs depends on miner-controlled \textit{K} parameter and user-defined output size and value. As in previous section we wil try to estimate this dependency based on Bitcoin stats:
+
+${LT_{max} = {1 \over 100 \cdot K}}$
+
+Based on this equation, it is possible to chose \textit{K} keeping in mind desired maximum ouptut lifetime. Desiring 10-100 years period of coins recirculation, \textit{K} parameter should vary from $10^{-6}$ to $10^{-7}$ that is much bigger, then $10^{-9}$ from previous section \dnote{и что с этим делать?)}. Regarding lost coins recirculation, significant differents between \textit{Postpaid} and \textit{Leaking balance} is that in \textit{Postpaid} all coins will return to economy all at once after some quite big $LT_{max}$ period, while in \textit{Leaking balance} they will return to econumy by small portions during this period.
+
+\dnote{todo}
+Prepaid model is much simplier, because LT_{max} is defined by user there...
+
+\dnote{a way to return lost coins back to economy, \textbf{prevenring deflation}}
 
 \subsection{Miner rewards}
 
@@ -220,10 +234,6 @@ We can conclude, that \esse{} model make sense even in cash-only chains, where o
 \subsection{??? }
 
 \dnote{All the money can be issued in genesis, with release 1 output per block}
-
-\subsection{Lost coins}
-
-\dnote{a way to return lost coins back to economy, \textbf{prevenring deflation}}
 
 \subsection{Comparison with Gesell's money}
 
