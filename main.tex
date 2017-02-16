@@ -205,7 +205,7 @@ The need of recirculating lost coins was widely discussed in cryptocurrencies \c
 
 While negative impact of deflation to cryptocurrencies is not proven, most of researchers agree in need of lost coins recirculating. \esse{} model provide lost coins recirculation mechanism by design, while it's properties vary from model implementation and parameters. In this section we are going to estimate lost coins recirculation dependency from chosen model and it's parameters and will compare results.
 
-Fee for keeping output of size \textit{BS} is the \state{} for \textit{LT} blocks is ${K \cdot BS \cdot LT}$. In \textit{Postpaid} and \textit{Leaking balance} models space-time fee is taken from output value itself, so when keys for output with \textit{$V_{output}$} coins are lost, they will return to economy after \textit{LT_{max}} blocks, where
+Fee for keeping output of size \textit{BS} is the \state{} for \textit{LT} blocks is ${K \cdot BS \cdot LT}$. In \textit{Postpaid} and \textit{Leaking balance} models space-time fee is taken from output value itself, so when keys for output with \textit{$V_{output}$} coins are lost, they will return to economy after \textit{$LT_{max}$} blocks, where
 
 ${LT_{max} = {V_{output} \over K \cdot BS}}$
 
@@ -213,21 +213,23 @@ Maximum lifetime of a concrete outputs depends on miner-controlled \textit{K} pa
 
 ${LT_{max} = {1 \over 100 \cdot K}}$
 
-Based on this equation, it is possible to chose \textit{K} keeping in mind desired maximum ouptut lifetime. Desiring 10 years period of coins fully recirculation, \textit{K} parameter should equals $10^{-6}$ that is much bigger than $10^{-9}$ from previous section \dnote{??? И тут 10 лет это мало, т.к. в этому случае через 5 лет ты сможешь потратить только половину)}. Regarding lost coins recirculation, significant difference between \textit{Postpaid} and \textit{Leaking balance} is that in \textit{Postpaid} all coins will return to economy all at once after some quite big $LT_{max}$ period, while in \textit{Leaking balance} they will return to economy by small portions during this period. This makes \textit{Leaking balance} preferable to \textit{Postpaid}, because lost coins from big enough outputs in \textit{Postpaid} will not return to the circulation in foreseeable future. Anyway in a log-term equilibrium conditions coins recirculation rate of both models will be calculated as
+Based on this equation, it is possible to chose \textit{K} keeping in mind desired maximum ouptut lifetime. Desiring 10 years period of coins fully recirculation, \textit{K} parameter should equals $10^{-6}$ that is much bigger than $10^{-9}$ from previous section \dnote{$??? И тут 10 лет это мало, т.к. в этому случае через 5 лет ты сможешь потратить только половину$}. Regarding lost coins recirculation, significant difference between \textit{Postpaid} and \textit{Leaking balance} is that in \textit{Postpaid} all coins will return to economy all at once after some quite big $LT_{max}$ period, while in \textit{Leaking balance} they will return to economy by small portions during this period. This makes \textit{Leaking balance} preferable to \textit{Postpaid}, because lost coins from big enough outputs in \textit{Postpaid} will not return to the circulation in foreseeable future. Anyway in a log-term equilibrium conditions coins recirculation rate of both models will be calculated as
 
-$R_{postpaid} = {N_{lost} \cdot V_{output} \over LT_{max}} = R_{leaking} = {N_{lost} \cdot K \cdot BS}}$
+$R_{postpaid} = {N_{lost} \cdot V_{output} \over LT_{max}} = R_{leaking} = {N_{lost} \cdot K \cdot BS}$
 
 where $N_{lost}$ is the number of outputs with lost keys. Assuming current Bitcoins statistics and $N_{lost}=10^6$ we can estimate, that 0.036 BTC will be released from abandoned outputs keys every block
 
-In \textit{Prepaid} model user define \textit{LT_{max}} by himself when he creates output and number of released coins after \textit{LT_{max}} is equals to output value $V_{output}$ rater than much smaller space-time fee $fee_{space\_time}$. Note here, that \textit{LT_{max}} do not directly depends on \textit{K} and coins recirculation rate will only depend on $V_{output}$, user-defined \textit{LT_{max}} and number of lost outputs ${N_{lost}}:
+In \textit{Prepaid} model user define $LT_{max}$ by himself when he creates output and number of released coins after $LT_{max}$ is equals to output value $V_{output}$ rater than much smaller space-time fee $fee_{space\_time}$. Note here, that $LT_{max}$ do not directly depends on \textit{K} and coins recirculation rate will only depend on $V_{output}$, user-defined $LT_{max}$ and number of lost outputs $N_{lost}$:
 
 $R_{prepaid} = {N_{lost} \cdot V_{output} \over LT_{max}} $
 
 Let's assume user-defined coin recirculation period $LT_{max}=10 years$ and $K=10^{-9}$ from previous section, we can estimate difference between prepaid and postpaid models:
 
-${R_{prepaid} \over R_{postpaid}} = { V_{output}  \over  K \cdot BS \cdot LT_{max}}} = 20$ \dnote{что-то не сходится, должно быть 1000}
+${R_{prepaid} \over R_{postpaid}} = { V_{output}  \over  K \cdot BS \cdot LT_{max}} = 20$
 
-Thus \esse{} model by design provide a way to return lost coins to circulation, preventing deflation risks. \textit{Postpaid} model has a disadvantage, that lost coins will be returned to circulation in a far future, in \texitit{Prepaid} model coin recirculation rate is much higher than in other models and \textit{Leaking balance} model is a smoother way of coin recirculation.
+ \dnote{что-то не сходится, должно быть 1000}
+
+Thus \esse{} model by design provide a way to return lost coins to circulation, preventing deflation risks. \textit{Postpaid} model has a disadvantage, that lost coins will be returned to circulation in a far future, in \textit{Prepaid} model coin recirculation rate is much higher than in other models and \textit{Leaking balance} model is a smoother way of coin recirculation.
 
 \subsection{Miner rewards}
 
