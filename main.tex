@@ -124,11 +124,17 @@ Most of users think about blockchain as something enough for a fullnode to work 
 
 As we have already mentioned above, in our model transaction fee consists of 3 parts: \textit{validation cost}, \textit{propogation cost} and \textit{state space-time difference cost}.
 
-$fee = fee_{validation} + fee_{propogation} + fee_{space\_time}$ \dnote{should we require from total fee to be positive?}
+\begin{equation}
+fee = fee_{validation} + fee_{propogation} + fee_{space\_time}
+\end{equation}
+
+ \dnote{should we require from total fee to be positive?}
 
 Validation and propogation costs are strictly positive, and assumed to be independent from space-time fee. We also assume, that space-time fee impact to total fee may range from negliable to dominant. Space-time fee component may be both positive and negative, since transaction may both increase and decrease \state{} size. It's dependency from size of inputs, outputs and their time to live may vary depending on the cryptocurrency purpose. Any transactoin remove some data from state, freeing some space-time \textit{$ST_{cleared}$} and add some data to it, filling space-time \textit{$ST_{filled}$} and resulting space-time fee can be calculated as follows:
 
-$fee_{space\_time} = K \cdot (ST_{filled} - ST_{cleared})$
+\begin{equation}
+fee_{space\_time} = K \cdot (ST_{filled} - ST_{cleared})
+\end{equation}
 
 where \textit{K} is a space-time price in the fee tokens. This price depends on hardware price for miners and token exchange rate, so \textit{K} is not a static value. We assume, that miners can change this pricing via mechanism like ``gas'' in Ethereum and thus control cost of blockchain support.
 
@@ -138,25 +144,35 @@ In most of existing cryptocurrencies it's not clear, how to calculate \textit{$S
 
 First model we are going to analyze is prepaid outputs. In it each output represents a box of fixed size \textit{BS} in a \state{} and prepaid until explicitly known period of time \textit{LT}. After \textit{LT} anyone ~(presumably miner, generated first block after that) will be able spend this overdue output. Thus spending script for all outputs will be a combination of regular spending script and loan period \textit{LT}:
 
-$(Height > LT) \lor (regular\_script)$
+\begin{equation}
+(Height > LT) \lor (regular\_script)
+\end{equation}
 
 where \textit{Height} is current blockchain height and \textit{regular\_script} is user-defined output spending script. This lifetime part of a script is a part of consensus, and space-time transaction fee is paid at the time of output creation:
 
-$fee_{prepaid} = K \cdot (\sum_i{(BS_i \cdot (LT_i - Height))} - \sum_j{(BS_j \cdot (LT_j - Height)}))$
+\begin{equation}
+fee_{prepaid} = K \cdot (\sum_i{(BS_i \cdot (LT_i - Height))} - \sum_j{(BS_j \cdot (LT_j - Height)}))
+\end{equation}
 
 \subsection{Postpaid outputs}
 
 In the second model, user should pay fee for taken space-time in \state{} when he spends output. When output is spent it's lifetime is known, so resulting transaction fee can be calculated:
 
-$fee_{postpaid} = \sum_i{(K_i \cdot BS_i \cdot (HS_i - HC_i))}$
+\begin{equation}
+fee_{postpaid} = \sum_i{(K_i \cdot BS_i \cdot (HS_i - HC_i))}
+\end{equation}
 
 where \textit{$HS_i$} and \textit{$HC_i$} are heights, where i-th output was created and spent respectively. Note, that each output has it's own space-time \textit{$K_i$}, corresponding to \textit{K} value at it's creation time. Here we can note, that if output value is \textit{V}, then height \textit{$H_{max}$} exists, where all the transaction value will be taken by space-time fee.
 
-$H_{max} = {{HC + V} \over {K \cdot BS}}$
+\begin{equation}
+H_{max} = {{HC + V} \over {K \cdot BS}}
+\end{equation}
 
 After that anyone should be able to spend this output, sending all it's value to transaction fee and spending script will looks like
 
-$(Height > H_{max}) \lor (regular\_script)$
+\begin{equation}
+(Height > H_{max}) \lor (regular\_script)
+\end{equation}
 
 \subsection{Leaking balance}
 
@@ -183,15 +199,21 @@ From users point of view, the longer you keep some output, the bigger space-time
 
 To estimate money flow let's assume, that user will move his money when space-time fee will start dominate over other transactional costs an therefore creation of transaction will be almost free for him. Thus we can estimate expected mean output lifetime as
 
-$LT_{mean}={fee_{propagation} \over K \cdot BS}$
+\begin{equation}
+LT_{mean}={fee_{propagation} \over K \cdot BS}
+\end{equation}
 
 Since there are $N_{UTXO}$ in a system and each of them contains $V_{output}$ coins, we can estimate per cent of coins, that will be moved in each block incentivised by \esse{} model:
 
-$M_{flow}={N_{UTXO} \cdot V_{output} \over LT_{mean} \cdot N_{coins}}=K \cdot {N_{UTXO} \cdot V_{output} \cdot BS \over fee_{propagation} \cdot N_{coins}} = K \cdot {BS \over fee_{propagation}}$
+\begin{equation}
+M_{flow}={N_{UTXO} \cdot V_{output} \over LT_{mean} \cdot N_{coins}}=K \cdot {N_{UTXO} \cdot V_{output} \cdot BS \over fee_{propagation} \cdot N_{coins}} = K \cdot {BS \over fee_{propagation}}
+\end{equation}
 
 Thus, money flow may be controlled with \textit{K} parameter. This formula provide a way to estimate \textit{K} based on current Bitcoin statistics:
 
-$K={M_{flow} \cdot fee_{propagation} \over BS} = {10^{-9}}{(BTC / (Byte \cdot Block))} $
+\begin{equation}
+K={M_{flow} \cdot fee_{propagation} \over BS} \approx {10^{-9}}{(BTC / (Byte \cdot Block))}
+\end{equation}
 
 For regular outputs of 36 Bytes space-time fee part will exceed propagation fee after 56000 blocks or 388 days. This means, that for active users, who spend their money more often than once a year, space-time fee will be negligible relative to propagation fee.
 
@@ -207,25 +229,35 @@ While negative impact of deflation to cryptocurrencies is not proven, most of re
 
 Fee for keeping output of size \textit{BS} is the \state{} for \textit{LT} blocks is ${K \cdot BS \cdot LT}$. In \textit{Postpaid} and \textit{Leaking balance} models space-time fee is taken from output value itself, so when keys for output with \textit{$V_{output}$} coins are lost, they will return to economy after \textit{$LT_{max}$} blocks, where
 
-${LT_{max} = {V_{output} \over K \cdot BS}}$
+\begin{equation}
+{LT_{max} = {V_{output} \over K \cdot BS}}
+\end{equation}
 
 Maximum lifetime of a concrete outputs depends on miner-controlled \textit{K} parameter and user-defined output size and value. As in previous section we will estimate this dependency based on Bitcoin stats:
 
-${LT_{max} = {1 \over 100 \cdot K}}$
+\begin{equation}
+{LT_{max} \approx {1 \over 100 \cdot K}}
+\end{equation}
 
 Based on this equation, it is possible to chose \textit{K} keeping in mind desired maximum ouptut lifetime. Desiring 10 years period of coins fully recirculation, \textit{K} parameter should equals $10^{-6}$ that is much bigger than $10^{-9}$ from previous section \dnote{$??? И тут 10 лет это мало, т.к. в этому случае через 5 лет ты сможешь потратить только половину$}. Regarding lost coins recirculation, significant difference between \textit{Postpaid} and \textit{Leaking balance} is that in \textit{Postpaid} all coins will return to economy all at once after some quite big $LT_{max}$ period, while in \textit{Leaking balance} they will return to economy by small portions during this period. This makes \textit{Leaking balance} preferable to \textit{Postpaid}, because lost coins from big enough outputs in \textit{Postpaid} will not return to the circulation in foreseeable future. Anyway in a log-term equilibrium conditions coins recirculation rate of both models will be calculated as
 
-$R_{postpaid} = {N_{lost} \cdot V_{output} \over LT_{max}} = R_{leaking} = {N_{lost} \cdot K \cdot BS}$
+\begin{equation}
+R_{postpaid} = {N_{lost} \cdot V_{output} \over LT_{max}} = R_{leaking} = {N_{lost} \cdot K \cdot BS}
+\end{equation}
 
 where $N_{lost}$ is the number of outputs with lost keys. Assuming current Bitcoins statistics and $N_{lost}\approx10^6$ we can estimate, that $\approx0.036$ BTC will be released from abandoned outputs keys every block.
 
 In \textit{Prepaid} model user define $LT_{max}$ by himself when he creates output and number of released coins after $LT_{max}$ is equals to output value $V_{output}$ rater than much smaller space-time fee $fee_{space\_time}$. Note here, that $LT_{max}$ do not directly depends on \textit{K} and coins recirculation rate will only depend on $V_{output}$, user-defined $LT_{max}$ and number of lost outputs $N_{lost}$:
 
-$R_{prepaid} = {N_{lost} \cdot V_{output} \over LT_{max}} $
+\begin{equation}
+R_{prepaid} = {N_{lost} \cdot V_{output} \over LT_{max}}
+\end{equation}
 
-Let's assume user-defined coin recirculation period $LT_{max}=10 years$ and $K=10^{-9}$ from previous section, we can estimate difference between prepaid and postpaid models:
+Let's assume user-defined coin recirculation period $LT_{max}\approx10 years$ and $K\approx10^{-9}$ from previous section, we can estimate difference between prepaid and postpaid models:
 
-${R_{prepaid} \over R_{postpaid}} = { V_{output}  \over  K \cdot BS \cdot LT_{max}} \approx 20$
+\begin{equation}
+{R_{prepaid} \over R_{postpaid}} = { V_{output}  \over  K \cdot BS \cdot LT_{max}} \approx 20
+\end{equation}
 
  \dnote{что-то не сходится, должно быть 1000}
 
