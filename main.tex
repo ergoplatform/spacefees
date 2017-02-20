@@ -244,7 +244,7 @@ Maximum lifetime of a concrete outputs depends on miner-controlled \textit{K} pa
 Based on this equation, it is possible to chose \textit{K} keeping in mind desired maximum ouptut lifetime. Desiring 10 years period of coins fully recirculation, \textit{K} parameter should equals $10^{-6}$ that is much bigger than $10^{-9}$ from previous section \dnote{$??? 10 is too small, you'll be able to spend only hlaf of your money after 5 years$}. Regarding lost coins recirculation, significant difference between \textit{Postpaid} and \textit{Leaking balance} is that in \textit{Postpaid} all coins will return to economy all at once after some quite big $LT_{max}$ period, while in \textit{Leaking balance} they will return to economy by small portions during this period. This makes \textit{Leaking balance} preferable to \textit{Postpaid}, because lost coins from big enough outputs in \textit{Postpaid} will not return to the circulation in foreseeable future. Anyway in a log-term equilibrium conditions coins recirculation rate of both models will be calculated as
 
 \begin{equation}
-R_{postpaid} = {N_{lost} \cdot V_{output} \over LT_{max}} = R_{leaking} = {N_{lost} \cdot K \cdot BS}
+R_{postpaid} = R_{leaking} = {N_{lost} \cdot V_{output} \over LT_{max}} = {N_{lost} \cdot K \cdot BS}
 \end{equation}
 
 where $N_{lost}$ is the number of outputs with lost keys. Assuming current Bitcoins statistics and $N_{lost}\approx10^6$ we can estimate, that $\approx0.036$ BTC will be released from abandoned outputs keys every block.
@@ -255,17 +255,24 @@ In \textit{Prepaid} model user define $LT_{max}$ by himself when he creates outp
 R_{prepaid} = {N_{lost} \cdot V_{output} \over LT_{max}}
 \end{equation}
 
-Let's assume user-defined coin recirculation period $LT_{max}\approx10 years$ and $K\approx10^{-9}$ from previous section, we can estimate difference between prepaid and postpaid models:
+Let's assume user-defined coin recirculation period $LT_{max}\approx10$ years and $K\approx10^{-9}$ from previous section, we can estimate difference between prepaid and postpaid models:
 
 \begin{equation}
 {R_{prepaid} \over R_{postpaid}} = { V_{output}  \over  K \cdot BS \cdot LT_{max}} \approx 20
 \end{equation}
+
+%R_{postpaid} = R_{leaking} = {N_{lost} \cdot V_{output} \over LT_{max}} = {N_{lost} \cdot K \cdot BS} = 10^6 * 10^(-9) * 35 = 0.035
+%R_{prepaid} = {N_{lost} \cdot V_{output} \over LT_{max}} = 10^(6) * 0.36 /  = 0.684931507
+%  \item Mean number of coins in one output: $V_{output}=0.35$ BTC
+%   \item Simple payment transaction fee: $fee_{propagation}=0.0002$ BTC
 
  \dnote{Check, should be something like 1000}
 
 Thus \esse{} model by design provide a way to return lost coins to circulation, preventing deflation risks. \textit{Postpaid} model has a disadvantage, that lost coins will be returned to circulation in a far future, in \textit{Prepaid} model coin recirculation rate is much higher than in other models and \textit{Leaking balance} model is a smoother way of coin recirculation.
 
 \subsection{Miner rewards}
+
+Mining reward is very important for cryptocurrency economy - in original paper\textit{Nakamoto2008} it's assumed, that miners are incentivized to fair befaviour, while recent researches showed, that it is not always correct \cite{carlsten2016instability, Eyal2014}. \esse{} model provide a new way to be rewarded by collecting garbage outputs, increasing miner profit.
 
 %\textbf{new way to be rewarded} by collecting garbage. With this reward, fixed block reward is not required any more for network stability \dnote{link to instability of Bitcoin without block reward} and allows \ergo to stop emission quite soon. Moreover with this economy miners will have \textbf{lower-bound for their rewards}, providing more stable mining and, therefore, secure network.
 
@@ -309,4 +316,4 @@ $S_s$ is a subsidified space-time amount (e.g. 500 byte-years which is about fre
 \bibliographystyle{elsarticle-num}
 \bibliography{sources.bib}
 
-\end{document}	
+\end{document}
