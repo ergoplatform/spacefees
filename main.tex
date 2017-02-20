@@ -194,6 +194,7 @@ In this section we are going to provide comprehensive analysis of \esse model. B
 \end{itemize}
 
 \subsection{Money flow}
+\label{sec:flow}
 
 From users point of view, the longer you keep some output, the bigger space-time fee you pay. Thus \esse{} provides an incentive to move your coins stimulating economic activity. In all fee models, described in section~\ref{sec:model}, user pays ${K \cdot BS}$ coins every block for keeping his output into \state{}. If he use blockchain with \esse{} as a money chain, output size \textit{BS} is relatively small and do not depend on output value.
 
@@ -204,7 +205,18 @@ To estimate money flow let's assume, that user will move his money when space-ti
 LT_{mean}={fee_{propagation} \over K \cdot BS}
 \end{equation}
 
-Since there are $N_{UTXO}$ in a system and each of them contains $V_{output}$ coins, we can estimate per cent of coins, that will be moved in each block incentivised by \esse{} model:
+Since there are $N_{UTXO}$ in a system and each of them contains $V_{output}$ coins, we can estimate per cent of coins, that will be moved in each block incentivized by \esse{} model:
+
+\dnote{start: estimate number of transactions per block}
+Number of transactions:
+\begin{equation}
+N_{transactions} \approx {N_{UTXO} \over LT_{mean}} = {N_{UTXO} \cdot K \cdot BS \over fee_{propagation}}
+\end{equation}
+
+\begin{equation}
+M_{flow} \approx { N_{transactions} \cdot V_{output} \over N_{coins}} = {K \cdot BS \over fee_{propagation}}
+\end{equation}
+\dnote{end: estimate number of transactions per block}
 
 \begin{equation}
 M_{flow}={N_{UTXO} \cdot V_{output} \over LT_{mean} \cdot N_{coins}}=K \cdot {N_{UTXO} \cdot V_{output} \cdot BS \over fee_{propagation} \cdot N_{coins}} = K \cdot {BS \over fee_{propagation}}
@@ -272,8 +284,23 @@ Thus \esse{} model by design provide a way to return lost coins to circulation, 
 
 \subsection{Miner rewards}
 
-Mining reward is very important for cryptocurrency economy - in original paper\textit{Nakamoto2008} it's assumed, that miners are incentivized to fair befaviour, while recent researches showed, that it is not always correct \cite{carlsten2016instability, Eyal2014}. \esse{} model provide a new way to be rewarded by collecting garbage outputs, increasing miner profit.
+Mining reward is very important for cryptocurrency economy - in original paper\textit{Nakamoto2008} it's assumed, that miners are incentivized to fair befaviour, while recent researches showed, that it is not always correct \cite{carlsten2016instability, Eyal2014}. In addion to usual propogation fee, \esse{} provides two new sources for miner income: a space-time fee and a coin recirculation reward.
 
+\begin{equation}
+R_{reward} = fee_{propogation} + fee_{space-time} + R_{recirculation}
+\end{equation}
+
+In section \ref{sec:flow} we have already noticed, \esse{} users have an intencive to actively use their coins and thus propogation fee is propotional to space-time fee.
+
+Space-time fee is the same for all space-time fee models:
+
+\begin{equation}
+fee_{flow} = fee_{recirculation} \cdot N_{transactions} = K \cdot N_{UTXO} \cdot BS
+\end{equation}
+
+\dnote{fee_{space_time} = \sum_{i=1}^{N_{UTXO}} K_i \cdot BS_i \approx  K \cdot N_{UTXO} \cdot BS}
+
+%$$\sum_{n=1}^{\infty} 2^{-n} = 1$$
 %\textbf{new way to be rewarded} by collecting garbage. With this reward, fixed block reward is not required any more for network stability \dnote{link to instability of Bitcoin without block reward} and allows \ergo to stop emission quite soon. Moreover with this economy miners will have \textbf{lower-bound for their rewards}, providing more stable mining and, therefore, secure network.
 
 \dnote{Miners are getting a new kind of profit}
@@ -282,7 +309,7 @@ Mining reward is very important for cryptocurrency economy - in original paper\t
 
 \dnote{What is an output value when miner is interested in collecting it?}
 
-\dnote{Minimal and expected money flow}
+ \dnote{Minimal and expected money flow}
 
 \subsection{??? }
 
