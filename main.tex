@@ -190,13 +190,14 @@ The last model we are going to analyze is a combination of prepaid and postpaid 
 In this section we are going to provide comprehensive analysis of \esse model. Besides of it's main goal to control state size, it provides additional benefits as side-effects, that can be used in cryptocurrency design. Our further analysis will be based on the following stats from current Bitcoin network:
 
 \begin{itemize}
-  \item Number of unspent transaction outputs: $N_{UTXO}=45000000$
-  \item Number of coins in circulation: $N_{coins}=16000000$ BTC
-  \item Mean number of coins in one output: $V_{output}=0.35$ BTC
-  \item Simple payment transaction fee: $fee_{propagation}=0.0002$ BTC
-  \item Mean output size: $BS=36$ Bytes
-  \item Per cent of coins, moved in every block: $M_{flow}=0.013$ \%
-  \item Time interval between blocks: $T_{block}=10$ minutes
+  \item Number of unspent transaction outputs: $N_{UTXO} \approx 45000000$
+  \item Number of coins in circulation: $N_{coins} \approx 16000000$ BTC
+  \item Mean number of coins in one output: $V_{output} \approx 0.35$ BTC
+  \item Simple payment transaction fee: $fee_{propagation} \approx 0.0002$ BTC
+  \item Mean output size: $BS \approx 36$ Bytes
+  \item Per cent of coins, moved in every block: $M_{flow} \approx 0.013$ \%
+  \item Time interval between blocks: $T_{block} \approx 10$ minutes
+  \item Transaction fees per block: $R_{pg} \approx 1$ BTC
 \end{itemize}
 
 \subsection{Money flow}
@@ -242,6 +243,7 @@ From money flow analysis we can conclude, that \esse{} model make sense even in 
 %Considering total $1.6\cdot10^7$ of Bitcois in c circulation, we can conclude, that user should pay for about $6\cdot10^{-17}$ of total supply every block for every byte in output.
 
 \subsection{Lost coins recirculation}
+\label{sec:re}
 
 The need of recirculating lost coins was widely discussed in cryptocurrencies \cite{gjermundrod2014recirculating, gjermundrod2016going} in order to combat deflation that will inevitably occur in cryptocurrencies with the fixed amount of coins to be circulated. Coins declared supply is known by cryptocurrency design, but available supply is unknown due to lost coins, locked in outputs that will never be spent \cite{ron2013quantitative}. On the other hand deflation is a real problem in the traditional monetary system, but it is still open question, whether it will also be a problem in the Bitcoin economy \cite{bitcoinDeflationarySpiral, barber2012bitter}.
 
@@ -293,21 +295,47 @@ Thus \esse{} model by design provide a way to return lost coins to circulation, 
 Mining reward is very important for cryptocurrency economy - in original paper\textit{Nakamoto2008} it's assumed, that miners are incentivized to fair befaviour, while recent researches showed, that it is not always correct \cite{carlsten2016instability, Eyal2014}. In addion to usual propogation fee, \esse{} provides two new sources for miner income: a space-time fee and a coin recirculation reward.
 
 \begin{equation}
-R_{reward} = fee_{propogation} + fee_{space-time} + R_{recirculation}
+R_{reward} = R_{propogation} + R_{space-time} + R_{recirculation}
 \end{equation}
 
-In section \ref{sec:flow} we have already noticed, \esse{} users have an intencive to actively use their coins and thus propogation fee is propotional to space-time fee.
-
-Space-time fee is the same for all space-time fee models:
+In section \ref{sec:flow} we have noticed, that \esse{} users have an intencive to actively use their coins and propogation reward is correlated with space-time reward
 
 \begin{equation}
-fee_{flow} = fee_{recirculation} \cdot N_{transactions} = K \cdot N_{UTXO} \cdot BS
+R_{propogation} = M \cdot R_{space-time} + R_{pg}
 \end{equation}
 
-\dnote{fee_{space_time} = \sum_{i=1}^{N_{UTXO}} K_i \cdot BS_i \approx  K \cdot N_{UTXO} \cdot BS}
+where $M$ and $C$ are non-negative constants. Space-time miners reward depends on \state{} size and space-time price $K$ only:
 
-%$$\sum_{n=1}^{\infty} 2^{-n} = 1$$
-%\textbf{new way to be rewarded} by collecting garbage. With this reward, fixed block reward is not required any more for network stability \dnote{link to instability of Bitcoin without block reward} and allows \ergo to stop emission quite soon. Moreover with this economy miners will have \textbf{lower-bound for their rewards}, providing more stable mining and, therefore, secure network.
+\begin{equation}
+R_{space-time} = \sum_{i=1}^{N_{UTXO}} K_i \cdot BS_i \approx K \cdot N_{UTXO} \cdot BS
+\end{equation}
+
+Recirculation reward was calculated in prevoius section and depends on space-time fee model. However it can be generolized as with $K_{model}$ with is equals to 1 for \textit{Leaking balance} and \textit{Postpaid} models, and $K_{model} > 1$ for \textit{Prepaid} model:
+
+\begin{equation}
+R_{recirculation} = {K_{model} \cdot  N_{lost} \cdot K \cdot BS}
+\end{equation}
+
+Resulting miner reward:
+
+\begin{equation}
+\label{eq:rew}
+R_{reward} \approx R_{pg} + (K \cdot BS) \cdot ((1 + M) \cdot N_{UTXO} + K_{model} \cdot N_{lost})
+\end{equation}
+
+First part of this equation $R_{pg}$ is the reward of miner in existing fee models, the rest is the unique reward for \esse{} model.  In \textit{Leaking balance} and \textit{Postpaid} models $K_{model} = 1$ and in sensible assumption $N_{UTXO} >> N_{lost}$ equation \ref{eq:rew} can be simplified to
+
+\begin{equation}
+R_{postpaid} \approx R_{pg} + K \cdot BS \cdot N_{UTXO} \cdot (1 + M)}
+\end{equation}
+
+that allows to estimate such $K$, when additional \esse{} reward will exeed common propogation reward $R_{pg}$ based on current Bitcoin statistics
+
+\begin{equation}
+K_{postpaid} = R_{pg} \over BS \cdot N_{UTXO} \cdot (1 + M)} \approx 10^(-9)
+\end{equation}
+
+that is very close to estimations from section \ref{eq:ltmean}. In \texitit{Prepaid} model miner rewird will be higher, thus in reasonable conditons miner reward, colleted from fees will be 1-20 times higher, than in regular fee model. \dnote{conclusion}
 
 \dnote{Miners are getting a new kind of profit}
 
