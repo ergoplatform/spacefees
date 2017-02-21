@@ -292,27 +292,25 @@ Thus \esse{} model by design provide a way to return lost coins to circulation, 
 
 \subsection{Miner rewards}
 \label{minerrew}
-
-
-Mining reward is very important for cryptocurrency economy - in original paper\textit{Nakamoto2008} it's assumed, that miners are incentivized to fair behaviour, while recent researches showed, that it is not always correct \cite{carlsten2016instability, eyal2014}. In addition to usual propagation fee, \esse{} provides two new sources for miner income: a space-time fee and a coin recirculation reward.
+Mining reward is very important for cryptocurrency economy - in original paper \cite{Nakamoto2008} it's assumed, that miners are incentivized to fair behaviour, while recent researches showed, that it is not always correct \cite{carlsten2016instability, eyal2014}. In addition to usual propagation fee, \esse{} provides two new sources for miner income: a space-time fee and a coin recirculation reward.
 
 \begin{equation}
 R_{reward} = R_{propagation} + R_{space-time} + R_{recirculation}
 \end{equation}
 
-In section \ref{sec:flow} we have noticed, that \esse{} users have an incentive to actively use their coins and propagation reward is correlated with space-time reward
+In section \ref{sec:flow} we have noticed, that \esse{} users have an incentive to actively use their coins and propagation reward is correlated with space-time reward:
 
 \begin{equation}
 R_{propagation} = M \cdot R_{space-time} + R_{pg}
 \end{equation}
 
-where $M$ and $C$ are non-negative constants. Space-time miners reward depends on \state{} size and space-time price $K$ only:
+where $M$ and $C$ are non-negative constants. Space-time miner reward depends on \state{} size and space-time price $K$ only:
 
 \begin{equation}
 R_{space-time} = \sum_{i=1}^{N_{UTXO}} K_i \cdot BS_i \approx K \cdot N_{UTXO} \cdot BS
 \end{equation}
 
-Recirculation reward was calculated in previous section and depends on space-time fee model. However it can be generalized as with $K_{model}$ with is equals to 1 for \textit{Leaking balance} and \textit{Postpaid} models, and $K_{model} > 1$ for \textit{Prepaid} model:
+Recirculation reward was calculated in previous section and depends on space-time fee model. However it can be generalized as with $K_{model}$ parameter, that is equals to 1 for \textit{Leaking balance} and \textit{Postpaid} models, and $K_{model} > 1$ \dnote{20?} for \textit{Prepaid} model:
 
 \begin{equation}
 R_{recirculation} = {K_{model} \cdot  N_{lost} \cdot K \cdot BS}
@@ -322,7 +320,7 @@ Resulting miner reward:
 
 \begin{equation}
 \label{eq:reward}
-R_{reward} = R_{pg} + R_{space-time} \approx R_{pg} + (K \cdot BS) \cdot ((1 + M) \cdot N_{UTXO} + K_{model} \cdot N_{lost})
+R_{reward} \approx R_{pg} + (K \cdot BS) \cdot ((1 + M) \cdot N_{UTXO} + K_{model} \cdot N_{lost})
 \end{equation}
 
 First part of this equation $R_{pg}$ is the reward of miner in existing fee models, the rest is the unique reward for \esse{} model.  In a sensible assumption $N_{UTXO} >> N_{lost}$ equation \ref{eq:reward} can be simplified to
@@ -331,28 +329,15 @@ First part of this equation $R_{pg}$ is the reward of miner in existing fee mode
 R_{postpaid} \approx R_{pg} + K \cdot BS \cdot N_{UTXO} \cdot (1 + M)
 \end{equation}
 
-that allows to estimate such $K$, when additional \esse{} reward will exceed common propagation reward $R_{pg}$ based on current Bitcoin statistics
+that allows to estimate such $K$, when additional \esse{} reward will exceed common propagation reward $R_{pg}$:
 
 \begin{equation}
-K_{postpaid} = {R_{pg} \over BS \cdot N_{UTXO} \cdot (1 + M) \approx 10^(-9)} ({BTC / (Byte \cdot Block)})
+K_{postpaid} = {R_{pg} \over BS \cdot N_{UTXO} \cdot (1 + M)} \approx 10^{-9} ({BTC / (Byte \cdot Block)})
 \end{equation}
 
-that is naturally coincide to estimations from section \ref{eq:ltmean} while both estimations are made from assumption, that propagation fee and space-time fee are equal for end users. Remarkable that space-time reward does not depend on network throughput and can be easily predicted. Since it will be accrued to generator of block with concrete height, it may be considered as a constant block reward fixing problem of blockchain instability without block reward \cite{carlsten2016instability}. Value of this reward may be controlled by $K$ parameter making mining more stable and thus network more secure.
+that is naturally coincide to estimations from section \ref{eq:ltmean} while both estimations are made from assumption, that propagation fee and space-time fee are equal for end users. Remarkable that space-time reward does not depend on network throughput and can be easily predicted. Since it will be accrued to generator of block with concrete height, it may be considered as a constant block reward fixing problem of blockchain instability without block reward \cite{carlsten2016instability}. It's value may be controlled by $K$ parameter making mining more stable and thus network more secure.
 
 \dnote{What is an output value when miner is interested in collecting it?}
-
-\subsection{Cryptocurrency inflation}
-
-As we have already noticed in section \ref{minerrew}, miners reward from space-time fee can be considered as static block reward. Extending this idea it is possible to get rid of coinbase transactions breaking usual transaction rule that sum of inputs should not be less then sum of outputs. To achieve this, all coins should be issued in genesis block in such a way, that every block one output will be released and miner will collect it's value according space-time fee model. Thereafter miner will collect reward in uniform way collecting abandoned outputs, whenever it was created in genesis or by cryptocurrency user.
-
-\subsection{Comparison with Gesell's money}
-
-\subsection{State size}
-\dnote{Max and expected state size}
-
-%Another \esse{} feature, important for miners, is that it provides fee \textbf{mechanism to control state size}, preventing network centralization on a few amount of very powerful computers
-
-\dnote{Comparison with Gesell's money~(money with demurrage)}
 
 \subsection{Subsidified space-time}
 
@@ -363,6 +348,18 @@ As we have already noticed in section \ref{minerrew}, miners reward from space-t
 $fee_{space-time\_cost} = K \cdot (\sum{(new\_output\_size \cdot lifetime - S_s)} - \sum{(old\_output\_size \cdot remaining\_lifetime - S_s)})$
 $S_s$ is a subsidified space-time amount (e.g. 500 byte-years which is about free storage for 10 years for a standard 50 bytes output)
 
+\subsection{Cryptocurrency inflation}
+
+As we have already noticed in section \ref{minerrew}, miners reward from space-time fee can be considered as static block reward. Extending this idea it is possible to get rid of coinbase transactions breaking usual transaction rule that sum of inputs should not be less then sum of outputs. To achieve this, all coins should be issued in genesis block in such a way, that every block one output will be released and miner will collect it's value according space-time fee model. Thereafter miner will collect reward in uniform way collecting abandoned outputs, whenever it was created in genesis or by cryptocurrency user.
+
+\subsection{Comparison with Gesell's money}
+
+\dnote{Comparison with Gesell's money~(money with demurrage)}
+
+\subsection{State size}
+\dnote{Max and expected state size}
+
+%Another \esse{} feature, important for miners, is that it provides fee \textbf{mechanism to control state size}, preventing network centralization on a few amount of very powerful computers
 
 
 \section{Related Work}
