@@ -350,6 +350,24 @@ As we have already noticed in section \ref{minerrew}, miners reward from space-t
 \dnote{Comparison with Gesell's money~(money with demurrage)}
 
 \subsection{State size}
+
+Finally, we are going to analize direct assignment of \esse{} model - to control \state{} size. Upper bound of \state{} size is $S$ may be easily calculated from assumption, that all available supply will be paid for space-time fee for one huge output to keep it in state for 1 block. However usually block size is limited by $S_{block}$ parameter and thus maximum output size is $BS = S_{block}$. As soon as each block space-time fee $K \cdot BS$ should be paid for all previously created outputs, maximum possible number of such outputs
+
+\begin{equation}
+O_{max} = {N_{coins} \over K \cdot S_{block}}
+\end{equation}
+
+and thus upper bound for state size is
+
+\begin{equation}
+S = {N_{coins} \over K}
+\end{equation}
+
+that is for about one petabyte \dnote{wtf?} for $K=10^{8}$.
+% may be estimated for $K$ ~ 1.6*10^{7}
+
+%moved miners will receive $S \cdot K$ coins per block.
+
 \dnote{Max and expected state size}
 
 %Another \esse{} feature, important for miners, is that it provides fee \textbf{mechanism to control state size}, preventing network centralization on a few amount of very powerful computers
