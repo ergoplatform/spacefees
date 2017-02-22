@@ -14,6 +14,8 @@
 
 \newtheorem{axiom}{Axiom}
 
+\usepackage{systeme}
+
 \newtheorem{proposition}{Proposition}
 \newtheorem{definition}{Definition}
 \newtheorem{assumption}{Assumption}
@@ -73,7 +75,7 @@
 \newcommand{\sr}{\stackrel}
 \newcommand{\ra}{\rightarrow}
 \newcommand{\la}{\leftarrow}
-\newcommand{\esse}{Esse}
+\newcommand{\esse}{\textit{Esse}}
 \newcommand{\state}{\textit{State}}
 
 \newcommand{\ignore}[1]{} % may contain useful stuff (that needs more work)
@@ -339,15 +341,6 @@ that is naturally coincide to estimations from section \ref{eq:ltmean} while bot
 
 \dnote{What is an output value when miner is interested in collecting it?}
 
-\subsection{Subsidified space-time}
-
-\dnote{transaction commission may be defined as $fee = Max(fee_{validation}, fee_{propagation}, fee_{space\_time})$}
-
-\dnote{describe like possible optimization}
-
-$fee_{space-time\_cost} = K \cdot (\sum{(new\_output\_size \cdot lifetime - S_s)} - \sum{(old\_output\_size \cdot remaining\_lifetime - S_s)})$
-$S_s$ is a subsidified space-time amount (e.g. 500 byte-years which is about free storage for 10 years for a standard 50 bytes output)
-
 \subsection{Cryptocurrency inflation}
 
 As we have already noticed in section \ref{minerrew}, miners reward from space-time fee can be considered as static block reward. Extending this idea it is possible to get rid of coinbase transactions breaking usual transaction rule that sum of inputs should not be less then sum of outputs. To achieve this, all coins should be issued in genesis block in such a way, that every block one output will be released and miner will collect it's value according space-time fee model. Thereafter miner will collect reward in uniform way collecting abandoned outputs, whenever it was created in genesis or by cryptocurrency user.
@@ -361,6 +354,39 @@ As we have already noticed in section \ref{minerrew}, miners reward from space-t
 
 %Another \esse{} feature, important for miners, is that it provides fee \textbf{mechanism to control state size}, preventing network centralization on a few amount of very powerful computers
 
+\subsection{Subsidized space-time}
+
+It is usual to pay for space-time multiplication for database leasing and thus \esse{} model is natural for blockchain-as-database model. On the other hand, in blockchain usage for currency it may be natural to allow users to keep some data for free in blockchain. In this section we are going to extend \esse{} model, subsidizing pre-defined by network space-time $S_s$ (which may also be defined by miners voting). For example, it may allow to keep simple money output for 10 years for free, subsidizing $S_s \approx 525600 (Blocks) \cdot 35 (Byte) \approx 18 (Mb \cdot Block)$. While 10 years is a quite big period for regular output, it is quite small amount of subsidized space-time for blockchain usage as a storage, e.g. will only allow to keep 127 Kb output for one date in \state{}.
+
+Such subsidized fee may be calculated as
+
+\begin{equation}
+fee_{sub} = Max(0, K \dot BS \cdot LT - S_s)
+\end{equation}
+
+and provides another way to control \esse{} economy with $S_s$ parameter. In particular it allows define $K$ and $S_s$ to archieve desired money flow and coin recirculation rates. As we have already noticed above $K$ parameter should be sufficiently different to archieve reasonable money flow and coin recirculation. It is possible to estimate $K$ and $S_s$ required for mean output lifetime $LT_{mean}$ and mean coin recirculation periods $R_{mean}$ using assumptions from previous sections:
+
+\begin{equation}
+  \begin{array}{ccl}
+   K \cdot BS \cdot LT_{max} - S_s & = & V_{output} \\
+   K \cdot BS \cdot LT_{mean} - S_s & = & fee_{propagation}
+  \end{array}
+\end{equation}
+
+Assuming $LT_{mean}=1$ year and $LT_{max}=10$ years and Bitcoin statistics, we may estimate values of $K$ and $S_s$:
+
+\begin{equation}
+  \begin{array}{ccl}
+   K & = & {V_{output} - fee_{propagation} \over BS \cdot (LT_{max} - LT_{mean})} \approx \quad 2*10^{-8} ({BTC / (Byte \cdot Block)}) \\
+   S_s & = & {(V_{output} - fee_{propagation}) \cdot LT_{mean} \over (LT_{max} - LT_{mean})} - fee_{propagation} \approx 0.04\quad(BTC)
+  \end{array}
+\end{equation}
+
+which is equals to 2 (Mb \cdot Block) for free.
+
+Thus, additional subsidized space-time parameter allows to use one blockchain as both money and data chains. Subsidized value may be configured to be big enough for regular users, allowing them to keep their outputs for free for some time, but small enough for blockchain usage as database. It also allows to increase $K$ value painlessly for regular users, but increasing lost coin recirculation rate.
+
+\dnote{transaction commission may be defined as $fee = Max(fee_{validation}, fee_{propagation}, fee_{space\_time})$}
 
 \section{Related Work}
 
