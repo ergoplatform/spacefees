@@ -361,7 +361,7 @@ It is usual to pay for space-time multiplication for database leasing and thus \
 Such subsidized fee may be calculated as
 
 \begin{equation}
-fee_{sub} = Max(0, K \dot BS \cdot LT - S_s)
+fee_{sub} = Max(0, K \cdot BS \cdot LT - S_s)
 \end{equation}
 
 and provides another way to control \esse{} economy with $S_s$ parameter. In particular it allows define $K$ and $S_s$ to archieve desired money flow and coin recirculation rates. As we have already noticed above $K$ parameter should be sufficiently different to archieve reasonable money flow and coin recirculation. It is possible to estimate $K$ and $S_s$ required for mean output lifetime $LT_{mean}$ and mean coin recirculation periods $R_{mean}$ using assumptions from previous sections:
@@ -382,7 +382,7 @@ Assuming $LT_{mean}=1$ year and $LT_{max}=10$ years and Bitcoin statistics, we m
   \end{array}
 \end{equation}
 
-which is equals to 2 (Mb \cdot Block) for free.
+which is equals to 2 ($Mb \cdot Block$) for free.
 
 Thus, additional subsidized space-time parameter allows to use one blockchain as both money and data chains. Subsidized value may be configured to be big enough for regular users, allowing them to keep their outputs for free for some time, but small enough for blockchain usage as database. It also allows to increase $K$ value painlessly for regular users, but increasing lost coin recirculation rate.
 
