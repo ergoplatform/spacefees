@@ -200,6 +200,7 @@ In this section we are going to provide comprehensive analysis of \esse model. B
   \item Per cent of coins, moved in every block: $M_{flow} \approx 0.013$ \%
   \item Time interval between blocks: $T_{block} \approx 10$ minutes
   \item Transaction fees per block: $R_{pg} \approx 1$ BTC
+  \item Fixed block reward: $R_{f} \approx 12.5$ BTC
 \end{itemize}
 
 \subsection{Money flow}
@@ -351,26 +352,29 @@ As we have already noticed in section \ref{minerrew}, miners reward from space-t
 
 \subsection{State size}
 
-Finally, we are going to analize direct assignment of \esse{} model - to control \state{} size. Upper bound of \state{} size is $S$ may be easily calculated from assumption, that all available supply will be paid for space-time fee for one huge output to keep it in state for 1 block. However usually block size is limited by $S_{block}$ parameter and thus maximum output size is $BS = S_{block}$. As soon as each block space-time fee $K \cdot BS$ should be paid for all previously created outputs, maximum possible number of such outputs
+Finally, we are going to analyze direct assignment of \esse{} model - to control \state{} size. Upper bound of \state{} size is $S$ may be easily calculated from assumption, that all available supply will be paid for space-time fee for one huge output to keep it in state for 1 block. However usually block size is limited by $S_{block}$ parameter and thus maximum output size is $BS = S_{block}$. As soon as each block space-time fee $K \cdot BS$ should be paid for all previously created outputs, maximum possible number of such outputs $O_{max}$ may be calculated from equation:
 
 \begin{equation}
-O_{max} = {N_{coins} \over K \cdot S_{block}}
+N_{coins} = \sum_i^{O_{max}}{K \cdot S_{block} \cdot i} = K \cdot S_{block} \cdot ( O_{max}^2 + O_{max}) / 2 \approx K \cdot S_{block} \cdot O_{max}^2 / 2
 \end{equation}
 
-and thus upper bound for state size is
+assuming that number of unspent outputs is big enough. Resulting state size
 
 \begin{equation}
-S = {N_{coins} \over K}
+S = S_{block} \cdot O_{max} = \sqrt { 2 \cdot N_{coins} \cdot S_{block} \over K}
 \end{equation}
 
-that is for about one petabyte \dnote{wtf?} for $K=10^{8}$.
-% may be estimated for $K$ ~ 1.6*10^{7}
+that is for about 58 Gb for Bitcoin statistics and $K=10^{-8}$ ({BTC / (Byte \cdot Block)}). Taking into account common idea, that \state{} should be kept in memory, 58 Gb is quite big \state{} size, however modern RAM discs allows to keep it. Note also, that it is upper-bound of \state{} size calculated from non-realistic assumption that all available supply will be paid for space-time fee.
 
-%moved miners will receive $S \cdot K$ coins per block.
+We may estimate expected \state{} size from assumption of fixed mining reward, namely that total miners block reward will be taken from space-time fee.
 
-\dnote{Max and expected state size}
+\begin{equation}
+S \cdot K = R_{block}
+\end{equation}
 
-%Another \esse{} feature, important for miners, is that it provides fee \textbf{mechanism to control state size}, preventing network centralization on a few amount of very powerful computers
+which leads to 1.3 Gb \State{} for $K=10^{-8}$ ({BTC / (Byte \cdot Block)}) which is close to current Bitcoins 1.6 Gb.
+
+Thus \esse{} model allows to control \state{} with $K$ parameter, allowing to estimate expected \state{} size and it's upper bound. Reasonable $K$ value leads to 1.3 Gb of expected \state{} size and 58 Gb of it's upper bound, preventing DoS attacks like \cite{bitcoin2015flood} and ensuring that there is no way to increase it's size to exceed existing RAM drives.
 
 \subsection{Subsidized space-time}
 
@@ -404,6 +408,7 @@ which is equals to 2 ($Mb \cdot Block$) for free.
 
 Thus, additional subsidized space-time parameter allows to use one blockchain as both money and data chains. Subsidized value may be configured to be big enough for regular users, allowing them to keep their outputs for free for some time, but small enough for blockchain usage as database. It also allows to increase $K$ value painlessly for regular users, but increasing lost coin recirculation rate.
 
+\dnote{TODO: Estimate state size}
 \dnote{transaction commission may be defined as $fee = Max(fee_{validation}, fee_{propagation}, fee_{space\_time})$}
 
 \section{Related Work}
