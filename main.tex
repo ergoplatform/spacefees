@@ -361,6 +361,7 @@ N_{coins} = \sum_i^{O_{max}}{K \cdot S_{block} \cdot i} = K \cdot S_{block} \cdo
 assuming that number of unspent outputs is big enough. Resulting state size
 
 \begin{equation}
+\label{eq:statesizemax}
 S = S_{block} \cdot O_{max} = \sqrt { 2 \cdot N_{coins} \cdot S_{block} \over K}
 \end{equation}
 
@@ -369,6 +370,7 @@ that is for about 58 Gb for Bitcoin statistics and $K=10^{-8}$ ($BTC / (Byte \cd
 We may estimate expected \state{} size from assumption of fixed mining reward, namely that total miners block reward will be taken from space-time fee.
 
 \begin{equation}
+\label{eq:statesizeexp}
 S \cdot K = R_{block}
 \end{equation}
 
@@ -404,11 +406,10 @@ Assuming $LT_{mean}=1$ year and $LT_{max}=10$ years and Bitcoin statistics, we m
   \end{array}
 \end{equation}
 
-which is equals to 2 ($Mb \cdot Block$) for free.
+which is equals to 2 ($Mb \cdot Block$) for free for each ouptut. This is exactly the increasing of upper bound for \state{} size because according to equation \ref{eq:statesizemax} subsidized space-time will just prolongate outputs lifetime for corresponding value. Morover according equation \ref{eq:statesizemax} expected \state{} size will remain the same because it is dictated by economical reasons only.
 
-Thus, additional subsidized space-time parameter allows to use one blockchain as both money and data chains. Subsidized value may be configured to be big enough for regular users, allowing them to keep their outputs for free for some time, but small enough for blockchain usage as database. It also allows to increase $K$ value painlessly for regular users, but increasing lost coin recirculation rate.
+Thus, additional subsidized space-time parameter allows to use the same blockchain for both money and data applications. Subsidized value may be configured to be big enough for regular users, allowing them to keep their outputs for free for some time, but small enough for blockchain usage as database. It's impact to \state{} size is negliable, while it allows to increase $K$ value painlessly for regular users, but increasing lost coin recirculation rate.
 
-\dnote{TODO: Estimate state size}
 \dnote{transaction commission may be defined as $fee = Max(fee_{validation}, fee_{propagation}, fee_{space\_time})$}
 
 \section{Related Work}
