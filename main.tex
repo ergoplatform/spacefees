@@ -364,7 +364,7 @@ assuming that number of unspent outputs is big enough. Resulting state size
 S = S_{block} \cdot O_{max} = \sqrt { 2 \cdot N_{coins} \cdot S_{block} \over K}
 \end{equation}
 
-that is for about 58 Gb for Bitcoin statistics and $K=10^{-8}$ ({BTC / (Byte \cdot Block)}). Taking into account common idea, that \state{} should be kept in memory, 58 Gb is quite big \state{} size, however modern RAM discs allows to keep it. Note also, that it is upper-bound of \state{} size calculated from non-realistic assumption that all available supply will be paid for space-time fee.
+that is for about 58 Gb for Bitcoin statistics and $K=10^{-8}$ ($BTC / (Byte \cdot Block)$). Taking into account common idea, that \state{} should be kept in memory, 58 Gb is quite big \state{} size, however modern RAM discs allows to keep it. Note also, that it is upper-bound of \state{} size calculated from non-realistic assumption that all available supply will be paid for space-time fee.
 
 We may estimate expected \state{} size from assumption of fixed mining reward, namely that total miners block reward will be taken from space-time fee.
 
@@ -372,7 +372,7 @@ We may estimate expected \state{} size from assumption of fixed mining reward, n
 S \cdot K = R_{block}
 \end{equation}
 
-which leads to 1.3 Gb \State{} for $K=10^{-8}$ ({BTC / (Byte \cdot Block)}) which is close to current Bitcoins 1.6 Gb.
+which leads to 1.3 Gb \state{} for $K=10^{-8}$ ($BTC / (Byte \cdot Block)$) which is close to current Bitcoins 1.6 Gb.
 
 Thus \esse{} model allows to control \state{} with $K$ parameter, allowing to estimate expected \state{} size and it's upper bound. Reasonable $K$ value leads to 1.3 Gb of expected \state{} size and 58 Gb of it's upper bound, preventing DoS attacks like \cite{bitcoin2015flood} and ensuring that there is no way to increase it's size to exceed existing RAM drives.
 
