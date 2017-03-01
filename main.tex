@@ -337,7 +337,7 @@ Remarkable that space-time reward does not depend on network throughput and can 
 
 As we have already noticed in section \ref{minerrew}, miners reward from space-time fee can be considered as static block reward. Extending this idea it is possible to get rid of coinbase transactions breaking usual transaction rule that sum of inputs should not be less then sum of outputs. To achieve this, all coins should be issued in genesis block in such a way, that every block one output will be released and miner will collect it's value according space-time fee model. Thereafter miner will collect reward in uniform way collecting abandoned outputs, whenever it was created in genesis or by cryptocurrency user.
 
-After all coins issue, nothing changes from both miners and users point of view: part of users money move every block to miner. Note, that it is isomorphic to inclation in existing cryptocurrencies, when users accumulations remain the same, but total supply increases via static miner reward.
+After all coins issue, nothing changes from both miners and users point of view: part of users money move every block to miner. Note, that it is isomorphic to inflation in existing cryptocurrencies, when users accumulations remain the same, but total supply increases via static miner reward.
 
 \subsection{State size}
 
@@ -354,7 +354,7 @@ assuming that number of unspent outputs is big enough. Resulting state size
 S = S_{block} \cdot O_{max} = \sqrt { 2 \cdot N_{coins} \cdot S_{block} \over K}
 \end{equation}
 
-that is for about 58 Gb for Bitcoin statistics and $K=10^{-8}$ ($BTC / (Byte \cdot Block)$). Taking into account common idea, that \state{} should be kept in memory, 58 Gb is quite big \state{} size, however modern RAM discs allows to keep it. Note also, that it is upper-bound of \state{} size calculated from non-realistic assumption that all available supply will be paid for space-time fee.
+that is for about 183 Gb for Bitcoin statistics and $K=10^{-9}$ ($BTC / (Byte \cdot Block)$). Taking into account common idea, that \state{} should be kept in memory, 183 is quite big \state{} size, however modern RAM discs allows to keep it. Note also, that it is upper-bound of \state{} size calculated from non-realistic assumption that all available supply will be paid for space-time fee.
 
 We may estimate expected \state{} size from assumption of fixed mining reward, namely that total miner block reward $M_{block}$ will be taken from space-time fee.
 
@@ -363,9 +363,9 @@ We may estimate expected \state{} size from assumption of fixed mining reward, n
 S \cdot K = M_{block}
 \end{equation}
 
-which leads to 1.3 Gb \state{} for $K=10^{-8}$ ($BTC / (Byte \cdot Block)$) which is close to current Bitcoins 1.6 Gb.
+which leads to 13 Gb \state{} for $K=10^{-9}$ ($BTC / (Byte \cdot Block)$) which is small enough to be processed on common hardware.
 
-Thus \esse{} model allows to control \state{} with $K$ parameter, allowing to estimate expected \state{} size and it's upper bound. Reasonable $K$ value leads to 1.3 Gb of expected \state{} size and 58 Gb of it's upper bound, preventing DoS attacks like \cite{bitcoin2015flood} and ensuring that there is no way to increase it's size to exceed existing RAM drives.
+Thus \esse{} model allows to control \state{} with $K$ parameter, allowing to estimate expected \state{} size and it's upper bound. Reasonable $K$ value leads to 13 Gb of expected \state{} size and 183 Gb of it's upper bound, preventing DoS attacks like \cite{bitcoin2015flood} and ensuring that there is no way to increase it's size to exceed existing RAM drives.
 
 \subsection{Subsidized space-time}
 
