@@ -239,7 +239,7 @@ For regular outputs of 36 Bytes space-time fee part will exceed propagation fee 
 
 From money flow analysis we can find out how to use \esse{} model to control cryptocurrency money flow, changing space-time price and encourage active economy participants. Another money flow analysis result is the dependency between $L$ and $K$ \ref{eq:ltmean} that can particularly by used in the \textit{Demurrage balance} model to reduce number of model parameters.
 
-%Considering total $1.6\cdot10^7$ of Bitcois in c circulation, we can conclude, that user should pay for about $6\cdot10^{-17}$ of total supply every block for every byte in output.
+%Considering total $1.6\cdot10^7$ of Bitcoins in c circulation, we can conclude, that user should pay for about $6\cdot10^{-17}$ of total supply every block for every byte in output.
 
 \subsection{Lost coins recirculation}
 \label{sec:re}
@@ -260,7 +260,7 @@ Maximum lifetime of a concrete outputs depends on miner-controlled \textit{K} pa
 {L_{max} \approx {1 \over 100 \cdot K}}
 \end{equation}
 
-Based on this equation, it is possible to chose \textit{K} keeping in mind desired maximum ouptut lifetime. Desiring 100 years period of coins fully recirculation, \textit{K} parameter should equals $2 \cdot 10^{-9}$ that is close to $10^{-9}$ from previous section. Regarding lost coins recirculation, significant difference between \textit{Postpaid} and \textit{Demurrage balance} is that in \textit{Postpaid} all coins will return to economy all at once after some quite big $L_{max}$ period, while in \textit{Demurrage balance} they will return to economy by small portions during this period. This makes \textit{Demurrage balance} preferable to \textit{Postpaid}, because lost coins from big enough outputs in \textit{Postpaid} will not return to the circulation in foreseeable future. Anyway in a log-term equilibrium conditions coins recirculation rate of both models will be calculated as
+Based on this equation, it is possible to chose \textit{K} keeping in mind desired maximum output lifetime. Desiring 100 years period of coins fully recirculation, \textit{K} parameter should equals $2 \cdot 10^{-9}$ that is close to $10^{-9}$ from previous section. Regarding lost coins recirculation, significant difference between \textit{Postpaid} and \textit{Demurrage balance} is that in \textit{Postpaid} all coins will return to economy all at once after some quite big $L_{max}$ period, while in \textit{Demurrage balance} they will return to economy by small portions during this period. This makes \textit{Demurrage balance} preferable to \textit{Postpaid}, because lost coins from big enough outputs in \textit{Postpaid} will not return to the circulation in foreseeable future. Anyway in a log-term equilibrium conditions coins recirculation rate of both models will be calculated as
 
 \begin{equation}
 R_{postpaid} = R_{demurrage} = {N_{lost} \cdot V_{output} \over L_{max}} = {N_{lost} \cdot K \cdot B}
@@ -377,7 +377,7 @@ Such subsidized fee may be calculated as
 fee_{sub} = Max(0, K \cdot B \cdot L - S_s)
 \end{equation}
 
-and provides another way to control \esse{} economy with $S_s$ parameter. In particular it allows define $K$ and $S_s$ to archieve desired money flow and coin recirculation rates. It is possible to estimate $K$ and $S_s$ required for mean output lifetime $L_{mean}$ and mean coin recirculation periods $R_{mean}$ using assumptions from previous section:
+and provides another way to control \esse{} economy with $S_s$ parameter. In particular it allows define $K$ and $S_s$ to achieve desired money flow and coin recirculation rates. It is possible to estimate $K$ and $S_s$ required for mean output lifetime $L_{mean}$ and mean coin recirculation periods $R_{mean}$ using assumptions from previous section:
 
 \begin{equation}
   \begin{array}{ccl}
@@ -395,7 +395,7 @@ Assuming $L_{mean}=1$ year and $L_{max}=10$ years and Bitcoin statistics, we may
   \end{array}
 \end{equation}
 
-which is equals to 2 ($Mb \cdot Block$) for free for each ouptut. This is exactly the increasing of upper bound for \state{} size because according to equation \ref{eq:statesizemax} subsidized space-time will just prolongate outputs lifetime for corresponding value. Morover according equation \ref{eq:statesizemax} expected \state{} size will remain the same because it is dictated by economical reasons only.
+which is equals to 2 ($Mb \cdot Block$) for free for each ouptut. This is exactly the increasing of upper bound for \state{} size because according to equation \ref{eq:statesizemax} subsidized space-time will just prolongate outputs lifetime for corresponding value. Moreover according equation \ref{eq:statesizemax} expected \state{} size will remain the same because it is dictated by economical reasons only.
 
 Thus, additional subsidized space-time parameter allows to use the same blockchain for both money and data applications. Subsidized value may be configured to be big enough for regular users, allowing them to keep their outputs for free for some time, but small enough for blockchain usage as database. It's impact to \state{} size is negligible, while it allows to increase $K$ value painlessly for regular users, but increasing lost coin recirculation rate.
 
