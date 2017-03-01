@@ -337,6 +337,8 @@ Remarkable that space-time reward does not depend on network throughput and can 
 
 As we have already noticed in section \ref{minerrew}, miners reward from space-time fee can be considered as static block reward. Extending this idea it is possible to get rid of coinbase transactions breaking usual transaction rule that sum of inputs should not be less then sum of outputs. To achieve this, all coins should be issued in genesis block in such a way, that every block one output will be released and miner will collect it's value according space-time fee model. Thereafter miner will collect reward in uniform way collecting abandoned outputs, whenever it was created in genesis or by cryptocurrency user.
 
+After all coins issue, nothing changes from both miners and users point of view: part of users money move every block to miner. Note, that it is isomorphic to inclation in existing cryptocurrencies, when users accumulations remain the same, but total supply increases via static miner reward.
+
 \subsection{State size}
 
 Finally, we are going to analyze direct assignment of \esse{} model - to control \state{} size. Upper bound of \state{} size is $S$ may be easily calculated from assumption, that all available supply will be paid for space-time fee for one huge output to keep it in state for 1 block. However usually block size is limited by $S_{block}$ parameter and thus maximum output size is $B = S_{block}$. As soon as each block space-time fee $K \cdot B$ should be paid for all previously created outputs, maximum possible number of such outputs $O_{max}$ may be calculated from equation:
