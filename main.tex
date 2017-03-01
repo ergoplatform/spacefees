@@ -150,16 +150,16 @@ In most of existing cryptocurrencies it's not clear, how to calculate \textit{$S
 
 \subsection{Prepaid outputs}
 
-First model we are going to analyze is prepaid outputs. In it each output represents a box of fixed size \textit{BS} in a \state{} and prepaid until explicitly known period of time \textit{LT}. After \textit{LT} anyone ~(presumably miner, generated first block after that) will be able spend this overdue output. Thus spending script for all outputs will be a combination of regular spending script and loan period \textit{LT}:
+First model we are going to analyze is prepaid outputs. In it each output represents a box of fixed size \textit{BS} in a \state{} and prepaid until explicitly known period of time \textit{L}. After \textit{L} anyone ~(presumably miner, generated first block after that) will be able spend this overdue output. Thus spending script for all outputs will be a combination of regular spending script and loan period \textit{L}:
 
 \begin{equation}
-(Height > LT) \lor (regular\_script)
+(Height > L) \lor (regular\_script)
 \end{equation}
 
 where \textit{Height} is current blockchain height and \textit{regular\_script} is user-defined output spending script. This lifetime part of a script is a part of consensus, and space-time transaction fee is paid at the time of output creation:
 
 \begin{equation}
-fee_{prepaid} = K \cdot (\sum_i{(BS_i \cdot (LT_i - Height))} - \sum_j{(BS_j \cdot (LT_j - Height)}))
+fee_{prepaid} = K \cdot (\sum_i{(BS_i \cdot (L_i - Height))} - \sum_j{(BS_j \cdot (L_j - Height)}))
 \end{equation}
 
 \subsection{Postpaid outputs}
@@ -184,7 +184,7 @@ After that anyone should be able to spend this output, sending all it's value to
 
 \subsection{Demurrage balance}
 
-The last model we are going to analyze is a combination of prepaid and postpaid models. Like in postpaid model, user pays for each his output when we spends it in an outgoing transaction, but is enforced to move his coins before a known time \textit{$HS$}. If the user do not do this, anyone can create a transaction with this output, returning them to owner without fee-space fee ${K \cdot BS \cdot LT}$. In this model \textit{LT} is another protocol parameter, that may be fixed by protocol design or changed via miners voting like \textit{K}.
+The last model we are going to analyze is a combination of prepaid and postpaid models. Like in postpaid model, user pays for each his output when we spends it in an outgoing transaction, but is enforced to move his coins before a known time \textit{$HS$}. If the user do not do this, anyone can create a transaction with this output, returning them to owner without fee-space fee ${K \cdot BS \cdot L}$. In this model \textit{L} is another protocol parameter, that may be fixed by protocol design or changed via miners voting like \textit{K}.
 
 \section{Analysis of The Model}
 \label{sec:analysis}
@@ -212,7 +212,7 @@ To estimate money flow let's assume, that user will move his money when space-ti
 
 \begin{equation}
 \label{eq:ltmean}
-LT_{mean}={fee_{propagation} \over K \cdot BS}
+L_{mean}={fee_{propagation} \over K \cdot BS}
 \end{equation}
 
 
@@ -221,7 +221,7 @@ Since there are $N_{UTXO}$ in a system and each of them contains $V_{output}$ co
 \dnote{start: estimate number of transactions per block}
 Number of transactions:
 \begin{equation}
-N_{transactions} \approx {N_{UTXO} \over LT_{mean}} = {N_{UTXO} \cdot K \cdot BS \over fee_{propagation}}
+N_{transactions} \approx {N_{UTXO} \over L_{mean}} = {N_{UTXO} \cdot K \cdot BS \over fee_{propagation}}
 \end{equation}
 
 \begin{equation}
@@ -230,7 +230,7 @@ M_{flow} \approx { N_{transactions} \cdot V_{output} \over N_{coins}} = {K \cdot
 \dnote{end: estimate number of transactions per block}
 
 \begin{equation}
-M_{flow}={N_{UTXO} \cdot V_{output} \over LT_{mean} \cdot N_{coins}}=K \cdot {N_{UTXO} \cdot V_{output} \cdot BS \over fee_{propagation} \cdot N_{coins}} = K \cdot {BS \over fee_{propagation}}
+M_{flow}={N_{UTXO} \cdot V_{output} \over L_{mean} \cdot N_{coins}}=K \cdot {N_{UTXO} \cdot V_{output} \cdot BS \over fee_{propagation} \cdot N_{coins}} = K \cdot {BS \over fee_{propagation}}
 \end{equation}
 
 Thus, money flow may be controlled with \textit{K} parameter. This formula provide a way to estimate \textit{K} based on current Bitcoin statistics:
@@ -241,7 +241,7 @@ K={M_{flow} \cdot fee_{propagation} \over BS} \approx {10^{-9}} ({BTC / (Byte \c
 
 For regular outputs of 36 Bytes space-time fee part will exceed propagation fee after 56000\dnote{why 56000?} blocks or 388 days. This means, that for active users, who spend their money more often than once a year, space-time fee will be negligible relative to propagation fee.
 
-From money flow analysis we can conclude, that \esse{} model make sense even in cash-only chains, where output size is fixed and very slow - cryptocurrency can control it's money flow, changing space-time price and encourage active economy participants. Another money flow analysis result is the dependency between $LT$ and $K$ \ref{eq:ltmean}
+From money flow analysis we can conclude, that \esse{} model make sense even in cash-only chains, where output size is fixed and very slow - cryptocurrency can control it's money flow, changing space-time price and encourage active economy participants. Another money flow analysis result is the dependency between $L$ and $K$ \ref{eq:ltmean}
  that can particularly by used in the \textit{Demurrage balance} model to reduce number of model parameters.
 
 %Considering total $1.6\cdot10^7$ of Bitcois in c circulation, we can conclude, that user should pay for about $6\cdot10^{-17}$ of total supply every block for every byte in output.
@@ -253,40 +253,40 @@ The need of recirculating lost coins was widely discussed in cryptocurrencies \c
 
 While negative impact of deflation to cryptocurrencies is not proven, most of researchers agree in need of lost coins recirculating. \esse{} model provide lost coins recirculation mechanism by design, while it's properties vary from model implementation and parameters. In this section we are going to estimate lost coins recirculation dependency from chosen model and it's parameters.
 
-Fee for keeping output of size \textit{BS} is the \state{} for \textit{LT} blocks is ${K \cdot BS \cdot LT}$. In \textit{Postpaid} and \textit{Demurrage balance} models space-time fee is taken from output value itself, so when keys for output with \textit{$V_{output}$} coins are lost, they will return to economy after \textit{$LT_{max}$} blocks, where
+Fee for keeping output of size \textit{BS} is the \state{} for \textit{L} blocks is ${K \cdot BS \cdot L}$. In \textit{Postpaid} and \textit{Demurrage balance} models space-time fee is taken from output value itself, so when keys for output with \textit{$V_{output}$} coins are lost, they will return to economy after \textit{$L_{max}$} blocks, where
 
 \begin{equation}
-{LT_{max} = {V_{output} \over K \cdot BS}}
+{L_{max} = {V_{output} \over K \cdot BS}}
 \end{equation}
 
 Maximum lifetime of a concrete outputs depends on miner-controlled \textit{K} parameter and user-defined output size and value. As in previous section we will estimate this dependency based on Bitcoin stats:
 
 \begin{equation}
-{LT_{max} \approx {1 \over 100 \cdot K}}
+{L_{max} \approx {1 \over 100 \cdot K}}
 \end{equation}
 
-Based on this equation, it is possible to chose \textit{K} keeping in mind desired maximum ouptut lifetime. Desiring 10 years period of coins fully recirculation, \textit{K} parameter should equals $10^{-6}$ that is much bigger than $10^{-9}$ from previous section \dnote{$??? 10 is too small, you'll be able to spend only hlaf of your money after 5 years$}. Regarding lost coins recirculation, significant difference between \textit{Postpaid} and \textit{Demurrage balance} is that in \textit{Postpaid} all coins will return to economy all at once after some quite big $LT_{max}$ period, while in \textit{Demurrage balance} they will return to economy by small portions during this period. This makes \textit{Demurrage balance} preferable to \textit{Postpaid}, because lost coins from big enough outputs in \textit{Postpaid} will not return to the circulation in foreseeable future. Anyway in a log-term equilibrium conditions coins recirculation rate of both models will be calculated as
+Based on this equation, it is possible to chose \textit{K} keeping in mind desired maximum ouptut lifetime. Desiring 10 years period of coins fully recirculation, \textit{K} parameter should equals $10^{-6}$ that is much bigger than $10^{-9}$ from previous section \dnote{$??? 10 is too small, you'll be able to spend only hlaf of your money after 5 years$}. Regarding lost coins recirculation, significant difference between \textit{Postpaid} and \textit{Demurrage balance} is that in \textit{Postpaid} all coins will return to economy all at once after some quite big $L_{max}$ period, while in \textit{Demurrage balance} they will return to economy by small portions during this period. This makes \textit{Demurrage balance} preferable to \textit{Postpaid}, because lost coins from big enough outputs in \textit{Postpaid} will not return to the circulation in foreseeable future. Anyway in a log-term equilibrium conditions coins recirculation rate of both models will be calculated as
 
 \begin{equation}
-R_{postpaid} = R_{demurrage} = {N_{lost} \cdot V_{output} \over LT_{max}} = {N_{lost} \cdot K \cdot BS}
+R_{postpaid} = R_{demurrage} = {N_{lost} \cdot V_{output} \over L_{max}} = {N_{lost} \cdot K \cdot BS}
 \end{equation}
 
 where $N_{lost}$ is the number of outputs with lost keys. Assuming current Bitcoins statistics and $N_{lost}\approx10^6$ we can estimate, that $\approx0.036$ BTC will be released from abandoned outputs keys every block.
 
-In \textit{Prepaid} model user define $LT_{max}$ by himself when he creates output and number of released coins after $LT_{max}$ is equals to output value $V_{output}$ rater than much smaller space-time fee $fee_{space\_time}$. Note here, that $LT_{max}$ do not directly depends on \textit{K} and coins recirculation rate will only depend on $V_{output}$, user-defined $LT_{max}$ and number of lost outputs $N_{lost}$:
+In \textit{Prepaid} model user define $L_{max}$ by himself when he creates output and number of released coins after $L_{max}$ is equals to output value $V_{output}$ rater than much smaller space-time fee $fee_{space\_time}$. Note here, that $L_{max}$ do not directly depends on \textit{K} and coins recirculation rate will only depend on $V_{output}$, user-defined $L_{max}$ and number of lost outputs $N_{lost}$:
 
 \begin{equation}
-R_{prepaid} = {N_{lost} \cdot V_{output} \over LT_{max}}
+R_{prepaid} = {N_{lost} \cdot V_{output} \over L_{max}}
 \end{equation}
 
-Let's assume user-defined coin recirculation period $LT_{max}\approx10$ years and $K\approx10^{-9}$ from previous section, we can estimate difference between prepaid and postpaid models:
+Let's assume user-defined coin recirculation period $L_{max}\approx10$ years and $K\approx10^{-9}$ from previous section, we can estimate difference between prepaid and postpaid models:
 
 \begin{equation}
-{R_{prepaid} \over R_{postpaid}} = { V_{output}  \over  K \cdot BS \cdot LT_{max}} \approx 20
+{R_{prepaid} \over R_{postpaid}} = { V_{output}  \over  K \cdot BS \cdot L_{max}} \approx 20
 \end{equation}
 
-%R_{postpaid} = R_{demurrage} = {N_{lost} \cdot V_{output} \over LT_{max}} = {N_{lost} \cdot K \cdot BS} = 10^6 * 10^(-9) * 35 = 0.035
-%R_{prepaid} = {N_{lost} \cdot V_{output} \over LT_{max}} = 10^(6) * 0.36 /  = 0.684931507
+%R_{postpaid} = R_{demurrage} = {N_{lost} \cdot V_{output} \over L_{max}} = {N_{lost} \cdot K \cdot BS} = 10^6 * 10^(-9) * 35 = 0.035
+%R_{prepaid} = {N_{lost} \cdot V_{output} \over L_{max}} = 10^(6) * 0.36 /  = 0.684931507
 %  \item Mean number of coins in one output: $V_{output}=0.35$ BTC
 %   \item Simple payment transaction fee: $fee_{propagation}=0.0002$ BTC
 
@@ -382,24 +382,24 @@ It is usual to pay for space-time multiplication for database leasing and thus \
 Such subsidized fee may be calculated as
 
 \begin{equation}
-fee_{sub} = Max(0, K \cdot BS \cdot LT - S_s)
+fee_{sub} = Max(0, K \cdot BS \cdot L - S_s)
 \end{equation}
 
-and provides another way to control \esse{} economy with $S_s$ parameter. In particular it allows define $K$ and $S_s$ to archieve desired money flow and coin recirculation rates. As we have already noticed above $K$ parameter should be sufficiently different to archieve reasonable money flow and coin recirculation. It is possible to estimate $K$ and $S_s$ required for mean output lifetime $LT_{mean}$ and mean coin recirculation periods $R_{mean}$ using assumptions from previous sections:
+and provides another way to control \esse{} economy with $S_s$ parameter. In particular it allows define $K$ and $S_s$ to archieve desired money flow and coin recirculation rates. As we have already noticed above $K$ parameter should be sufficiently different to archieve reasonable money flow and coin recirculation. It is possible to estimate $K$ and $S_s$ required for mean output lifetime $L_{mean}$ and mean coin recirculation periods $R_{mean}$ using assumptions from previous sections:
 
 \begin{equation}
   \begin{array}{ccl}
-   K \cdot BS \cdot LT_{max} - S_s & = & V_{output} \\
-   K \cdot BS \cdot LT_{mean} - S_s & = & fee_{propagation}
+   K \cdot BS \cdot L_{max} - S_s & = & V_{output} \\
+   K \cdot BS \cdot L_{mean} - S_s & = & fee_{propagation}
   \end{array}
 \end{equation}
 
-Assuming $LT_{mean}=1$ year and $LT_{max}=10$ years and Bitcoin statistics, we may estimate values of $K$ and $S_s$:
+Assuming $L_{mean}=1$ year and $L_{max}=10$ years and Bitcoin statistics, we may estimate values of $K$ and $S_s$:
 
 \begin{equation}
   \begin{array}{ccl}
-   K & = & {V_{output} - fee_{propagation} \over BS \cdot (LT_{max} - LT_{mean})} \approx \quad 2*10^{-8} ({BTC / (Byte \cdot Block)}) \\
-   S_s & = & {(V_{output} - fee_{propagation}) \cdot LT_{mean} \over (LT_{max} - LT_{mean})} - fee_{propagation} \approx 0.04\quad(BTC)
+   K & = & {V_{output} - fee_{propagation} \over BS \cdot (L_{max} - L_{mean})} \approx \quad 2*10^{-8} ({BTC / (Byte \cdot Block)}) \\
+   S_s & = & {(V_{output} - fee_{propagation}) \cdot L_{mean} \over (L_{max} - L_{mean})} - fee_{propagation} \approx 0.04\quad(BTC)
   \end{array}
 \end{equation}
 
