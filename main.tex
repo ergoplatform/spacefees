@@ -182,14 +182,14 @@ After that anyone should be able to spend this output, sending all it's value to
 (Height > H_{max}) \lor (regular\_script)
 \end{equation}
 
-\subsection{Leaking balance}
+\subsection{Demurrage balance}
 
 The last model we are going to analyze is a combination of prepaid and postpaid models. Like in postpaid model, user pays for each his output when we spends it in an outgoing transaction, but is enforced to move his coins before a known time \textit{$HS$}. If the user do not do this, anyone can create a transaction with this output, returning them to owner without fee-space fee ${K \cdot BS \cdot LT}$. In this model \textit{LT} is another protocol parameter, that may be fixed by protocol design or changed via miners voting like \textit{K}.
 
 \section{Analysis of The Model}
 \label{sec:analysis}
 
-In this section we are going to provide comprehensive analysis of \esse model. Besides of it's main goal to control state size, it provides additional benefits as side-effects, that can be used in cryptocurrency design. Our further analysis will be based on the following stats from current Bitcoin network:
+In this section we are going to provide comprehensive analysis of \esse{} model. Besides of it's main goal to control state size, it provides additional benefits as side-effects, that can be used in cryptocurrency design. Our further analysis will be based on the following stats from current Bitcoin network:
 
 \begin{itemize}
   \item Number of unspent transaction outputs: $N_{UTXO} \approx 45000000$
@@ -242,7 +242,7 @@ K={M_{flow} \cdot fee_{propagation} \over BS} \approx {10^{-9}} ({BTC / (Byte \c
 For regular outputs of 36 Bytes space-time fee part will exceed propagation fee after 56000\dnote{why 56000?} blocks or 388 days. This means, that for active users, who spend their money more often than once a year, space-time fee will be negligible relative to propagation fee.
 
 From money flow analysis we can conclude, that \esse{} model make sense even in cash-only chains, where output size is fixed and very slow - cryptocurrency can control it's money flow, changing space-time price and encourage active economy participants. Another money flow analysis result is the dependency between $LT$ and $K$ \ref{eq:ltmean}
- that can particularly by used in the \textit{Leaking balance} model to reduce number of model parameters.
+ that can particularly by used in the \textit{Demurrage balance} model to reduce number of model parameters.
 
 %Considering total $1.6\cdot10^7$ of Bitcois in c circulation, we can conclude, that user should pay for about $6\cdot10^{-17}$ of total supply every block for every byte in output.
 
@@ -253,7 +253,7 @@ The need of recirculating lost coins was widely discussed in cryptocurrencies \c
 
 While negative impact of deflation to cryptocurrencies is not proven, most of researchers agree in need of lost coins recirculating. \esse{} model provide lost coins recirculation mechanism by design, while it's properties vary from model implementation and parameters. In this section we are going to estimate lost coins recirculation dependency from chosen model and it's parameters.
 
-Fee for keeping output of size \textit{BS} is the \state{} for \textit{LT} blocks is ${K \cdot BS \cdot LT}$. In \textit{Postpaid} and \textit{Leaking balance} models space-time fee is taken from output value itself, so when keys for output with \textit{$V_{output}$} coins are lost, they will return to economy after \textit{$LT_{max}$} blocks, where
+Fee for keeping output of size \textit{BS} is the \state{} for \textit{LT} blocks is ${K \cdot BS \cdot LT}$. In \textit{Postpaid} and \textit{Demurrage balance} models space-time fee is taken from output value itself, so when keys for output with \textit{$V_{output}$} coins are lost, they will return to economy after \textit{$LT_{max}$} blocks, where
 
 \begin{equation}
 {LT_{max} = {V_{output} \over K \cdot BS}}
@@ -265,10 +265,10 @@ Maximum lifetime of a concrete outputs depends on miner-controlled \textit{K} pa
 {LT_{max} \approx {1 \over 100 \cdot K}}
 \end{equation}
 
-Based on this equation, it is possible to chose \textit{K} keeping in mind desired maximum ouptut lifetime. Desiring 10 years period of coins fully recirculation, \textit{K} parameter should equals $10^{-6}$ that is much bigger than $10^{-9}$ from previous section \dnote{$??? 10 is too small, you'll be able to spend only hlaf of your money after 5 years$}. Regarding lost coins recirculation, significant difference between \textit{Postpaid} and \textit{Leaking balance} is that in \textit{Postpaid} all coins will return to economy all at once after some quite big $LT_{max}$ period, while in \textit{Leaking balance} they will return to economy by small portions during this period. This makes \textit{Leaking balance} preferable to \textit{Postpaid}, because lost coins from big enough outputs in \textit{Postpaid} will not return to the circulation in foreseeable future. Anyway in a log-term equilibrium conditions coins recirculation rate of both models will be calculated as
+Based on this equation, it is possible to chose \textit{K} keeping in mind desired maximum ouptut lifetime. Desiring 10 years period of coins fully recirculation, \textit{K} parameter should equals $10^{-6}$ that is much bigger than $10^{-9}$ from previous section \dnote{$??? 10 is too small, you'll be able to spend only hlaf of your money after 5 years$}. Regarding lost coins recirculation, significant difference between \textit{Postpaid} and \textit{Demurrage balance} is that in \textit{Postpaid} all coins will return to economy all at once after some quite big $LT_{max}$ period, while in \textit{Demurrage balance} they will return to economy by small portions during this period. This makes \textit{Demurrage balance} preferable to \textit{Postpaid}, because lost coins from big enough outputs in \textit{Postpaid} will not return to the circulation in foreseeable future. Anyway in a log-term equilibrium conditions coins recirculation rate of both models will be calculated as
 
 \begin{equation}
-R_{postpaid} = R_{leaking} = {N_{lost} \cdot V_{output} \over LT_{max}} = {N_{lost} \cdot K \cdot BS}
+R_{postpaid} = R_{demurrage} = {N_{lost} \cdot V_{output} \over LT_{max}} = {N_{lost} \cdot K \cdot BS}
 \end{equation}
 
 where $N_{lost}$ is the number of outputs with lost keys. Assuming current Bitcoins statistics and $N_{lost}\approx10^6$ we can estimate, that $\approx0.036$ BTC will be released from abandoned outputs keys every block.
@@ -285,14 +285,14 @@ Let's assume user-defined coin recirculation period $LT_{max}\approx10$ years an
 {R_{prepaid} \over R_{postpaid}} = { V_{output}  \over  K \cdot BS \cdot LT_{max}} \approx 20
 \end{equation}
 
-%R_{postpaid} = R_{leaking} = {N_{lost} \cdot V_{output} \over LT_{max}} = {N_{lost} \cdot K \cdot BS} = 10^6 * 10^(-9) * 35 = 0.035
+%R_{postpaid} = R_{demurrage} = {N_{lost} \cdot V_{output} \over LT_{max}} = {N_{lost} \cdot K \cdot BS} = 10^6 * 10^(-9) * 35 = 0.035
 %R_{prepaid} = {N_{lost} \cdot V_{output} \over LT_{max}} = 10^(6) * 0.36 /  = 0.684931507
 %  \item Mean number of coins in one output: $V_{output}=0.35$ BTC
 %   \item Simple payment transaction fee: $fee_{propagation}=0.0002$ BTC
 
  \dnote{Check, should be something like 1000}
 
-Thus \esse{} model by design provide a way to return lost coins to circulation, preventing deflation risks. \textit{Postpaid} model has a disadvantage, that lost coins will be returned to circulation in a far future, in \textit{Prepaid} model coin recirculation rate is much higher than in other models and \textit{Leaking balance} model is a smoother way of coin recirculation.
+Thus \esse{} model by design provide a way to return lost coins to circulation, preventing deflation risks. \textit{Postpaid} model has a disadvantage, that lost coins will be returned to circulation in a far future, in \textit{Prepaid} model coin recirculation rate is much higher than in other models and \textit{Demurrage balance} model is a smoother way of coin recirculation.
 
 \subsection{Miner rewards}
 \label{minerrew}
@@ -314,7 +314,7 @@ where $C$ is non-negative constant. Space-time miner reward depends on \state{} 
 M_{space-time} = \sum_{i=1}^{N_{UTXO}} K_i \cdot BS_i \approx K \cdot N_{UTXO} \cdot BS
 \end{equation}
 
-Recirculation reward was calculated in previous section and depends on space-time fee model. However it can be generalized as with $K_{model}$ parameter, that is equals to 1 for \textit{Leaking balance} and \textit{Postpaid} models, and $K_{model} > 1$ \dnote{20?} for \textit{Prepaid} model:
+Recirculation reward was calculated in previous section and depends on space-time fee model. However it can be generalized as with $K_{model}$ parameter, that is equals to 1 for \textit{Demurrage balance} and \textit{Postpaid} models, and $K_{model} > 1$ \dnote{20?} for \textit{Prepaid} model:
 
 \begin{equation}
 M_{recirculation} = {K_{model} \cdot  N_{lost} \cdot K \cdot BS}
@@ -346,10 +346,6 @@ that is naturally coincide to estimations from section \ref{eq:ltmean} while bot
 \subsection{Cryptocurrency inflation}
 
 As we have already noticed in section \ref{minerrew}, miners reward from space-time fee can be considered as static block reward. Extending this idea it is possible to get rid of coinbase transactions breaking usual transaction rule that sum of inputs should not be less then sum of outputs. To achieve this, all coins should be issued in genesis block in such a way, that every block one output will be released and miner will collect it's value according space-time fee model. Thereafter miner will collect reward in uniform way collecting abandoned outputs, whenever it was created in genesis or by cryptocurrency user.
-
-\subsection{Comparison with Gesell's money}
-
-\dnote{Comparison with Gesell's money~(money with demurrage)}
 
 \subsection{State size}
 
@@ -411,9 +407,14 @@ which is equals to 2 ($Mb \cdot Block$) for free for each ouptut. This is exactl
 
 Thus, additional subsidized space-time parameter allows to use the same blockchain for both money and data applications. Subsidized value may be configured to be big enough for regular users, allowing them to keep their outputs for free for some time, but small enough for blockchain usage as database. It's impact to \state{} size is negligible, while it allows to increase $K$ value painlessly for regular users, but increasing lost coin recirculation rate.
 
-\dnote{transaction commission may be defined as $fee = Max(fee_{validation}, fee_{propagation}, fee_{space\_time})$}
 
 \section{Related Work}
+
+\dnote{transaction commission may be defined as $fee = Max(fee_{validation}, fee_{propagation}, fee_{space\_time})$}
+
+\section{Further Work}
+
+\dnote{Comparison with Gesell's money~(money with demurrage)}
 
 \section{Conclusion}
 
