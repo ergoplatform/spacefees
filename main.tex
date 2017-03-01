@@ -302,7 +302,7 @@ where $C$ is non-negative constant. Space-time miner reward depends on \state{} 
 M_{space-time} = \sum_{i=1}^{N_{UTXO}} K_i \cdot B_i \approx K \cdot N_{UTXO} \cdot B
 \end{equation}
 
-Recirculation reward was calculated in previous section and depends on space-time fee model. However it can be generalized as with $K_{model}$ parameter, that is equals to 1 for \textit{Demurrage balance} and \textit{Postpaid} models, and $K_{model} > 1$ \dnote{20?} for \textit{Prepaid} model:
+Recirculation reward was calculated in previous section and depends on space-time fee model. However it can be generalized as with $K_{model}$ parameter, that is equals to 1 for \textit{Demurrage balance} and \textit{Postpaid} models, and $K_{model} \approx 20$ for \textit{Prepaid} model:
 
 \begin{equation}
 M_{recirculation} = {K_{model} \cdot  N_{lost} \cdot K \cdot B}
@@ -327,7 +327,9 @@ that allows to estimate such $K$, when additional \esse{} reward will exceed com
 M_{postpaid} = {M_{pg} \over B \cdot N_{UTXO} \cdot (1 + M)} \approx 10^{-9} ({BTC / (Byte \cdot Block)})
 \end{equation}
 
-that is naturally coincide to estimations from section \ref{eq:ltmean} while both estimations are made from assumption, that propagation fee and space-time fee are equal for end users. Remarkable that space-time reward does not depend on network throughput and can be easily predicted. Since it will be accrued to generator of block with concrete height, it may be considered as a constant block reward fixing problem of blockchain instability without block reward \cite{carlsten2016instability}. It's value may be controlled by $K$ parameter making mining more stable and thus network more secure.
+that is naturally coincide to estimations from section \ref{eq:ltmean} while miner reward equals to user losses.
+
+Remarkable that space-time reward does not depend on network throughput and can be easily predicted. Since it will be accrued to generator of block with concrete height, it may be considered as a constant block reward fixing problem of blockchain instability without block reward \cite{carlsten2016instability}. It's value may be controlled by $K$ parameter making mining more stable and thus network more secure.
 
 \dnote{What is an output value when miner is interested in collecting it?}
 
