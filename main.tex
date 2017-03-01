@@ -208,12 +208,13 @@ In this section we are going to provide comprehensive analysis of \esse model. B
 
 From users point of view, the longer you keep some output, the bigger space-time fee you pay. Thus \esse{} provides an incentive to move your coins stimulating economic activity. In all fee models, described in section~\ref{sec:model}, user pays ${K \cdot BS}$ coins every block for keeping his output into \state{}. If he use blockchain with \esse{} as a money chain, output size \textit{BS} is relatively small and do not depend on output value.
 
-To estimate money flow let's assume, that user will move his money when space-time fee will start dominate over other transactional costs an therefore creation of transaction will be almost free for him. Thus we can estimate expected mean output lifetime as
+To estimate money flow let's assume, that user will move his money when space-time fee will start dominate over other transactional costs \dnote{why?} an therefore creation of transaction will be almost free \dnote{not true} for him. Thus we can estimate expected mean output lifetime as
 
 \begin{equation}
 \label{eq:ltmean}
 LT_{mean}={fee_{propagation} \over K \cdot BS}
 \end{equation}
+
 
 Since there are $N_{UTXO}$ in a system and each of them contains $V_{output}$ coins, we can estimate per cent of coins, that will be moved in each block incentivized by \esse{} model:
 
@@ -238,7 +239,7 @@ Thus, money flow may be controlled with \textit{K} parameter. This formula provi
 K={M_{flow} \cdot fee_{propagation} \over BS} \approx {10^{-9}} ({BTC / (Byte \cdot Block)})
 \end{equation}
 
-For regular outputs of 36 Bytes space-time fee part will exceed propagation fee after 56000 blocks or 388 days. This means, that for active users, who spend their money more often than once a year, space-time fee will be negligible relative to propagation fee.
+For regular outputs of 36 Bytes space-time fee part will exceed propagation fee after 56000\dnote{why 56000?} blocks or 388 days. This means, that for active users, who spend their money more often than once a year, space-time fee will be negligible relative to propagation fee.
 
 From money flow analysis we can conclude, that \esse{} model make sense even in cash-only chains, where output size is fixed and very slow - cryptocurrency can control it's money flow, changing space-time price and encourage active economy participants. Another money flow analysis result is the dependency between $LT$ and $K$ \ref{eq:ltmean}
  that can particularly by used in the \textit{Leaking balance} model to reduce number of model parameters.
