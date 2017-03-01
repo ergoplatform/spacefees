@@ -246,7 +246,7 @@ From money flow analysis we can find out how to use \esse{} model to control cry
 
 The need of recirculating lost coins was widely discussed in cryptocurrencies \cite{gjermundrod2014recirculating, gjermundrod2016going} in order to combat deflation that will inevitably occur in cryptocurrencies with the fixed amount of coins to be circulated. Coins declared supply is known by cryptocurrency design, but available supply is unknown due to lost coins, locked in outputs that will never be spent \cite{ron2013quantitative}. On the other hand deflation is a real problem in the traditional monetary system, but it is still open question, whether it will also be a problem in the Bitcoin economy \cite{bitcoinDeflationarySpiral, barber2012bitter}.
 
-While negative impact of deflation to cryptocurrencies is not proven, most of researchers agree in need of lost coins recirculating. \esse{} model provide lost coins recirculation mechanism by design, while it's properties vary from model implementation and parameters. In this section we are going to estimate lost coins recirculation dependency from chosen model and it's parameters.
+While negative impact of deflation to cryptocurrencies is not proven, most of researchers agree in non-negative impact of lost coins recirculating. \esse{} model provide lost coins recirculation mechanism by design, while it's properties vary from model implementation and parameters. In this section we are going to estimate lost coins recirculation dependency from chosen model and it's parameters.
 
 Fee for keeping output of size \textit{B} is the \state{} for \textit{L} blocks is ${K \cdot B \cdot L}$. In \textit{Postpaid} and \textit{Demurrage balance} models space-time fee is taken from output value itself, so when keys for output with \textit{$V_{output}$} coins are lost, they will return to economy after \textit{$L_{max}$} blocks, where
 
@@ -260,13 +260,13 @@ Maximum lifetime of a concrete outputs depends on miner-controlled \textit{K} pa
 {L_{max} \approx {1 \over 100 \cdot K}}
 \end{equation}
 
-Based on this equation, it is possible to chose \textit{K} keeping in mind desired maximum ouptut lifetime. Desiring 10 years period of coins fully recirculation, \textit{K} parameter should equals $10^{-6}$ that is much bigger than $10^{-9}$ from previous section \dnote{$??? 10 is too small, you'll be able to spend only hlaf of your money after 5 years$}. Regarding lost coins recirculation, significant difference between \textit{Postpaid} and \textit{Demurrage balance} is that in \textit{Postpaid} all coins will return to economy all at once after some quite big $L_{max}$ period, while in \textit{Demurrage balance} they will return to economy by small portions during this period. This makes \textit{Demurrage balance} preferable to \textit{Postpaid}, because lost coins from big enough outputs in \textit{Postpaid} will not return to the circulation in foreseeable future. Anyway in a log-term equilibrium conditions coins recirculation rate of both models will be calculated as
+Based on this equation, it is possible to chose \textit{K} keeping in mind desired maximum ouptut lifetime. Desiring 100 years period of coins fully recirculation, \textit{K} parameter should equals $2 \cdot 10^{-9}$ that is close to $10^{-9}$ from previous section. Regarding lost coins recirculation, significant difference between \textit{Postpaid} and \textit{Demurrage balance} is that in \textit{Postpaid} all coins will return to economy all at once after some quite big $L_{max}$ period, while in \textit{Demurrage balance} they will return to economy by small portions during this period. This makes \textit{Demurrage balance} preferable to \textit{Postpaid}, because lost coins from big enough outputs in \textit{Postpaid} will not return to the circulation in foreseeable future. Anyway in a log-term equilibrium conditions coins recirculation rate of both models will be calculated as
 
 \begin{equation}
 R_{postpaid} = R_{demurrage} = {N_{lost} \cdot V_{output} \over L_{max}} = {N_{lost} \cdot K \cdot B}
 \end{equation}
 
-where $N_{lost}$ is the number of outputs with lost keys. Assuming current Bitcoins statistics and $N_{lost}\approx10^6$ we can estimate, that $\approx0.036$ BTC will be released from abandoned outputs keys every block.
+where $N_{lost}$ is the number of outputs with lost keys. Assuming current Bitcoins statistics, $N_{lost}\approx10^6$ and $K = 10^{-9}$ we can estimate, that $\approx0.036$ BTC will be released from abandoned outputs every block.
 
 In \textit{Prepaid} model user define $L_{max}$ by himself when he creates output and number of released coins after $L_{max}$ is equals to output value $V_{output}$ rater than much smaller space-time fee $fee_{space\_time}$. Note here, that $L_{max}$ do not directly depends on \textit{K} and coins recirculation rate will only depend on $V_{output}$, user-defined $L_{max}$ and number of lost outputs $N_{lost}$:
 
@@ -279,13 +279,6 @@ Let's assume user-defined coin recirculation period $L_{max}\approx10$ years and
 \begin{equation}
 {R_{prepaid} \over R_{postpaid}} = { V_{output}  \over  K \cdot B \cdot L_{max}} \approx 20
 \end{equation}
-
-%R_{postpaid} = R_{demurrage} = {N_{lost} \cdot V_{output} \over L_{max}} = {N_{lost} \cdot K \cdot B} = 10^6 * 10^(-9) * 35 = 0.035
-%R_{prepaid} = {N_{lost} \cdot V_{output} \over L_{max}} = 10^(6) * 0.36 /  = 0.684931507
-%  \item Mean number of coins in one output: $V_{output}=0.35$ BTC
-%   \item Simple payment transaction fee: $fee_{propagation}=0.0002$ BTC
-
- \dnote{Check, should be something like 1000}
 
 Thus \esse{} model by design provide a way to return lost coins to circulation, preventing deflation risks. \textit{Postpaid} model has a disadvantage, that lost coins will be returned to circulation in a far future, in \textit{Prepaid} model coin recirculation rate is much higher than in other models and \textit{Demurrage balance} model is a smoother way of coin recirculation.
 
