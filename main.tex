@@ -210,29 +210,23 @@ In this section we are going to provide comprehensive analysis of \esse{} model.
 
 From users point of view, the longer you keep some output, the bigger space-time fee you pay. Thus \esse{} provides an incentive to move your coins stimulating economic activity. In all fee models, described in section~\ref{sec:model}, user pays ${K \cdot B}$ coins every block for keeping his output into \state{}. If he use blockchain with \esse{} as a money chain, output size \textit{B} is relatively small and do not depend on output value.
 
-To estimate money flow let's assume, that user will move his money when space-time fee will start dominate over other transactional costs \dnote{why?} an therefore creation of transaction will be almost free \dnote{not true} for him. Thus we can estimate expected mean output lifetime as
+To estimate money flow let's assume, that user will move his money when space-time fee will start dominate over other transactional costs \dnote{why?}. Thus we can estimate expected mean output lifetime as
 
 \begin{equation}
 \label{eq:ltmean}
 L_{mean}={fee_{propagation} \over K \cdot B}
 \end{equation}
 
+Since there are $N_{UTXO}$ in a system and each of them contains $V_{output}$ coins, we can estimate number of transactions per block incentivized by \esse{} model:
 
-Since there are $N_{UTXO}$ in a system and each of them contains $V_{output}$ coins, we can estimate per cent of coins, that will be moved in each block incentivized by \esse{} model:
-
-\dnote{start: estimate number of transactions per block}
-Number of transactions:
 \begin{equation}
 N_{transactions} \approx {N_{UTXO} \over L_{mean}} = {N_{UTXO} \cdot K \cdot B \over fee_{propagation}}
 \end{equation}
 
-\begin{equation}
-M_{flow} \approx { N_{transactions} \cdot V_{output} \over N_{coins}} = {K \cdot B \over fee_{propagation}}
-\end{equation}
-\dnote{end: estimate number of transactions per block}
+and per cent of coins, that will be moved in each block:
 
 \begin{equation}
-M_{flow}={N_{UTXO} \cdot V_{output} \over L_{mean} \cdot N_{coins}}=K \cdot {N_{UTXO} \cdot V_{output} \cdot B \over fee_{propagation} \cdot N_{coins}} = K \cdot {B \over fee_{propagation}}
+M_{flow} \approx { N_{transactions} \cdot V_{output} \over N_{coins}} = {K \cdot B \over fee_{propagation}}
 \end{equation}
 
 Thus, money flow may be controlled with \textit{K} parameter. This formula provide a way to estimate \textit{K} based on current Bitcoin statistics:
@@ -241,10 +235,9 @@ Thus, money flow may be controlled with \textit{K} parameter. This formula provi
 K={M_{flow} \cdot fee_{propagation} \over B} \approx {10^{-9}} ({BTC / (Byte \cdot Block)})
 \end{equation}
 
-For regular outputs of 36 Bytes space-time fee part will exceed propagation fee after 56000\dnote{why 56000?} blocks or 388 days. This means, that for active users, who spend their money more often than once a year, space-time fee will be negligible relative to propagation fee.
+For regular outputs of 36 Bytes space-time fee part will exceed propagation fee after 5555 blocks or 38 days. This means, that for active users, who spend their money more often than once a month, space-time fee will be negligible relative to propagation fee.
 
-From money flow analysis we can conclude, that \esse{} model make sense even in cash-only chains, where output size is fixed and very slow - cryptocurrency can control it's money flow, changing space-time price and encourage active economy participants. Another money flow analysis result is the dependency between $L$ and $K$ \ref{eq:ltmean}
- that can particularly by used in the \textit{Demurrage balance} model to reduce number of model parameters.
+From money flow analysis we can find out how to use \esse{} model to control cryptocurrency money flow, changing space-time price and encourage active economy participants. Another money flow analysis result is the dependency between $L$ and $K$ \ref{eq:ltmean} that can particularly by used in the \textit{Demurrage balance} model to reduce number of model parameters.
 
 %Considering total $1.6\cdot10^7$ of Bitcois in c circulation, we can conclude, that user should pay for about $6\cdot10^{-17}$ of total supply every block for every byte in output.
 
