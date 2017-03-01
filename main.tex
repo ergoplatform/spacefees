@@ -367,9 +367,9 @@ which leads to 13 Gb \state{} for $K=10^{-9}$ ($BTC / (Byte \cdot Block)$) which
 
 Thus \esse{} model allows to control \state{} with $K$ parameter, allowing to estimate expected \state{} size and it's upper bound. Reasonable $K$ value leads to 13 Gb of expected \state{} size and 183 Gb of it's upper bound, preventing DoS attacks like \cite{bitcoin2015flood} and ensuring that there is no way to increase it's size to exceed existing RAM drives.
 
-\subsection{Subsidized space-time}
+\section{Subsidized space-time}
 
-It is usual to pay for space-time multiplication for database leasing and thus \esse{} model is natural for blockchain-as-database model. On the other hand, in blockchain usage for currency it may be natural to allow users to keep some data for free in blockchain. In this section we are going to extend \esse{} model, subsidizing pre-defined by network space-time $S_s$ (which may also be defined by miners voting). For example, it may allow to keep simple money output for 10 years for free, subsidizing $S_s \approx 525600 (Blocks) \cdot 35 (Byte) \approx 18 (Mb \cdot Block)$. While 10 years is a quite big period for regular output, it is quite small amount of subsidized space-time for blockchain usage as a storage, e.g. will only allow to keep 127 Kb output for one date in \state{}.
+It is usual to pay for space-time multiplication for database leasing and thus \esse{} model is natural for blockchain-as-database model. On the other hand, in blockchain usage for currency it may be natural to allow users to keep some data for free in blockchain. In this section we are going to extend \esse{} model, subsidizing pre-defined by network space-time $S_s$ (which may also be defined by miners voting). For example, it may allow to keep simple money output for 10 years for free, subsidizing $S_s \approx 525600 (Blocks) \cdot 35 (Byte) \approx 18 (Mb \cdot Block)$. While 10 years is a quite big period for regular output, it is quite small amount of subsidized space-time for blockchain usage as a storage, e.g. will only allow to keep 127 Kb output for one day in \state{}.
 
 Such subsidized fee may be calculated as
 
