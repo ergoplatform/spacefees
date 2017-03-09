@@ -259,7 +259,7 @@ R_{postpaid} = R_{demurrage} = {N_{lost} \cdot V_{output} \over L_{max}} = {N_{l
 
 where $N_{lost}$ is the number of outputs with lost keys. Assuming current Bitcoins statistics, $N_{lost}\approx10^6$ and $K = 10^{-9}$ we can estimate, that $\approx0.036$ BTC will be released from abandoned outputs every block.
 
-In \textit{Prepaid} model user define $L_{max}$ by himself when he creates output and number of released coins after $L_{max}$ is equals to output value $V_{output}$ rater than much smaller space-time fee $fee_{space\_time}$. Note here, that $L_{max}$ do not directly depends on \textit{K} and coins recirculation rate will only depend on $V_{output}$, user-defined $L_{max}$ and number of lost outputs $N_{lost}$:
+In \textit{Prepaid} model user define $L_{max}$ by himself when he creates output and number of released coins after $L_{max}$ is equals to output value $V_{output}$ rater than much smaller space-time fee $f_s$. Note here, that $L_{max}$ do not directly depends on \textit{K} and coins recirculation rate will only depend on $V_{output}$, user-defined $L_{max}$ and number of lost outputs $N_{lost}$:
 
 \begin{equation}
 R_{prepaid} = {N_{lost} \cdot V_{output} \over L_{max}}
@@ -429,7 +429,7 @@ Thus, additional subsidized space-time parameter allows to use the same blockcha
 
 \section{Further Work}
 
-\dnote{transaction commission may be defined as $fee = Max(fee_{validation}, f_p, fee_{space\_time})$}
+\dnote{transaction commission may be defined as $fee = Max(f_{v}, f_p, f_s)$}
 
 \dnote{Comparison with Gesell's money~(money with demurrage)}
 
