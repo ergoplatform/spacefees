@@ -201,7 +201,7 @@ After that anyone should be able to spend this output, sending all it's value to
 \subsection{Scheduled Payments}
 \label{sec-scheduled}
 
-The last model we are going to analyze is a combination of the prepaid and postpaid models. Like in the postpaid model, an user pays for an output when he spends it in a transaction, but he is also enforced to move his coins before a known time $H_{creation} + H_{demurrage}$. If the user do not do this, anyone can create a transaction with this output, returning them to owner without space-time fee ${K \cdot B \cdot H_{demurrage}}$. The spending script for the output would be like
+The last model we introduce is a combination of the prepaid and postpaid models. Like in the postpaid model, an user pays for an output when he spends it in a transaction, but he is also enforced to move his coins before a known time $H_{creation} + H_{demurrage}$. If the user do not do this, anyone can create a transaction with this output, returning them to owner without space-time fee ${K \cdot B \cdot H_{demurrage}}$. The spending script for the output would be like
 
 \begin{align}
 \begin{split}
@@ -218,55 +218,19 @@ In this model $H_{demurrage}$ is another protocol parameter, that may be fixed b
 \section{Analysis of The Model}
 \label{sec:analysis}
 
-In this section we are going to provide comprehensive analysis of \esse{} model. Besides of it's main goal to control state size, it provides additional benefits as side-effects, that can be used in cryptocurrency design. Our further analysis will be based on the following stats from current Bitcoin network:
+In this section we provide analysis of the model. Besides of its main goal to control state size, it provides additional benefits as side-effects, that can be used in cryptocurrency design. Our further analysis will be based on the following stats from current Bitcoin network:
 
 \begin{itemize}
-  \item Number of unspent transaction outputs: $N_{UTXO} \approx 45000000$
-  \item Number of coins in circulation: $N_{coins} \approx 16000000$ BTC
-  \item Mean number of coins in one output: $V_{output} \approx 0.35$ BTC
-  \item Simple payment transaction fee: $fee_{propagation} \approx 0.0002$ BTC
-  \item Mean output size: $B \approx 36$ Bytes
+  \item Number of unspent transaction outputs: $N_{UTXO} \approx 45,000,000$
+  \item Number of coins in circulation: $N_{coins} \approx 16,000,000$ BTC
+  \item Mean number of coins in an output: $V_{mean} \approx 0.35$ BTC
+  \item Simple payment transaction fee: $f_{p} \approx 0.0002$ BTC
+  \item Mean output size: $B_{mean} \approx 36$ Bytes
   \item Per cent of coins, moved in every block: $M_{flow} \approx 0.013$ \%
   \item Time interval between blocks: $T_{block} \approx 10$ minutes
   \item Transaction fees per block: $M_{pg} \approx 1$ BTC
   \item Fixed block reward: $R_{f} \approx 12.5$ BTC
 \end{itemize}
-
-\subsection{Money flow}
-\label{sec:flow}
-
-From users point of view, the longer you keep some output, the bigger space-time fee you pay. Thus \esse{} provides an incentive to move your coins stimulating economic activity. In all fee models, described in section~\ref{sec:model}, user pays ${K \cdot B}$ coins every block for keeping his output into \state{}. If he use blockchain with \esse{} as a money chain, output size \textit{B} is relatively small and do not depend on output value.
-
-To estimate money flow let's assume, that user will move his money when space-time fee will start dominate over other transactional costs \dnote{why?}. Thus we can estimate expected mean output lifetime as
-
-\begin{equation}
-\label{eq:ltmean}
-L_{mean}={fee_{propagation} \over K \cdot B}
-\end{equation}
-
-Since there are $N_{UTXO}$ in a system and each of them contains $V_{output}$ coins, we can estimate number of transactions per block incentivized by \esse{} model:
-
-\begin{equation}
-N_{transactions} \approx {N_{UTXO} \over L_{mean}} = {N_{UTXO} \cdot K \cdot B \over fee_{propagation}}
-\end{equation}
-
-and per cent of coins, that will be moved in each block:
-
-\begin{equation}
-M_{flow} \approx { N_{transactions} \cdot V_{output} \over N_{coins}} = {K \cdot B \over fee_{propagation}}
-\end{equation}
-
-Thus, money flow may be controlled with \textit{K} parameter. This formula provide a way to estimate \textit{K} based on current Bitcoin statistics:
-
-\begin{equation}
-K={M_{flow} \cdot fee_{propagation} \over B} \approx {10^{-9}} ({BTC / (Byte \cdot Block)})
-\end{equation}
-
-For regular outputs of 36 Bytes space-time fee part will exceed propagation fee after 5555 blocks or 38 days. This means, that for active users, who spend their money more often than once a month, space-time fee will be negligible relative to propagation fee.
-
-From money flow analysis we can find out how to use \esse{} model to control cryptocurrency money flow, changing space-time price and encourage active economy participants. Another money flow analysis result is the dependency between $L$ and $K$ \ref{eq:ltmean} that can particularly by used in the \textit{Demurrage balance} model to reduce number of model parameters.
-
-%Considering total $1.6\cdot10^7$ of Bitcoins in c circulation, we can conclude, that user should pay for about $6\cdot10^{-17}$ of total supply every block for every byte in output.
 
 \subsection{Lost coins recirculation}
 \label{sec:re}
@@ -393,6 +357,40 @@ S \cdot K = M_{block}
 which leads to 13 Gb \state{} for $K=10^{-9}$ ($BTC / (Byte \cdot Block)$) which is small enough to be processed on common hardware.
 
 Thus \esse{} model allows to control \state{} with $K$ parameter, allowing to estimate expected \state{} size and it's upper bound. Reasonable $K$ value leads to 13 Gb of expected \state{} size and 183 Gb of it's upper bound, preventing DoS attacks like \cite{bitcoin2015flood} and ensuring that there is no way to increase it's size to exceed existing RAM drives.
+
+\subsection{Money flow}
+\label{sec:flow}
+
+From users point of view, the longer you keep some output, the bigger space-time fee you pay. Thus the proposed fee regime provides an incentive to move coins stimulating economic activity. In all the fee models introduced in Section~\ref{sec:model}, user pays ${K \cdot B}$ coins every block for keeping his output in the state. If he uses blockchain with output size \textit{B} is relatively small and do not depend on output value.
+
+To estimate money flow let's assume, that user will move his money when space-time fee will start dominate over other transactional costs \dnote{why?}. Thus we can estimate expected mean output lifetime as
+
+\begin{equation}
+\label{eq:ltmean}
+L_{mean}={fee_{propagation} \over K \cdot B}
+\end{equation}
+
+Since there are $N_{UTXO}$ in a system and each of them contains $V_{output}$ coins, we can estimate number of transactions per block incentivized by \esse{} model:
+
+\begin{equation}
+N_{transactions} \approx {N_{UTXO} \over L_{mean}} = {N_{UTXO} \cdot K \cdot B \over fee_{propagation}}
+\end{equation}
+
+and share of coins moved in a block:
+
+\begin{equation}
+M_{flow} \approx { N_{transactions} \cdot V_{output} \over N_{coins}} = {K \cdot B \over fee_{propagation}}
+\end{equation}
+
+Thus, money flow may be controlled with \textit{K} parameter. This formula provide a way to estimate \textit{K} based on current Bitcoin statistics:
+
+\begin{equation}
+K={M_{flow} \cdot fee_{propagation} \over B} \approx {10^{-9}} ({BTC / (Byte \cdot Block)})
+\end{equation}
+
+For regular outputs of 36 Bytes space-time fee part will exceed propagation fee after 5555 blocks or 38 days. This means, that for active users, who spend their money more often than once a month, space-time fee will be negligible relative to propagation fee.
+
+From money flow analysis we can find out how to use \esse{} model to control cryptocurrency money flow, changing space-time price and encourage active economy participants. Another money flow analysis result is the dependency between $L$ and $K$ \ref{eq:ltmean} that can particularly by used in the \textit{Demurrage balance} model to reduce number of model parameters.
 
 \section{Subsidized space-time}
 
