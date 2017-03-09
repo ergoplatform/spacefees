@@ -274,7 +274,7 @@ R_{prepaid} = {N_{lost} \cdot V_{output} \over L_{max}}
 Assuming that $K\approx10^{-9}$ we can estimate difference between prepaid and postpaid models:
 
 \begin{equation}
-{R_{prepaid} \over R_{postpaid}} = {V_{output} \over  K \cdot B \cdot L_{max}} \approx {10^7 \over L_{max}}
+r_{mode} = {R_{prepaid} \over R_{postpaid}} = {V_{output} \over  K \cdot B \cdot L_{max}} \approx {10^7 \over L_{max}}
 \end{equation}
 
 For example, if user-defined coin recirculation period $L_{max}\approx10$ years then ${R_{prepaid} \over R_{postpaid}} \approx 19$
@@ -288,35 +288,54 @@ Concluding the section, \esse{} model by design provides a way to return lost co
 
 From users point of view, the longer you keep some output, the bigger space-time fee you pay. Thus the proposed fee regime provides an incentive to move coins stimulating economic activity. In all the fee models introduced in Section~\ref{sec:model}, user pays ${K \cdot B}$ coins every block for keeping his output in the state. If he uses blockchain with output size \textit{B} is relatively small and do not depend on output value.
 
-To estimate money flow let's assume, that user will move his money when space-time fee will start dominate over other transactional costs \dnote{why?}. Thus we can estimate expected mean output lifetime as
+\ignore{
+  To estimate money flow let's assume, that user will move his money when space-time fee will start dominate over other transactional costs \dnote{why?}. Thus we can estimate expected mean output lifetime as
+
+  \begin{equation}
+  \label{eq:ltmean}
+  L_{mean}={f_p \over K \cdot B}
+  \end{equation}
+}
+
+Since there are $N_{utxo}$ in a system and each of them contains $V_{output}$ coins, we can estimate mean number of output spendings per block incentivized by \esse{} model:
 
 \begin{equation}
-\label{eq:ltmean}
-L_{mean}={f_p \over K \cdot B}
+N_{incentivized} \approx {N_{utxo} \over L_{max-mean}} % = {N_{utxo} \cdot K \cdot B \over f_p}
 \end{equation}
 
-Since there are $N_{utxo}$ in a system and each of them contains $V_{output}$ coins, we can estimate number of transactions per block incentivized by \esse{} model:
+where $L_{max-mean}$ is mean lifetime of an output.
+
+We can find a ratio:
+
 
 \begin{equation}
-N_{moved-outputs} \approx {N_{utxo} \over L_{mean}} = {N_{utxo} \cdot K \cdot B \over f_p}
+r_{flow} = {N_{incentivized} \over N_{moved}}  \approx {8180 \over L_{max-mean}} % = {N_{utxo} \cdot K \cdot B \over f_p}
 \end{equation}
 
-and share of coins moved in a block:
+For example, if a user pays for $8180$ blocks~(about 57 days) on average in the \textit{Prepaid} model, money flow doubles in comparison with a system without \esse{} component.  
 
-\begin{equation}
-M_{flow} \approx { N_{transactions} \cdot V_{output} \over N_{coins}} = {K \cdot B \over f_p}
-\end{equation}
 
-Thus, money flow may be controlled with \textit{K} parameter. This formula provide a way to estimate \textit{K} based on current Bitcoin statistics:
 
-\begin{equation}
-K={M_{flow} \cdot f_p \over B} \approx {10^{-9}} ({BTC / (Byte \cdot Block)})
-\end{equation}
+\ignore{
+  and share of coins moved in a block:
 
-For a mean output size of 36 Bytes space-time fee part will exceed propagation fee after 5555 blocks or 38 days. 
-%This means, that for active users, who spend their money more often than once a month, space-time fee will be negligible relative to propagation fee.
+  \begin{equation}
+    M_{flow} \approx { N_{transactions} \cdot V_{output} \over N_{coins}} = {K \cdot B \over f_p}
+  \end{equation}
 
-From money flow analysis we can find out how to use \esse{} model to control cryptocurrency money flow, changing space-time price and encourage active economy participants. Another money flow analysis result is the dependency between $L$ and $K$ \ref{eq:ltmean} that can particularly by used in the \textit{Demurrage balance} model to reduce number of model parameters.
+  Thus, money flow may be controlled with \textit{K} parameter. This formula provide a way to estimate \textit{K} based on current Bitcoin statistics:
+
+  \begin{equation}
+    K={M_{flow} \cdot f_p \over B} \approx {10^{-9}} ({BTC / (Byte \cdot Block)})
+  \end{equation}
+
+  For a mean output size of 36 Bytes space-time fee part will exceed propagation fee after 5555 blocks or 38 days. 
+  %This means, that for active users, who spend their money more often than once a month, space-time fee will be negligible relative to propagation fee.
+
+  From money flow analysis we can find out how to use \esse{} model to control cryptocurrency money flow, changing space-time price and encourage active economy participants. Another money flow analysis result is the dependency between $L$ and $K$ \ref{eq:ltmean} that can particularly by used in the \textit{Demurrage balance} model to reduce number of model parameters.
+}
+
+
 
 
 \subsection{Miner rewards}
@@ -332,7 +351,7 @@ M_{reward} = M_{propagation} + M_{space-time} + M_{recirculation}
 In Section \ref{sec:flow} we have noticed, that \esse{} users have an incentive to actively use their coins and propagation reward is correlated with space-time reward:
 
 \begin{equation}
-M_{propagation} = C \cdot M_{space-time} + M_{pg}
+M_{propagation} = r_{flow} \cdot M_{space-time} + M_{pg}
 \end{equation}
 
 where $C$ is non-negative constant. A space-time reward depends on state size and space-time price $K$ only:
@@ -344,14 +363,14 @@ M_{space-time} = \sum_{i=1}^{N_{utxo}} K_i \cdot B_i \approx K \cdot N_{utxo} \c
 Recirculation reward was calculated in previous section and depends on space-time fee model. However it can be generalized as with $K_{model}$ parameter, that is equals to 1 for \textit{Demurrage balance} and \textit{Postpaid} models, and $K_{model} \approx 20$ for \textit{Prepaid} model:
 
 \begin{equation}
-M_{recirculation} = {K_{model} \cdot  N_{lost} \cdot K \cdot B}
+M_{recirculation} = {r_{mode} \cdot  N_{lost} \cdot K \cdot B}
 \end{equation}
 
 Resulting miner reward:
 
 \begin{equation}
 \label{eq:reward}
-M_{reward} \approx M_{pg} + (K \cdot B) \cdot ((1 + C) \cdot N_{utxo} + K_{model} \cdot N_{lost})
+M_{reward} \approx M_{pg} + (K \cdot B) \cdot ((1 + r_flow) \cdot N_{utxo} + r_{mode} \cdot N_{lost})
 \end{equation}
 
 First part of this equation $M_{pg}$ is the reward of miner in existing fee models, the rest is the unique reward for \esse{} model.  In a sensible assumption $N_{utxo} >> N_{lost}$ equation \ref{eq:reward} can be simplified to
