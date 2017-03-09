@@ -222,7 +222,7 @@ In this section we provide analysis of the model. We study how efficient is the 
 rewards as well as lost coins recirculation. Throughout this section we use following values got from current state of the Bitcoin network:
 
 \begin{itemize}
-  \item number of unspent transaction outputs: $N_{UTXO} \approx 45,000,000$
+  \item number of unspent transaction outputs: $N_{utxo} \approx 45,000,000$
   \item number of coins in circulation: $N_{coins} \approx 16,000,000$ BTC
   \item mean value of an output: $V_{mean} \approx 0.35$ BTC
   \item simple payment transaction fee: $f_{p} \approx 0.0002$ BTC
@@ -295,10 +295,10 @@ To estimate money flow let's assume, that user will move his money when space-ti
 L_{mean}={f_p \over K \cdot B}
 \end{equation}
 
-Since there are $N_{UTXO}$ in a system and each of them contains $V_{output}$ coins, we can estimate number of transactions per block incentivized by \esse{} model:
+Since there are $N_{utxo}$ in a system and each of them contains $V_{output}$ coins, we can estimate number of transactions per block incentivized by \esse{} model:
 
 \begin{equation}
-N_{moved-outputs} \approx {N_{UTXO} \over L_{mean}} = {N_{UTXO} \cdot K \cdot B \over f_p}
+N_{moved-outputs} \approx {N_{utxo} \over L_{mean}} = {N_{utxo} \cdot K \cdot B \over f_p}
 \end{equation}
 
 and share of coins moved in a block:
@@ -338,7 +338,7 @@ M_{propagation} = C \cdot M_{space-time} + M_{pg}
 where $C$ is non-negative constant. A space-time reward depends on state size and space-time price $K$ only:
 
 \begin{equation}
-M_{space-time} = \sum_{i=1}^{N_{UTXO}} K_i \cdot B_i \approx K \cdot N_{UTXO} \cdot B
+M_{space-time} = \sum_{i=1}^{N_{utxo}} K_i \cdot B_i \approx K \cdot N_{utxo} \cdot B
 \end{equation}
 
 Recirculation reward was calculated in previous section and depends on space-time fee model. However it can be generalized as with $K_{model}$ parameter, that is equals to 1 for \textit{Demurrage balance} and \textit{Postpaid} models, and $K_{model} \approx 20$ for \textit{Prepaid} model:
@@ -351,19 +351,19 @@ Resulting miner reward:
 
 \begin{equation}
 \label{eq:reward}
-M_{reward} \approx M_{pg} + (K \cdot B) \cdot ((1 + C) \cdot N_{UTXO} + K_{model} \cdot N_{lost})
+M_{reward} \approx M_{pg} + (K \cdot B) \cdot ((1 + C) \cdot N_{utxo} + K_{model} \cdot N_{lost})
 \end{equation}
 
-First part of this equation $M_{pg}$ is the reward of miner in existing fee models, the rest is the unique reward for \esse{} model.  In a sensible assumption $N_{UTXO} >> N_{lost}$ equation \ref{eq:reward} can be simplified to
+First part of this equation $M_{pg}$ is the reward of miner in existing fee models, the rest is the unique reward for \esse{} model.  In a sensible assumption $N_{utxo} >> N_{lost}$ equation \ref{eq:reward} can be simplified to
 
 \begin{equation}
-M_{postpaid} \approx M_{pg} + K \cdot B \cdot N_{UTXO} \cdot (1 + M)
+M_{postpaid} \approx M_{pg} + K \cdot B \cdot N_{utxo} \cdot (1 + M)
 \end{equation}
 
 that allows to estimate such $K$, when additional \esse{} reward will exceed common propagation reward $M_{pg}$:
 
 \begin{equation}
-M_{postpaid} = {M_{pg} \over B \cdot N_{UTXO} \cdot (1 + M)} \approx 10^{-9} ({BTC / (Byte \cdot Block)})
+M_{postpaid} = {M_{pg} \over B \cdot N_{utxo} \cdot (1 + M)} \approx 10^{-9} ({BTC / (Byte \cdot Block)})
 \end{equation}
 
 that is naturally coincide to estimations from section \ref{eq:ltmean} while miner reward equals to user losses.
