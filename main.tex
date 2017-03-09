@@ -99,7 +99,7 @@
 
 \begin{document}
 
-\title{On Space-Scarce Economy In Blockchain Systems}
+\title{On Space-Scarce Economy\\ In Blockchain Systems}
 \author{Dmitry Meshkov and Alexander Chepurnoy, IOHK Research}
 \maketitle
 
@@ -201,19 +201,19 @@ After that anyone should be able to spend this output, sending all it's value to
 \subsection{Scheduled Payments}
 \label{sec-scheduled}
 
-The last model we introduce is a combination of the prepaid and postpaid models. Like in the postpaid model, an user pays for an output when he spends it in a transaction, but he is also enforced to move his coins before a known time $H_{creation} + H_{demurrage}$. If the user do not do this, anyone can create a transaction with this output, returning them to owner without space-time fee ${K \cdot B \cdot H_{demurrage}}$. The spending script for the output would be like
+The last model we introduce is a combination of the prepaid and postpaid models. Like in the postpaid model, an user pays for an output when he spends it in a transaction, but he is also enforced to move his coins before a known duration $D_{s}$ since output creation. If the user do not do this, anyone can create a transaction with this output, returning them to owner without space-time fee ${K \cdot B \cdot D_{s}}$. The spending script for the output would be like
 
 \begin{align}
 \begin{split}
 &(regular\_script) \lor \\
-&(Height > (self.height + H_s) \land \\  
+&(Height > (self.height + D_s) \land \\  
 &\qquad has\_output(value = self.value - K \cdot B \cdot H_s, script = self.script))
 \end{split}
 \end{align}
 
 
 
-In this model $H_{demurrage}$ is another protocol parameter, that may be fixed by protocol design or changed via miners voting like \textit{K}.
+In this model $D_s$ is another protocol parameter, that may be fixed by protocol design or changed via miners voting like \textit{K}.
 
 \section{Analysis of The Model}
 \label{sec:analysis}
