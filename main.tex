@@ -367,32 +367,32 @@ To estimate money flow let's assume, that user will move his money when space-ti
 
 \begin{equation}
 \label{eq:ltmean}
-L_{mean}={fee_{propagation} \over K \cdot B}
+L_{mean}={f_p \over K \cdot B}
 \end{equation}
 
 Since there are $N_{UTXO}$ in a system and each of them contains $V_{output}$ coins, we can estimate number of transactions per block incentivized by \esse{} model:
 
 \begin{equation}
-N_{transactions} \approx {N_{UTXO} \over L_{mean}} = {N_{UTXO} \cdot K \cdot B \over fee_{propagation}}
+N_{transactions} \approx {N_{UTXO} \over L_{mean}} = {N_{UTXO} \cdot K \cdot B \over f_p}
 \end{equation}
 
 and share of coins moved in a block:
 
 \begin{equation}
-M_{flow} \approx { N_{transactions} \cdot V_{output} \over N_{coins}} = {K \cdot B \over fee_{propagation}}
+M_{flow} \approx { N_{transactions} \cdot V_{output} \over N_{coins}} = {K \cdot B \over f_p}
 \end{equation}
 
 Thus, money flow may be controlled with \textit{K} parameter. This formula provide a way to estimate \textit{K} based on current Bitcoin statistics:
 
 \begin{equation}
-K={M_{flow} \cdot fee_{propagation} \over B} \approx {10^{-9}} ({BTC / (Byte \cdot Block)})
+K={M_{flow} \cdot f_p \over B} \approx {10^{-9}} ({BTC / (Byte \cdot Block)})
 \end{equation}
 
 For regular outputs of 36 Bytes space-time fee part will exceed propagation fee after 5555 blocks or 38 days. This means, that for active users, who spend their money more often than once a month, space-time fee will be negligible relative to propagation fee.
 
 From money flow analysis we can find out how to use \esse{} model to control cryptocurrency money flow, changing space-time price and encourage active economy participants. Another money flow analysis result is the dependency between $L$ and $K$ \ref{eq:ltmean} that can particularly by used in the \textit{Demurrage balance} model to reduce number of model parameters.
 
-\section{Subsidized space-time}
+\section{Subsidizing Space-time}
 
 It is usual to pay for space-time multiplication for database leasing and thus \esse{} model is natural for blockchain-as-database model. On the other hand, in blockchain usage for currency it may be natural to allow users to keep some data for free in blockchain. In this section we are going to extend \esse{} model, subsidizing pre-defined by network space-time $S_s$ (which may also be defined by miners voting). For example, it may allow to keep simple money output for 10 years for free, subsidizing $S_s \approx 525600 (Blocks) \cdot 35 (Byte) \approx 18 (Mb \cdot Block)$. While 10 years is a quite big period for regular output, it is quite small amount of subsidized space-time for blockchain usage as a storage, e.g. will only allow to keep 127 Kb output for one day in \state{}.
 
@@ -407,7 +407,7 @@ and provides another way to control \esse{} economy with $S_s$ parameter. In par
 \begin{equation}
   \begin{array}{ccl}
    K \cdot B \cdot L_{max} - S_s & = & V_{output} \\
-   K \cdot B \cdot L_{mean} - S_s & = & fee_{propagation}
+   K \cdot B \cdot L_{mean} - S_s & = & f_p
   \end{array}
 \end{equation}
 
@@ -415,8 +415,8 @@ Assuming $L_{mean}=1$ year and $L_{max}=10$ years and Bitcoin statistics, we may
 
 \begin{equation}
   \begin{array}{ccl}
-   K & = & {V_{output} - fee_{propagation} \over B \cdot (L_{max} - L_{mean})} \approx \quad 2*10^{-8} ({BTC / (Byte \cdot Block)}) \\
-   S_s & = & {(V_{output} - fee_{propagation}) \cdot L_{mean} \over (L_{max} - L_{mean})} - fee_{propagation} \approx 0.04\quad(BTC)
+   K & = & {V_{output} - f_p \over B \cdot (L_{max} - L_{mean})} \approx \quad 2*10^{-8} ({BTC / (Byte \cdot Block)}) \\
+   S_s & = & {(V_{output} - f_p) \cdot L_{mean} \over (L_{max} - L_{mean})} - f_p \approx 0.04\quad(BTC)
   \end{array}
 \end{equation}
 
@@ -429,7 +429,7 @@ Thus, additional subsidized space-time parameter allows to use the same blockcha
 
 \section{Further Work}
 
-\dnote{transaction commission may be defined as $fee = Max(fee_{validation}, fee_{propagation}, fee_{space\_time})$}
+\dnote{transaction commission may be defined as $fee = Max(fee_{validation}, f_p, fee_{space\_time})$}
 
 \dnote{Comparison with Gesell's money~(money with demurrage)}
 
