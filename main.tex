@@ -167,7 +167,7 @@ We further assume that outputs are protected by logical propositions and conside
 First option we are going to analyze is prepaid outputs. In it each output of a size \textit{B} in a state is prepaid until explicitly known period of time $L_{max}$. After $L_{max}$ anyone~(presumably miner generated first block after that) is able to spend the overdue output. Thus a spending script for any output must be a combination of regular spending script and loan period $L_{max}$:
 
 \begin{equation}
-(Height > L_{max}) \lor (regular\_script)
+(Height > self.height + L_{max}) \lor (regular\_script)
 \end{equation}
 
 where \textit{Height} is current blockchain height and \textit{regular\_script} is user-defined spending script for the output. This form of a script is a part of consensus and mandatory space-time fee is to be paid by a transaction ccreating the output:
@@ -195,7 +195,7 @@ H_{max} = {H_{creation} + {V \over {K \cdot B}}}
 After that anyone should be able to spend this output, sending all it's value to transaction fee and spending script will looks like
 
 \begin{equation}
-(Height > H_{max}) \lor (regular\_script)
+(Height > self.height + H_{max}) \lor (regular\_script)
 \end{equation}
 
 \subsection{Scheduled Payments}
@@ -206,8 +206,8 @@ The last model we are going to analyze is a combination of the prepaid and postp
 \begin{align}
 \begin{split}
 &(regular\_script) \lor \\
-(&Height > (H_{creation} + H_{demurrage}) \land \\  
-&  has\_output(value = self.value - K \cdot B \cdot H_{demurrage}, script = self.script))
+&(Height > (self.height + H_s) \land \\  
+&\qquad has\_output(value = self.value - K \cdot B \cdot H_s, script = self.script))
 \end{split}
 \end{align}
 
