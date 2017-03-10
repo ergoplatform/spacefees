@@ -143,6 +143,14 @@ The paper is organized as follows. A design of our model is described in Section
 
 \knote{note that we're talking about minimal fees}
 
+\subsection{Assumptions}
+\begin{itemize}
+  \item{} We assume that all the fees for a block are going to a single miner like in Bitcoin at the moment. There are proposals to share the rewards for a block within a grou of miners~(for example, reward miners of some number of blocks before current one)\knote{links to Bitcoin-NG, ByzCoin}. The main difference is that in Bitcoin a miner can include his transactions into a block for free. In such systems analysis results would be different. 
+  \item{language} \knote{TODO: fill the description}
+  \item{} We assume that a block is of a finite size but all the transactions a miner has at a given moment of time could be packed into it. 
+\end{itemize}
+
+
 \section{The Model}
 \label{sec:model}
 
@@ -176,6 +184,8 @@ where \textit{Height} is current blockchain height and \textit{regular\_script} 
 f_{s-prepaid} = K \cdot (\sum_i{(B_i \cdot (L_{max\_i} - Height))} - \sum_j{(B_j \cdot (L_{max\_j} - Height)}))
 \end{equation}
 
+After $L_{max}$ the output is spendable by anyone~(presumably, miner).
+
 \subsection{Postpaid Outputs}
 \label{sec-postpaid}
 
@@ -192,7 +202,7 @@ where $H_{creation\_i}$ and $H_{spent\_i}$ are heights where i-th output was cre
 H_{max} = {H_{creation} + {V \over {K \cdot B}}}
 \end{equation}
 
-After that anyone should be able to spend this output, sending all it's value to transaction fee and spending script will looks like
+After that anyone should be able to spend this output, sending the whole value to transaction fee and spending script will looks like
 
 \begin{equation}
 (Height > self.height + H_{max}) \lor (regular\_script)
@@ -236,6 +246,7 @@ rewards as well as lost coins recirculation. Throughout this section we use foll
 
 We use numbers from the Bitcoin to calculate some typical cases as this is the most used cryptocurrency with longest history. However, a cryptocurrency with SSE being deployed would have different metrics values. Thus results from this section got with the Bitcoin statistical data should be considered as initial.
 
+We study money flows in a space-scarce economy while dividing them into two types. Miners claim lost coins and also charge every output in the system state every block. Users are incentivized to move coins more frequently thus increasing mining rewards due to increased economic activity.  
 
 \subsection{Lost coins recirculation}
 \label{sec:re}
@@ -274,7 +285,7 @@ R_{prepaid} = {N_{lost} \cdot V_{output} \over L_{max}}
 Assuming that $K\approx10^{-9}$ we can estimate difference between prepaid and postpaid models:
 
 \begin{equation}
-r_{mode} = {R_{prepaid} \over R_{postpaid}} = {V_{output} \over  K \cdot B \cdot L_{max}} \approx {10^7 \over L_{max}}
+{R_{prepaid} \over R_{postpaid}} = {V_{output} \over  K \cdot B \cdot L_{max}} \approx {10^7 \over L_{max}}
 \end{equation}
 
 For example, if user-defined coin recirculation period $L_{max}\approx10$ years then ${R_{prepaid} \over R_{postpaid}} \approx 19$
@@ -283,12 +294,15 @@ Concluding the section, \esse{} model by design provides a way to return lost co
 
 
 
-\subsection{Money flow}
+\subsection{User-Driven Money flow}
 \label{sec:flow}
 
-From users point of view, the longer you keep some output, the bigger space-time fee you pay. Thus the proposed fee regime provides an incentive to move coins stimulating economic activity. In all the fee models introduced in Section~\ref{sec:model}, user pays ${K \cdot B}$ coins every block for keeping his output in the state. If he uses blockchain with output size \textit{B} is relatively small and do not depend on output value.
+From users point of view, the longer you keep some output, the bigger space-time fee you pay. Thus the proposed fee regime provides an incentive to move coins stimulating economic activity. In all the fee models introduced in Section~\ref{sec:model}, user pays ${K \cdot B}$ coins every block for keeping his output in the state. 
+
 
 \ignore{
+  If he uses blockchain with output size \textit{B} is relatively small and do not depend on output value.
+
   To estimate money flow let's assume, that user will move his money when space-time fee will start dominate over other transactional costs \dnote{why?}. Thus we can estimate expected mean output lifetime as
 
   \begin{equation}
@@ -297,24 +311,49 @@ From users point of view, the longer you keep some output, the bigger space-time
   \end{equation}
 }
 
-Since there are $N_{utxo}$ in a system and each of them contains $V_{output}$ coins, we can estimate mean number of output spendings per block incentivized by \esse{} model:
+Currently in Bitcoin $N_moved$ outputs are moved in a block, and this number can be defined as: 
 
 \begin{equation}
-N_{incentivized} \approx {N_{utxo} \over L_{max-mean}} % = {N_{utxo} \cdot K \cdot B \over f_p}
+N_{moved} = {N_{utxo} \over L_{mu}} % = {N_{utxo} \cdot K \cdot B \over f_p}
 \end{equation}
 
-where $L_{max-mean}$ is mean lifetime of an output.
-
-We can find a ratio:
-
-
+where $L_{mu}$ is mean lifetime of an output. We can define $L_{mu}$ as:
 \begin{equation}
-r_{flow} = {N_{incentivized} \over N_{moved}}  \approx {8180 \over L_{max-mean}} % = {N_{utxo} \cdot K \cdot B \over f_p}
+L_{mu} = {N_{utxo} \over {N_{moved}}}
 \end{equation}
 
-For example, if a user pays for $8180$ blocks~(about 57 days) on average in the \textit{Prepaid} model, money flow doubles in comparison with a system without \esse{} component.  
+In Bitcoin, $L_{mu} \approx 8182$ blocks.
 
 
+With \esse{} fee component enabled users move coins more frequently, thus mean lifetime becomes $L_{mi} < L_{mu}$. It is hard to estimate $L_{mi}$ as it depends on K and also on blockchain-specific usage scenarios. Increasement in money flow could be calcualted as:
+
+$\Delta N_{moved} = {N_{utxo} \over L_{mi}} - {N_{utxo} \over L_{mu}} = N_{utxo} \cdot {{L_{mu}-L_{mi}} \over {L_{mu} \cdot L_{mi}}}$
+
+
+\ignore{
+  In the \textit{Scheduled payments} mode there is an additional component in the flow which is miners moving an output every $D_s$ blocks:
+
+  \begin{equation}
+    N_{scheduled} \approx {N_{utxo} \over D_s}
+  \end{equation}
+
+
+
+  We can find a ratio between $N_{incentivized}$ and ${moved}$:
+
+  \begin{equation}
+    r_{flow} = {N_{incentivized} \over N_{moved}}  \approx {8180 \over L_{max-mean}} % = {N_{utxo} \cdot K \cdot B \over f_p}
+  \end{equation}
+
+  For example, if a user pays for $8180$ blocks~(about 57 days) on average in the \textit{Prepaid} model, money flow doubles in comparison with a system without \esse{} component.  
+
+
+  For \textit{Scheduled payments}:
+
+  \begin{equation}
+    r_{flow} = {{N_{incentivized} + N_{scheduled}} \over N_{moved}} % = {N_{utxo} \cdot K \cdot B \over f_p}
+  \end{equation}
+}
 
 \ignore{
   and share of coins moved in a block:
@@ -340,21 +379,38 @@ For example, if a user pays for $8180$ blocks~(about 57 days) on average in the 
 
 \subsection{Miner rewards}
 \label{minerrew}
-Rewarding miners is very important for viability of a cryptocurrency economy. 
-%- in original paper \cite{Nakamoto2008} it's assumed, that miners are incentivized to fair behaviour, while recent researches showed, that it is not always correct \cite{carlsten2016instability, eyal2014}. 
-In addition to usual propagation fee, \esse{} provides two new sources for miner income: a space-time fee and a coin recirculation reward.
+Incentivizing mining is very important for viability of a cryptocurrency economy. 
+In addition to usual propagation fee, \esse{} provides two new sources for miner income: a space-time fee and lost coins in the \textit{Prepaid} model.
 
+Thus in the \textit{Prepaid} model:
 \begin{equation}
-M_{reward} = M_{propagation} + M_{space-time} + M_{recirculation}
+M_{3} = M_{propagation} + M_{space-time} + M_{lost}
 \end{equation}
 
-In Section \ref{sec:flow} we have noticed, that \esse{} users have an incentive to actively use their coins and propagation reward is correlated with space-time reward:
-
+In other models:
 \begin{equation}
-M_{propagation} = r_{flow} \cdot M_{space-time} + M_{pg}
+M_{2} = M_{propagation} + M_{space-time}
 \end{equation}
 
-where $C$ is non-negative constant. A space-time reward depends on state size and space-time price $K$ only:
+We now calculate the difference with reward $M_pg$~(propagation fees) miners have in Bitcoin. We assume that number of inputs per transaction is the same, then number of transactions as well propagation fees are to be increased in the same way as $N_{moved}$:
+
+\begin{equation}
+M_{propagation} = M_{pg} \cdot(1 + {{L_{mu}-L_{mi}} \over {L_{mu} \cdot L_{mi}}})
+\end{equation}
+
+
+
+\ignore{
+  In Section \ref{sec:flow} we have noticed, that \esse{} users have an incentive to actively use their coins and propagation reward is correlated with space-time reward:
+
+  \begin{equation}
+    M_{propagation} = r_{flow} \cdot M_{space-time} + M_{pg}
+  \end{equation}
+
+  where $C$ is non-negative constant. 
+}
+
+A space-time reward depends on state size and space-time price $K$ only:
 
 \begin{equation}
 M_{space-time} = \sum_{i=1}^{N_{utxo}} K_i \cdot B_i \approx K \cdot N_{utxo} \cdot B
@@ -363,39 +419,43 @@ M_{space-time} = \sum_{i=1}^{N_{utxo}} K_i \cdot B_i \approx K \cdot N_{utxo} \c
 Recirculation reward was calculated in previous section and depends on space-time fee model. However it can be generalized as with $K_{model}$ parameter, that is equals to 1 for \textit{Demurrage balance} and \textit{Postpaid} models, and $K_{model} \approx 20$ for \textit{Prepaid} model:
 
 \begin{equation}
-M_{recirculation} = {r_{mode} \cdot  N_{lost} \cdot K \cdot B}
+M_{lost} = {N_{lost} \cdot V_{output} \over L_{max}}
 \end{equation}
 
-Resulting miner reward:
+Thus the additional mining reward is:
 
 \begin{equation}
-\label{eq:reward}
-M_{reward} \approx M_{pg} + (K \cdot B) \cdot ((1 + r_flow) \cdot N_{utxo} + r_{mode} \cdot N_{lost})
+\Delta M_2 = M_2 - M_{pg} = M_{pg} \cdot {{L_{mu}-L_{mi}} \over {L_{mu} \cdot L_{mi}}} + K \cdot N_{utxo} \cdot B
 \end{equation}
-
-First part of this equation $M_{pg}$ is the reward of miner in existing fee models, the rest is the unique reward for \esse{} model.  In a sensible assumption $N_{utxo} >> N_{lost}$ equation \ref{eq:reward} can be simplified to
 
 \begin{equation}
-M_{postpaid} \approx M_{pg} + K \cdot B \cdot N_{utxo} \cdot (1 + M)
+\Delta M_3 = M_{pg} \cdot {{L_{mu}-L_{mi}} \over {L_{mu} \cdot L_{mi}}} + K \cdot N_{utxo} \cdot B + {N_{lost} \cdot V_{output} \over L_{max}}
 \end{equation}
 
-that allows to estimate such $K$, when additional \esse{} reward will exceed common propagation reward $M_{pg}$:
+\ignore{
+  \begin{equation}
+  \label{eq:reward}
+    M_{reward} \approx M_{pg} + (K \cdot B) \cdot ((1 + r_{flow}) \cdot N_{utxo} + r_{mode} \cdot N_{lost})
+  \end{equation}
 
-\begin{equation}
-M_{postpaid} = {M_{pg} \over B \cdot N_{utxo} \cdot (1 + M)} \approx 10^{-9} ({BTC / (Byte \cdot Block)})
-\end{equation}
+  First part of this equation $M_{pg}$ is the reward of miner in existing fee models, the rest is the unique reward for \esse{} model.  In a sensible assumption $N_{utxo} >> N_{lost}$ equation \ref{eq:reward} can be simplified to
 
-that is naturally coincide to estimations from section \ref{eq:ltmean} while miner reward equals to user losses.
+  \begin{equation}
+    M_{postpaid} \approx M_{pg} + K \cdot B \cdot N_{utxo} \cdot (1 + M)
+  \end{equation}
 
-Remarkable that space-time reward does not depend on network throughput and can be easily predicted. Since it will be accrued to generator of block with concrete height, it may be considered as a constant block reward fixing problem of blockchain instability without block reward \cite{carlsten2016instability}. It's value may be controlled by $K$ parameter making mining more stable and thus network more secure.
+  that allows to estimate such $K$, when additional \esse{} reward will exceed common propagation reward $M_{pg}$:
+
+  \begin{equation}
+    K = {M_{pg} \over B \cdot N_{utxo} \cdot (1 + M)} \approx 10^{-9} ({BTC / (Byte \cdot Block)})
+  \end{equation}
+
+  that is naturally coincide to estimations from section \ref{eq:ltmean} while miner reward equals to user losses.
+}
+
+We remark that space-time reward $K \cdot N_{utxo} \cdot B$ does not depend on network throughput and can be easily predicted. Since it will be accrued to generator of block with concrete height, it may be considered as a constant block reward fixing problem of blockchain instability without block reward \cite{carlsten2016instability}. This value may be controlled by adjusting $K$ parameter making mining more stable and thus securing the network.
 
 \dnote{What is an output value when miner is interested in collecting it?}
-
-\subsection{Cryptocurrency inflation}
-
-As we have already noticed in section \ref{minerrew}, miners reward from space-time fee can be considered as static block reward. Extending this idea it is possible to get rid of coinbase transactions breaking usual transaction rule that sum of inputs should not be less then sum of outputs. To achieve this, all coins should be issued in genesis block in such a way, that every block one output will be released and miner will collect it's value according space-time fee model. Thereafter miner will collect reward in uniform way collecting abandoned outputs, whenever it was created in genesis or by cryptocurrency user.
-
-After all coins issue, nothing changes from both miners and users point of view: part of users money move every block to miner. Note, that it is isomorphic to inflation in existing cryptocurrencies, when users accumulations remain the same, but total supply increases via static miner reward.
 
 \subsection{State size}
 
@@ -423,8 +483,13 @@ S \cdot K = M_{block}
 
 which leads to 13 Gb \state{} for $K=10^{-9}$ ($BTC / (Byte \cdot Block)$) which is small enough to be processed on common hardware.
 
-Thus \esse{} model allows to control \state{} with $K$ parameter, allowing to estimate expected \state{} size and it's upper bound. Reasonable $K$ value leads to 13 Gb of expected \state{} size and 183 Gb of it's upper bound, preventing DoS attacks like \cite{bitcoin2015flood} and ensuring that there is no way to increase it's size to exceed existing RAM drives.
+Thus \esse{} model allows to control \state{} with $K$ parameter, allowing to estimate expected \state{} size and its upper bound. Reasonable $K$ value leads to 13 Gb of expected \state{} size and 183 Gb of its upper bound, preventing DoS attacks like \cite{bitcoin2015flood} and ensuring that there is no way to increase its size to exceed existing RAM drives.
 
+\subsection{Cryptocurrency inflation}
+
+As we have already noticed in section \ref{minerrew}, miners reward from space-time fee can be considered as static block reward. Extending this idea it is possible to get rid of coinbase transactions breaking usual transaction rule that sum of inputs should not be less then sum of outputs. To achieve this, all coins should be issued in genesis block in such a way, that every block one output will be released and miner will collect its value according space-time fee model. Thereafter miner will collect reward in uniform way collecting abandoned outputs, whenever it was created in genesis or by cryptocurrency user.
+
+After all coins issue, nothing changes from both miners and users point of view: part of users money move every block to miner. Note, that it is isomorphic to inflation in existing cryptocurrencies, when users accumulations remain the same, but total supply increases via static miner reward.
 
 
 \section{Subsidizing Space-time}
@@ -457,7 +522,7 @@ Assuming $L_{mean}=1$ year and $L_{max}=10$ years and Bitcoin statistics, we may
 
 which is equals to 2 ($Mb \cdot Block$) for free for each ouptut. This is exactly the increasing of upper bound for \state{} size because according to equation \ref{eq:statesizemax} subsidized space-time will just prolongate outputs lifetime for corresponding value. Moreover according equation \ref{eq:statesizemax} expected \state{} size will remain the same because it is dictated by economical reasons only.
 
-Thus, additional subsidized space-time parameter allows to use the same blockchain for both money and data applications. Subsidized value may be configured to be big enough for regular users, allowing them to keep their outputs for free for some time, but small enough for blockchain usage as database. It's impact to \state{} size is negligible, while it allows to increase $K$ value painlessly for regular users, but increasing lost coin recirculation rate.
+Thus, additional subsidized space-time parameter allows to use the same blockchain for both money and data applications. Subsidized value may be configured to be big enough for regular users, allowing them to keep their outputs for free for some time, but small enough for blockchain usage as database. Its impact to \state{} size is negligible, while it allows to increase $K$ value painlessly for regular users, but increasing lost coin recirculation rate.
 
 
 \section{Related Work}
