@@ -517,16 +517,20 @@ Thus, additional subsidized space-time parameter allows to use the same blockcha
 
 \section{Related Work}
 
-\knote{PascalCoin?}
+Ethereum introduced a fee to cover computational costs of nodes processing a transaction~(via rewarding a miner), with a mandatory minimum. A price of a computational unit~(which is an instruction of Ethereum Virtual Machine) is controlled by miners via adjusting ``gas'' price. We consider to adopt this approach toward charging users for consuming space-time units. 
+
+FreiCoin is a cryptocurrency with demurrage. Demurrage-adjusted running balance~(aggregated for all the outputs associated with a key) is to be recalculated when a transaction is touching any output which is a part of the balance. Unlike FreiCoin, miners are watching over the state constantly to clean it in our proposal, and coins being lost are getting back into circulation~(in FreiCoin, outputs forgotten do live forever in the unspent outputs set). \knote{link}
+
+In PascalCoin \knote{link}, if an account has not made any operations for 420,480 blocks then its balance is considered as forgotten and miner can claim it. Our approach to recover lost coins is more natural. In the \textit{prepaid} mode an user sets expiration time on his side~(paying accordingly), in \textit{postpaid} and \textit{scheduled payments} modes a forgotten output is to be turned into space-time fees eventually.
 
 \section{Further Work}
 
 We left some questions for further research:
 
 \begin{itemize}
-  \item{}It is interesting how tokens in a cryptocurrency with a \esse{} fee component can be compared with a Gesell's demurrage currency~\knote{links}. 
-  \item{}A possible interesting research vector is how to find appropriate mandatory minimal $f_v$, $f_p$, $f_s$ values. Another question is how these component could be combined in a transaction fee $f$. On possible option is to set $f = max(f_p, f_v, f_s)$.
-  \item{}A possible interaction with the problem of blockchain instability without the constant block reward~\cite{carlsten2016instability} in the setting of increased fee supply is another concern to study.
+  \item{}it is interesting to see how tokens in a cryptocurrency with a \esse{} fee component can be compared with a Gesell's demurrage currency~\knote{links}. 
+  \item{}an interesting research vector is how to find appropriate mandatory minimal $f_v$, $f_p$, $f_s$ values. Another question is how these component could be combined in a transaction fee $f$. One possible option is to set $f = max(f_p, f_v, f_s)$.
+  \item{}a possible interaction with the problem of blockchain instability without the constant block reward~\cite{carlsten2016instability} in the setting of increased fee supply is another concern to study.
 \end{itemize}
 
 \bibliographystyle{elsarticle-num}
