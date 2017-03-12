@@ -227,7 +227,7 @@ In this model $D_s$ is another protocol parameter which may be fixed by a protoc
 \section{Analysis of the Model}
 \label{sec:analysis}
 
-In this section we provide analysis of the model. We study how efficient is the proposal regarding the main goal to control state size. We get estimations for additional miners
+In this section we provide analysis of the model. We show how the proposal is meeting its goal to control state size. We get estimations for additional miners
 rewards as well as lost coins recirculation. Throughout this section we use following values got from current state of the Bitcoin network:
 
 \begin{itemize}
@@ -236,14 +236,14 @@ rewards as well as lost coins recirculation. Throughout this section we use foll
   \item mean value of an output: $V_{mean} \approx 0.35$ BTC
   \item simple payment transaction fee: $f_{p} \approx 0.0002$ BTC
   \item mean output size: $B_{mean} \approx 36$ Bytes
-  \item share of coins moved in every block: $M_{flow} \approx 0.013$ \%
+  %\item share of coins moved in every block: $M_{flow} \approx 0.013$ \%
   \item time interval between blocks: $T_{block} \approx 10$ minutes
   \item transaction fees per block: $M_{pg} \approx 1$ BTC
-  \item constant block reward: $R_{f} = 12.5$ BTC
+  \item constant block reward: $M_c = 12.5$ BTC
   \item average number of outputs spent in a block $N_{moved} \approx 5,500$ 
 \end{itemize}
 
-We use numbers from the Bitcoin to calculate some typical cases as this is the most used cryptocurrency with longest history. However, a cryptocurrency with SSE being deployed would have different metrics values. Thus results from this section got with the Bitcoin statistical data should be considered as initial.
+We use the numbers from the Bitcoin to make calculations for some typical cases as this is the most used cryptocurrency with longest history. However, a cryptocurrency with SSE being deployed would have different values for the metrics. Thus results from this section got with the Bitcoin statistical data should be considered as initial.
 
 We study money flows in a space-scarce economy while dividing them into two types. Miners claim lost coins and also charge every output in the system state every block. Users are incentivized to move coins more frequently thus increasing mining rewards due to increased economic activity.  
 
@@ -289,14 +289,14 @@ Assuming that $K\approx10^{-9}$ we can estimate difference between prepaid and p
 
 For example, if user-defined coin recirculation period $L_{max}\approx10$ years then ${R_{prepaid} \over R_{postpaid}} \approx 19$
 
-Concluding Section, \esse{} model by design provides a way to return lost coins to circulation thus preventing potential deflation. \textit{Postpaid} model has a disadvantage  that lost coins could be returned to circulation in far future. In \textit{Prepaid} model coin recirculation rate is presumably much higher than in other models and \textit{Scheduled payments} mode is a most smooth way to recycle coins.
+Concluding, \esse{} model by design provides a way to return lost coins to circulation thus preventing potential deflation. \textit{Postpaid} model has a disadvantage  that lost coins could be returned to circulation in far future. In \textit{Prepaid} model coin recirculation rate is presumably much higher than in other models and \textit{Scheduled payments} mode is a most smooth way to recycle coins.
 
 
 
 \subsection{User-Driven Money flow}
 \label{sec:flow}
 
-From users point of view, the longer you keep some output, the bigger space-time fee you pay. Thus the proposed fee regime provides an incentive to move coins stimulating economic activity. In all the fee models introduced in Section~\ref{sec:model}, user pays ${K \cdot B}$ coins every block for keeping his output in the state. 
+From users point of view, the longer you keep some output, the bigger space-time fee you pay. Thus the proposed fee regime provides an incentive to move coins more frequently stimulating economic activity. In all the fee models introduced in Section~\ref{sec:model}, user pays ${K \cdot B}$ coins every block for keeping his output in the state. 
 
 
 \ignore{
@@ -415,7 +415,9 @@ A space-time reward depends on state size and space-time price $K$ only:
 M_{space-time} = \sum_{i=1}^{N_{utxo}} K_i \cdot B_i \approx K \cdot N_{utxo} \cdot B
 \end{equation}
 
-Recirculation reward was calculated in previous section and depends on space-time fee model. However it can be generalized as with $K_{model}$ parameter, that is equals to 1 for \textit{Scheduled payments} and \textit{Postpaid} models, and $K_{model} \approx 20$ \dnote{$K_{model} is not used anywhere!$} for \textit{Prepaid} model:
+Recirculation reward in the \textit{Prepaid} model:
+
+%was calculated in previous section and depends on space-time fee model. However it can be generalized as with $K_{model}$ parameter, that is equals to 1 for \textit{Scheduled payments} and \textit{Postpaid} models, and $K_{model} \approx 20$ \dnote{$K_{model} is not used anywhere!$} for \textit{Prepaid} model:
 
 \begin{equation}
 M_{lost} = {N_{lost} \cdot V_{output} \over L_{max}}
@@ -452,7 +454,9 @@ Thus the additional mining reward is:
   that is naturally coincide to estimations from section \ref{eq:ltmean} while miner reward equals to user losses.
 }
 
-We remark that space-time reward $K \cdot N_{utxo} \cdot B$ does not depend on network throughput and can be easily predicted. Since it will be accrued to generator of block with concrete height, it may be considered as a constant block reward fixing problem of blockchain instability without block reward \cite{carlsten2016instability}. This value may be controlled by adjusting $K$ parameter making mining more stable and thus securing the network.
+We remark that space-time reward $K \cdot N_{utxo} \cdot B$ does not depend on network throughput and can be easily predicted. Since it will be accrued to generator of a block of a concrete height, and may be considered as a constant block reward. The reward value may be controlled by adjusting $K$ parameter making mining more stable and thus securing the network.
+
+\knote{This constant reward is fixing problem of blockchain instability without block reward \cite{carlsten2016instability} - pretty bold claim - move to further work? }
 
 \dnote{What is an output value when miner is interested in collecting it?}
 
@@ -468,7 +472,7 @@ For a state of size $S$ miner is getting $S \cdot K$ space-time fees every block
 
 \begin{equation}
 \label{eq:statesizeexp}
-S \cdot K = R_{f}
+S \cdot K = M_c
 \end{equation}
 
 which leads to 13 Gb state for $K=10^{-9}$ ($BTC / (Byte \cdot Block)$).
