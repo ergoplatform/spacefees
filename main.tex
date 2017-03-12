@@ -14,11 +14,6 @@
 
 \usepackage{systeme}
 
-%\newtheorem{proposition}{Proposition}
-%\newtheorem{definition}{Definition}
-%\newtheorem{assumption}{Assumption}
-
-
 \def\shownotes{1}
 \def\notesinmargins{0}
 
@@ -64,9 +59,7 @@
   breakatwhitespace=true,
   tabsize=3,
 }
-\newtheorem{claim1}{Claim}
-\newtheorem{dfn}{Definition}
-\newtheorem{defn}{Definition}
+
 \newcommand{\ma}{\mathcal{A}}
 \newcommand{\mb}{\mathcal{B}}
 \newcommand{\he}{\hat{e}}
@@ -80,19 +73,7 @@
 \newcommand{\full}[1]{} % use only for full version
 \newcommand{\notfull}[1]{#1}
 \newcommand{\rand}{\stackrel{R}{\leftarrow}}
-\newcommand{\haya}{blue}
-\newcommand{\amitabh}{purple}
-\newcommand{\questions}{blue}
-\newcommand{\defined}{\stackrel{\mbox{\tiny{def}}}{=}}
-\newcommand{\mc}{\mathcal}
-\newcommand{\ms}{\mathsf}
-\newcommand{\txs}{\textsf}
-\newcommand{\lea}{\leftarrow}
-\newcommand{\rea}{\rightarrow}
-\newcommand{\adv}{{\cal A} }
-\def\kg{{\sf{Gen}}}
-\def\enc{{\sf{Enc}}}
-\def\dec{{\sf{Dec}}}
+
 \newcommand{\mypar}[1]{\smallskip\noindent\textbf{#1.}\ \ \ }
 
 \begin{document}
@@ -145,7 +126,8 @@ Summarizing, we study an economy where memory of a massively-replicated system n
 
 \subsection{Structure of the Paper}
 
-The paper is organized as follows. A design of our model is described in Section~\ref{sec:model}. The model is analyzed in section~\ref{sec:analysis}.  \knote{finish}
+The paper is organized as follows. A design of our model is described in Section~\ref{sec:model}. The model is analyzed in Section~\ref{sec:analysis}.  
+\knote{finish}
 
 
 \section{The Model}
@@ -456,19 +438,16 @@ Thus the additional mining reward is:
 
 We remark that space-time reward $K \cdot N_{utxo} \cdot B$ does not depend on network throughput and can be easily predicted. Since it will be accrued to generator of a block of a concrete height, and may be considered as a constant block reward. The reward value may be controlled by adjusting $K$ parameter making mining more stable and thus securing the network.
 
-\knote{This constant reward is fixing problem of blockchain instability without block reward \cite{carlsten2016instability} - pretty bold claim - move to further work? }
-
 \dnote{What is an output value when miner is interested in collecting it?}
 
 \subsection{State size}
 
-In this section we analyze the main goal of \esse{} model which is to control state size. We study two most important cases. First, we estimate how big the state should be to give miners rewards comparable to Bitcoin's constant reward of today. Second, we study what is the maximum size of state could be considering an user having all the coins in the system 
-and performing constant spam attack.
+In this section we analyze the main goal of \esse{} model which is to control state size. We study two most important cases. First, we estimate how big the state should be to give miners rewards comparable to Bitcoin's constant reward of today. Second, we study what is the maximum size of state could be considering an user having coins in the system and performing constant spam attack.
 
 
 \paragraph{Constant Rewards}
 
-For a state of size $S$ miner is getting $S \cdot K$ space-time fees every block. To be a replacement for a constant reward in Bitcoin of today $R_f$, following equality should holds:
+For a state of size $S$ miner is getting $S \cdot K$ space-time fees every block. For them to be a replacement for the current constant reward in Bitcoin $M_c$ following equality should holds:
 
 \begin{equation}
 \label{eq:statesizeexp}
@@ -493,23 +472,17 @@ assuming that number of unspent outputs is big enough. Resulting state size:
 S = S_{block} \cdot O_{max} = \sqrt { 2 \cdot N_{coins} \cdot S_{block} \over K}
 \end{equation}
 
-which is about 183 gigabytes for Bitcoin statistics and $K=10^{-9}$ ($BTC / (Byte \cdot Block)$). Taking into account that \state{} should be kept in memory, 183GB is quite big state size, however modern RAM discs allows to keep it. Note also that it is upper-bound of \state{} size calculated from non-realistic assumptions that all available supply will be paid for space-time fee, and $K$ is constant.
+which is about 183 gigabytes for Bitcoin statistics and $K=10^{-9}$ ($BTC / (Byte \cdot Block)$). Taking into account that \state{} should be kept in memory, 183GB is quite big state size, however, miners can keep it in RAM. Note also that it is upper-bound of \state{} size calculated from non-realistic assumptions that all available supply will be paid for space-time fee, and $K$ is constant.
+
 
 
 Thus \esse{} model allows to control state growth with $K$ parameter and allows to estimate expected state size as well as an upper bound. Reasonable $K$ value leads to 13 Gb of expected state size and 183 GB for a spam attack backed by all the tokens in the system. The model is preventing spam attacks like \cite{bitcoin2015flood} and provide a guarantee that miners can have state fit in RAM.
 
 
-\paragraph{Cryptocurrency inflation}
-
-As we have already noticed in section \ref{minerrew}, miners reward from space-time fee can be considered as static block reward. Extending this idea it is possible to get rid of coinbase transactions breaking usual transaction rule that sum of inputs should not be less then sum of outputs. To achieve this, all coins should be issued in genesis block in such a way, that every block one output will be released and miner will collect its value according space-time fee model. Thereafter miner will collect reward in uniform way collecting abandoned outputs, whenever it was created in genesis or by cryptocurrency user.
-
-After all coins issue, nothing changes from both miners and users point of view: part of users money move every block to miner. Note, that it is isomorphic to inflation in existing cryptocurrencies, when users accumulations remain the same, but total supply increases via static miner reward.
-
-\section{Examples}
-
-\knote{moneychain and datachain}
-
 \section{Subsidizing Space-time}
+\label{sec:subsidy}
+
+\knote{the whole section is not very clear}
 
 It is usual to pay space-time fee for a cloud storage and thus \esse{} model is natural for a blockchain acting as a database. On the other hand, in a cryptocurrency setting it may be natural to allow users to keep their coins for free for some period of time. In this section we are going to extend \esse{} model with a space-time subsidy $S_s$. For example, it may be allowed to keep a simple output for 10 years for free thus $S_s \approx 525600 (Blocks) \cdot 35 (Byte) \approx 18 (Mb \cdot Block)$. While 10 years is a quite big period for regular output, it is quite small amount of subsidized space-time for blockchain usage as a storage, e.g. will only allow to keep 127 Kb output for one day in \state{}.
 
@@ -519,7 +492,7 @@ Such subsidized fee may be calculated as
 f_{s} = max(0, K \cdot B \cdot L - S_s)
 \end{equation}
 
-and provides another way to control \esse{} economy with $S_s$ parameter. In particular it allows define $K$ and $S_s$ to achieve desired money flow and coin recirculation rates. It is possible to estimate $K$ and $S_s$ required for mean output lifetime $L_{mean}$ and mean coin recirculation periods $R_{mean}$ using assumptions from previous section:
+and provides another way to control \esse{} economy with $S_s$ parameter. In particular, it allows to define $K$ and $S_s$ to achieve desired money flow and coin recirculation rates. It is possible to estimate $K$ and $S_s$ required for mean output lifetime $L_{mean}$ and mean coin recirculation periods $R_{mean}$ using assumptions from previous section:
 
 \begin{equation}
   \begin{array}{ccl}
@@ -548,6 +521,17 @@ Thus, additional subsidized space-time parameter allows to use the same blockcha
 
 \section{Further Work}
 
+We left some questions for further research:
+
+\begin{itemize}
+  \item{}
+  \item{}
+  \item{}
+\end{itemize}
+
+\knote{This constant reward is fixing problem of blockchain instability without block reward \cite{carlsten2016instability} - pretty bold claim - move to further work? }
+
+
 \dnote{transaction commission may be defined as $fee = Max(f_{v}, f_p, f_s)$}
 
 \dnote{Comparison with Gesell's money~(money with demurrage)}
@@ -556,5 +540,15 @@ Thus, additional subsidized space-time parameter allows to use the same blockcha
 
 \bibliographystyle{elsarticle-num}
 \bibliography{sources.bib}
+
+\appendix
+
+\section{Examples}
+
+\knote{moneychain and datachain}
+
+\section{Unified Transactions}
+
+\dnote{As we have already noticed in section \ref{minerrew}, miners reward from space-time fee can be considered as static block reward. Extending this idea it is possible to get rid of coinbase transactions breaking usual transaction rule that sum of inputs should not be less then sum of outputs. To achieve this, all coins should be issued in genesis block in such a way, that every block one output will be released and miner will collect its value according space-time fee model. Thereafter miner will collect reward in uniform way collecting abandoned outputs, whenever it was created in genesis or by cryptocurrency user. After all coins issue, nothing changes from both miners and users point of view: part of users money move every block to miner. Note, that it is isomorphic to inflation in existing cryptocurrencies, when users accumulations remain the same, but total supply increases via static miner reward.}
 
 \end{document}
