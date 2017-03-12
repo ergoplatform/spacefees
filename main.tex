@@ -156,14 +156,14 @@ In our model transaction fee $f$ consists of 3 parts: \textit{validation cost} $
 f = f_v + f_p + f_s , f \ge 0
 \end{equation}
 
-Validation and propagation costs are strictly non-negative and assumed to be independent from the space-time fee. We assume that space-time fee impact to total fee $f$ may range from negligible to dominant. It is possible for $f_s$ to be negative since transaction may both increase and decrease state size. It depends on size of outputs to be marked as spent, newly created outputs and their time to live. Thus a transaction is freeing some space-time \textit{$T_{cleared}$} and claiming space-time \textit{$T_{filled}$}. Resulting space-time fee can be calculated as follows:
+Validation and propagation costs are strictly non-negative and assumed to be independent from the space-time fee. We assume that space-time fee impact to total fee $f$ may range from negligible to dominant. It is possible for $f_s$ to be negative since a transaction may whether increase or decrease the state. It depends on size of outputs to be marked as spent, newly created outputs and their time to live. If a transaction is freeing some space-time \textit{$T_{cleared}$} and claiming space-time \textit{$T_{filled}$}, then the  resulting space-time fee can be calculated as follows:
 \begin{equation}
 f_s = K \cdot (T_{filled} - T_{cleared})
 \end{equation}
 
-where \textit{K} is a space-time price in the fee tokens. We assume that miners can change this price via mechanism like ``gas'' in Ethereum~(based on hardware price for miners and token exchange rate) and thus control cost of blockchain support.
+where \textit{K} is a space-time price. We assume that miners can change this price like they change ``gas'' cost in Ethereum~(based on hardware prices and token exchange rate) and thus control cost of maintaining the blockchain.
 
-We further assume that outputs are protected by logical propositions and consider three options for the fee to be charged. Concretely, \textit{prepaid outputs} are defined in the Section~\ref{sec-prepaid}, \textit{postpaid outputs} are described in the Section~\ref{sec-postpaid} and \textit{scheduled payments} are proposed in the Section~\ref{sec-scheduled}.
+We consider three options for the fee to be charged. Concretely, \textit{prepaid outputs} are defined in Section~\ref{sec-prepaid}, \textit{postpaid outputs} are described in Section~\ref{sec-postpaid} and \textit{scheduled payments} are proposed in Section~\ref{sec-scheduled}.
 
 \subsection{Prepaid Outputs}
 \label{sec-prepaid}
@@ -286,7 +286,7 @@ Assuming that $K\approx10^{-9}$ we can estimate difference between prepaid and p
 
 For example, if user-defined coin recirculation period $L_{max}\approx10$ years then ${R_{prepaid} \over R_{postpaid}} \approx 19$
 
-Concluding the section, \esse{} model by design provides a way to return lost coins to circulation thus preventing potential deflation. \textit{Postpaid} model has a disadvantage  that lost coins could be returned to circulation in far future. In \textit{Prepaid} model coin recirculation rate is presumably much higher than in other models and \textit{Scheduled payments} mode is a most smooth way to recycle coins.
+Concluding Section, \esse{} model by design provides a way to return lost coins to circulation thus preventing potential deflation. \textit{Postpaid} model has a disadvantage  that lost coins could be returned to circulation in far future. In \textit{Prepaid} model coin recirculation rate is presumably much higher than in other models and \textit{Scheduled payments} mode is a most smooth way to recycle coins.
 
 
 
