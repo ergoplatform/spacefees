@@ -140,6 +140,7 @@ Summarizing, we study an economy where memory of a massively-replicated system n
   \item{} We assume that all the fees for a block are going to a single miner like in Bitcoin. There are proposals to share the rewards for a block within a group of miners~(for example, share fees with miners of some number of blocks before or after current one \cite{eyal2016bitcoin, kogias2016enhancing})\knote{link to ByzCoin}. One difference is that in Bitcoin a miner can include his transactions into a block for free.
   \item{} We assume that a state consists of unspent outputs. An output is not modifiable so could be created and spent only. An output is protected by a script which is defined as a logical formula which can refer to properties of a blockchain (for example, its current height), spending transaction and an outputs itself. \knote{example} 
   \item{} For simplicity, we assume that a block is of a finite size but all the transactions a miner has at a given moment of time could be packed into it, if otherwise is not stated explicitly.
+  \item{} Time is measured via \textit{height} which is a number of blocks since an initial block~(a genesis block). 
 \end{itemize}
 
 \subsection{Structure of the Paper}
@@ -168,17 +169,19 @@ We consider three options for the fee to be charged. Concretely, \textit{prepaid
 \subsection{Prepaid Outputs}
 \label{sec-prepaid}
 
-First option we are going to analyze is prepaid outputs. In it each output of a size \textit{B} in a state is prepaid until explicitly known period of time $L_{max}$. After $L_{max}$ anyone~(presumably miner generated first block after that) is able to spend the overdue output. Thus a spending script for any output must be a combination of regular spending script and loan period $L_{max}$:
+First option we are going to analyze is prepaid outputs. Each output of a size \textit{B} in a state is prepaid for a duration $L_{max}$ set explicitly in a transaction creating the output. After $L_{max}$ anyone~(presumably a miner generating first block after that) is able to spend the overdue output. Thus a spending script for any output must be a combination of regular spending script and loan period $L_{max}$:
 
 \begin{equation}
 (Height > self.height + L_{max}) \lor (regular\_script)
 \end{equation}
 
-where \textit{Height} is current blockchain height and \textit{regular\_script} is user-defined spending script for the output\dnote{What is self.height?}. This form of a script is a part of consensus and mandatory space-time fee is to be paid by a transaction creating the output:
+where \textit{Height} is current blockchain height and \textit{regular\_script} is user-defined spending script for the output\dnote{What is self.height?}. This form of a script is a part of consensus and a mandatory space-time fee is to be paid by a transaction creating the output:
 
 \begin{equation}
 f_{s-prepaid} = K \cdot (\sum_i{(B_i \cdot (L_{max\_i} - Height))} - \sum_j{(B_j \cdot (L_{max\_j} - Height)}))
 \end{equation}
+
+\knote{Height is subjective here, write about that}
 
 After $L_{max}$ the output is spendable by anyone~(presumably, miner).
 
@@ -186,19 +189,19 @@ After $L_{max}$ the output is spendable by anyone~(presumably, miner).
 \label{sec-postpaid}
 
 
-In the second model, user should pay fee for consumed space-time when he spends an output. When output is spent its lifetime is known so resulting transaction fee can be calculated:
+In the second model an user should pay fee for consumed space-time when he spends an output. When an output is spent its lifetime is known so resulting transaction fee can be calculated as:
 
 \begin{equation}
 f_{s-postpaid} = \sum_i{(K_i \cdot B_i \cdot (H_{spent\_i} - H_{creation\_i}))}
 \end{equation}
 
-where $H_{creation\_i}$ and $H_{spent\_i}$ are heights where i-th output was created and spent respectively. Note that each output has its own space-time price \textit{$K_i$} which is the \textit{K} value at the time of the output creation. Here we can note, that if output value is \textit{V}, then height \textit{$H_{max}$} exists, where all the output value will be taken by space-time fee.
+where $H_{creation\_i}$ and $H_{spent\_i}$ are heights where i-th output was created and spent respectively. Note that each output has its own space-time price \textit{$K_i$} which is the \textit{K} value at the time of the output creation. We note that for output value is \textit{V} height \textit{$H_{max}$} exists  when the whole output value will be taken by space-time fee:
 
 \begin{equation}
 H_{max} = {H_{creation} + {V \over {K \cdot B}}}
 \end{equation}
 
-After that anyone should be able to spend this output, sending the whole value to transaction fee and spending script will looks like
+After that anyone should be able to spend this output, sending the whole value to transaction fee and a spending script looks like
 
 \begin{equation}
 (Height > self.height + H_{max}) \lor (regular\_script)
@@ -207,7 +210,7 @@ After that anyone should be able to spend this output, sending the whole value t
 \subsection{Scheduled Payments}
 \label{sec-scheduled}
 
-The last model we introduce is a combination of the prepaid and postpaid models. Like in the postpaid model, an user pays for an output when he spends it in a transaction, but he is also enforced to move his coins before a known duration $D_{s}$ since output creation. If the user do not do this, anyone can create a transaction with this output, returning them to owner without space-time fee ${K \cdot B \cdot D_{s}}$. The spending script for the output would be like
+The last model we introduce is a combination of the prepaid and postpaid models. Like in the postpaid model, an user pays for an output when he spends it in a transaction. In addition, the output is also enforced to be moved before a known duration $D_{s}$ since its creation. That is, if the user do not move the coins before this then anyone can create a transaction claiming this output, returning all the coinsback to the owner except of a space-time fee ${K \cdot B \cdot D_{s}}$. A spending script for the output would be like:
 
 \begin{align}
 \begin{split}
@@ -219,7 +222,7 @@ The last model we introduce is a combination of the prepaid and postpaid models.
 
 \dnote{With this script output is kept for free after $D_s$, if noone spent it.}
 
-In this model $D_s$ is another protocol parameter, that may be fixed by protocol design or changed via miners voting like \textit{K}.
+In this model $D_s$ is another protocol parameter which may be fixed by a protocol design or changed via miners voting like \textit{K}.
 
 \section{Analysis of the Model}
 \label{sec:analysis}
