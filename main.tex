@@ -508,7 +508,7 @@ After all coins issue, nothing changes from both miners and users point of view:
 
 \section{Subsidizing Space-time}
 
-It is usual to pay for space-time multiplication for database leasing and thus \esse{} model is natural for blockchain-as-database model. On the other hand, in blockchain usage for currency it may be natural to allow users to keep some data for free in blockchain. In this section we are going to extend \esse{} model, subsidizing pre-defined by network space-time $S_s$ (which may also be defined by miners voting). For example, it may allow to keep simple money output for 10 years for free, subsidizing $S_s \approx 525600 (Blocks) \cdot 35 (Byte) \approx 18 (Mb \cdot Block)$. While 10 years is a quite big period for regular output, it is quite small amount of subsidized space-time for blockchain usage as a storage, e.g. will only allow to keep 127 Kb output for one day in \state{}.
+It is usual to pay space-time fee for a cloud storage and thus \esse{} model is natural for a blockchain acting as a database. On the other hand, in a cryptocurrency setting it may be natural to allow users to keep their coins for free for some period of time. In this section we are going to extend \esse{} model with a space-time subsidy $S_s$. For example, it may be allowed to keep a simple output for 10 years for free thus $S_s \approx 525600 (Blocks) \cdot 35 (Byte) \approx 18 (Mb \cdot Block)$. While 10 years is a quite big period for regular output, it is quite small amount of subsidized space-time for blockchain usage as a storage, e.g. will only allow to keep 127 Kb output for one day in \state{}.
 
 Such subsidized fee may be calculated as
 
