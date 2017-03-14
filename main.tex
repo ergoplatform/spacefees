@@ -92,7 +92,7 @@ In this paper we study space-scarce economy in massively replicated open blockch
 Bitcoin \cite{Nakamoto2008} was introduced in 2008 by S. Nakamoto as a purely peer-to-peer version of electronic cash with a ledger written into blockchain data structure maintained by the whole network. Security of the scheme is relied on miners. If majority of miners are honest then Bitcoin meets its security goals as formal analysis~\cite{Garay2015} shows. For the work done a miner is claiming a reward which consists of two parts. First, some constant number of bitcoins created out of thin air in a newly created block according to predefined and hard-coded token emission schedule. Second, a miner claims fees for all the transactions included into the block. A transaction fee is set by user during transaction creation.
 
 
-An user pay fees to miners to have his transactions included into the blockchain. Fees are useful for an existing cryptocurrency economy for two reasons:
+A user pay fees to miners to have his transactions included into the blockchain. Fees are useful for an existing cryptocurrency economy for two reasons:
 
 \begin{enumerate}
   \item{Incentivizing a miner's activity. } A rational Bitcoin miner does not include all the valid transactions into blocks as, due to the increased chances of orphaning a block, the cost of adding transactions to a block could not be ignored~\cite{andersen2013,rizun2015transaction}. As shown in \cite{rizun2015transaction}, even in absence of block size limit, Bitcoin fee market is healthy and the miners surplus is maximized at a finite quantity of block space. Thus the miner is incentivized to produce a block of a limited size. This means that only subset of transactions providing enough value to a miner will be included in a block. A paper~\cite{rizun2015transaction} provides a procedure to calculate transaction fee based on block propagation time, i.e. miners network resources utilization.
@@ -171,7 +171,7 @@ After $L_{max}$ the output is spendable by anyone~(presumably, miner). \dnote{Th
 \label{sec-postpaid}
 
 
-In the second model an user should pay fee for consumed space-time when he spends an output. When an output is spent its lifetime is known so resulting transaction fee can be calculated as:
+In the second model a user should pay fee for consumed space-time when he spends an output. When an output is spent its lifetime is known so resulting transaction fee can be calculated as:
 
 \begin{equation}
 f_{s-postpaid} = \sum_i{(K_i \cdot B_i \cdot (H_{spent\_i} - H_{creation\_i}))}
@@ -193,7 +193,7 @@ After that anyone should be able to spend this output, sending the whole value t
 \subsection{Scheduled Payments}
 \label{sec-scheduled}
 
-The last model we introduce is a combination of the prepaid and postpaid models. Like in the postpaid model, an user pays for an output when he spends it in a transaction. In addition, the output is also enforced to be moved before a known duration $D_{s}$ since its creation. That is, if the user do not move the coins before this then anyone can create a transaction claiming this output, returning all the coins back to the owner except of a space-time fee ${K \cdot B \cdot D_{s}}$. A spending script for the output would be like:
+The last model we introduce is a combination of the prepaid and postpaid models. Like in the postpaid model, a user pays for an output when he spends it in a transaction. In addition, the output is also enforced to be moved before a known duration $D_{s}$ since its creation. That is, if the user do not move the coins before this then anyone can create a transaction claiming this output, returning all the coins back to the owner except of a space-time fee ${K \cdot B \cdot D_{s}}$. A spending script for the output would be like:
 
 \begin{align}
 \begin{split}
@@ -258,7 +258,7 @@ R_{postpaid} = R_{scheduled} = {N_{lost} \cdot V_{output} \over L_{max}} = {N_{l
 
 where $N_{lost}$ is the number of outputs with lost keys. Assuming current Bitcoins statistics, $N_{lost}\approx10^6$ and $K = 10^{-9}$ we can estimate, that $\approx0.036$ bitcoin are to be released from abandoned outputs in every block.
 
-In the \textit{Prepaid} mode an user defines $L_{max}$ by himself when he creates an output and number of released coins after $L_{max}$ is equals to output value $V_{output}$ rater than much smaller space-time fee $f_s$. Note here, that $L_{max}$ do not directly depends on \textit{K} and coins recirculation rate will only depend on $V_{output}$, user-defined $L_{max}$ and number of lost outputs $N_{lost}$:
+In the \textit{Prepaid} mode a user defines $L_{max}$ by himself when he creates an output and number of released coins after $L_{max}$ is equals to output value $V_{output}$ rater than much smaller space-time fee $f_s$. Note here, that $L_{max}$ do not directly depends on \textit{K} and coins recirculation rate will only depend on $V_{output}$, user-defined $L_{max}$ and number of lost outputs $N_{lost}$:
 
 \begin{equation}
 R_{prepaid} = {N_{lost} \cdot V_{output} \over L_{max}}
@@ -441,7 +441,7 @@ We remark that space-time reward $K \cdot N_{utxo} \cdot B$ does not depend on n
 
 \subsection{State size}
 
-In this section we analyze the main goal of \esse{} model which is to control state size. We study two most important cases. First, we estimate how big the state should be to give miners rewards comparable to Bitcoin's constant reward of today. Second, we study what is the maximum size of state could be considering an user having coins in the system and performing constant spam attack. \dnote{last sentense is not clean}
+In this section we analyze the main goal of \esse{} model which is to control state size. We study two most important cases. First, we estimate how big the state should be to give miners rewards comparable to Bitcoin's constant reward of today. Second, we study what is the maximum size of state could be considering a user having coins in the system and performing constant spam attack. \dnote{last sentense is not clean}
 
 \paragraph{Constant Rewards}
 
@@ -516,7 +516,7 @@ Ethereum\cite{ethyp} introduced a fee to cover computational costs of nodes proc
 
 FreiCoin\cite{freicoin} is a cryptocurrency with demurrage. Demurrage-adjusted running balance~(aggregated for all the outputs associated with a key) is to be recalculated when a transaction is touching any output which is a part of the balance. Unlike FreiCoin, miners are watching over the state constantly to clean it in our proposal, and coins being lost are getting back into circulation~(in FreiCoin, outputs forgotten do live forever in the unspent outputs set).
 
-In PascalCoin \cite{pascalCoin}, if an account has not made any operations for 420,480 blocks then its balance is considered as forgotten and miner can claim it. Our approach to recover lost coins is more natural. In the \textit{prepaid} mode an user sets expiration time on his side~(paying accordingly), in \textit{postpaid} and \textit{scheduled payments} modes a forgotten output is to be turned into space-time fees eventually.
+In PascalCoin \cite{pascalCoin}, if an account has not made any operations for 420,480 blocks then its balance is considered as forgotten and miner can claim it. Our approach to recover lost coins is more natural. In the \textit{prepaid} mode a user sets expiration time on his side~(paying accordingly), in \textit{postpaid} and \textit{scheduled payments} modes a forgotten output is to be turned into space-time fees eventually.
 
 \section{Further Work}
 
