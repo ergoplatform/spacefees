@@ -31,7 +31,7 @@
 \fi
 
 \newcommand{\knote}[1]{{\authnote{\textcolor{green}{Alex notes}}{#1}}}
-\newcommand{\dnote}[1]{{\authnote{\textcolor{blue}{Dima notes}}{#1}}}
+\newcommand{\dnote}[1]{{\authnote{\textcolor{red}{Dima notes}}{#1}}}
 
 % type user-defined commands here
 \usepackage[T1]{fontenc}
@@ -504,11 +504,11 @@ Assuming $L_{mean}=1$ year and $L_{max}=10$ years and Bitcoin statistics, we may
   \end{array}
 \end{equation}
 
-which is equals to 2 ($Mb \cdot Block$) for free for each ouptut. This is exactly the increasing of upper bound for \state{} size because according to equation \ref{eq:statesizemax}, because subsidized space-time will just prolongate outputs lifetime for corresponding value. \dnote{here will win another atacker strategy to create smallest outputs!! analyze}
-%Moreover according equation \ref{eq:statesizemax} expected \state{} size will remain the same because it is dictated by economical reasons only.
+which is equals to 2 ($Mb \cdot Block$) for free for each ouptut.
 
-Thus, additional subsidized space-time parameter allows to use the same blockchain for both money and data applications. Subsidized value may be configured to be big enough for regular users, allowing them to keep their outputs for free for some time, but small enough for blockchain usage as database. Its impact to \state{} size is negligible\dnote{check}, while it allows to increase $K$ value painlessly for regular users, but increasing lost coin recirculation rate.
+This is exactly the increasing of upper bound for \state{} size according to equation \ref{eq:statesizemax}, because subsidized space-time will just prolongate outputs lifetime for corresponding value. However adversary strategy will change with $S_s$ - to maximize attack damage, she will maximize number of created outouts, getting $S_s$ space-time for each for free. In such a case she will be able to fill all blocks during subsidized period $S_s/B$ leading to additional 51 Gb of \state{} size upper bound in case of Bitcoin parameters.
 
+Thus, additional subsidized space-time parameter allows to use the same blockchain for both money and data applications. Subsidized value may be configured to be big enough for regular users, allowing them to keep their outputs for free for some time, but small enough for blockchain usage as database. Subsidized period will increase \state{} size upper bound for 27\% in realistic conditions, while it allows to increase $K$ value painlessly for regular users, but increasing lost coin recirculation rate.
 
 \section{Related Work}
 
