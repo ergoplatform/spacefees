@@ -466,44 +466,6 @@ which is about 183 gigabytes for Bitcoin statistics and $K=10^{-9}$ ($BTC / (Byt
 
 Thus \esse{} model allows to control state growth with $K$ parameter and allows to estimate expected state size as well as an upper bound. Reasonable $K$ value leads to 13 Gb of expected state size and 183 GB for a spam attack backed by all the tokens in the system. The model is preventing spam attacks like \cite{bitcoin2015flood} and provide a guarantee that miners can have state fit in RAM.
 
-
-\section{Subsidizing Space-time}
-\label{sec:subsidy}
-
-\knote{the whole section is not very clear}
-
-It is usual to pay space-time fee for a cloud storage and thus \esse{} model is natural for a blockchain acting as a database. On the other hand, in a cryptocurrency setting it may be natural to allow users to keep their coins for free for some period of time. In this section we are going to extend \esse{} model with a space-time subsidy $S_s$. For example, it may be allowed to keep a simple output for 10 years for free thus $S_s \approx 525600 (Blocks) \cdot 35 (Byte) \approx 18 (Mb \cdot Block)$. While 10 years is a quite big period for regular output, it is quite small amount of subsidized space-time for blockchain usage as a storage, e.g. will only allow to keep 127 Kb output for one day in \state{}.
-
-Such subsidized fee may be calculated as
-
-\begin{equation}
-f_{s} = max(0, K \cdot B \cdot L - S_s)
-\end{equation}
-
-and provides another way to control \esse{} economy with $S_s$ parameter. In particular, it allows to define $K$ and $S_s$ to achieve desired money flow and coin recirculation rates. It is possible to estimate $K$ and $S_s$ required for mean output lifetime $L_{mean}$ and mean coin recirculation periods $R_{mean}$ using assumptions from previous section:
-
-\begin{equation}
-  \begin{array}{ccl}
-   K \cdot B \cdot L_{max} - S_s & = & V_{output} \\
-   K \cdot B \cdot L_{mean} - S_s & = & f_p
-  \end{array}
-\end{equation}
-
-Assuming $L_{mean}=1$ year and $L_{max}=10$ years and Bitcoin statistics, we may estimate values of $K$ and $S_s$:
-
-\begin{equation}
-  \begin{array}{ccl}
-   K & = & {V_{output} - f_p \over B \cdot (L_{max} - L_{mean})} \approx \quad 2*10^{-8} ({BTC / (Byte \cdot Block)}) \\
-   S_s & = & {(V_{output} - f_p) \cdot L_{mean} \over (L_{max} - L_{mean})} - f_p \approx 0.04\quad(BTC)
-  \end{array}
-\end{equation}
-
-which is equals to 2 ($Mb \cdot Block$) for free for each ouptut.
-
-This is exactly the increasing of upper bound for \state{} size according to equation \ref{eq:statesizemax}, because subsidized space-time will just prolongate outputs lifetime for corresponding value. However adversary strategy will change with $S_s$ - to maximize attack damage, she will maximize number of created outouts, getting $S_s$ space-time for each for free. In such a case she will be able to fill all blocks during subsidized period $S_s/B$ leading to additional 51 Gb of \state{} size upper bound in case of Bitcoin parameters.
-
-Thus, additional subsidized space-time parameter allows to use the same blockchain for both money and data applications. Subsidized value may be configured to be big enough for regular users, allowing them to keep their outputs for free for some time, but small enough for blockchain usage as database. Subsidized period will increase \state{} size upper bound for 27\% in realistic conditions, while it allows to increase $K$ value painlessly for regular users, but increasing lost coin recirculation rate.
-
 \section{Related Work}
 
 Ethereum\cite{ethyp} introduced a fee to cover computational costs of nodes processing a transaction~(via rewarding a miner), with a mandatory minimum. A price of a computational unit~(which is an instruction of Ethereum Virtual Machine) is controlled by miners via adjusting ``gas'' price. We consider to adopt this approach toward charging users for consuming space-time units.
@@ -517,8 +479,9 @@ In PascalCoin \cite{pascalCoin}, if an account has not made any operations for 4
 We left some questions for further research:
 
 \begin{itemize}
-  \item{}it is interesting to see how tokens in a cryptocurrency with a \esse{} fee component can be compared with a Gesell's demurrage currency~\knote{links}. 
+  \item{}it is interesting to see how tokens in a cryptocurrency with a \esse{} fee component can be compared with a Gesell's demurrage currency\cite{gesell1958natural}.
   \item{}an interesting research vector is how to find appropriate mandatory minimal $f_v$, $f_p$, $f_s$ values. Another question is how these component could be combined in a transaction fee $f$. One possible option is to set $f = max(f_p, f_v, f_s)$.
+  \item{}concrete dependency of space-time fee from output size and lifetime is another topic of discussion. One possible option is discussed in Appendix \ref{sec:subsidy}.
   \item{}a possible interaction with the problem of blockchain instability without the constant block reward~\cite{carlsten2016instability} in the setting of increased fee supply is another concern to study.
 \end{itemize}
 
@@ -526,6 +489,15 @@ We left some questions for further research:
 \bibliography{sources.bib}
 
 \appendix
+
+\section{Subsidizing Space-time}
+\label{sec:subsidy}
+
+It is usual to pay space-time fee for a cloud storage and thus \esse{} model is natural for a blockchain acting as a database. On the other hand, in a cryptocurrency setting it may be natural to allow users to keep their coins for free for some period of time $S_s/B$. For example $S_s \approx 1.8$ ($Mb \cdot Block$) will allow to keep output for free for one year assuming 10 minutes block interval. While it is quite a big period for regular output, it is negligible for blockchain usage as a storage, e.g. will only allow to keep 12 Kb output for one day in \state{}.
+
+For sure, this free space time will increase \state{} size upper bound. To maximize attack damage, the adversary will maximize number of created outputs, getting $S_s$ space-time for each for free, filling all blocks during subsidized period $S_s/B$. In case of Bitcoin parameters one year of subsidized period for smallest outputs will make it possible to keep 51 Gb of outputs for free, increasing \state{} size upper bound for 27\%.
+
+Thus, additional subsidized space-time parameter allows to use the same blockchain for both money and data applications. Also this additional parameter provide a new way to configure cryptocurrency, for example to increase $K$ value painlessly for regular users, but increasing lost coin recirculation rate.
 
 \section{Examples}
 
