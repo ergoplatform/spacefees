@@ -514,15 +514,10 @@ Thus, additional subsidized space-time parameter allows to use the same blockcha
 
 
 \paragraph{\textbf{Q: } Aren't there important use-cases for ``storing data forever''? Like when the ledger is used for storing property deeds or university degrees or other public, "official" documents?}~\\
-\textbf{A: }
+\textbf{A: } While this is very appealing for a user to store something forever paying just once~(or not paying anything at all), a resulting economy where miners need to store increasingly growing amount of data getting bounded rewards may be unstable or just not viable. As a solution, we propose a system where a state size could be bounded, then, as new data is to be introduced each block, expiration is strictly needed. However, for some real-life scenarios we can imagine hybrid systems, where some special actors~(governments or universities) can store something forever~(paying once, or not paying at all), while other participants are paying as we are proposing thus subsidizing public good.
 
 \paragraph{\textbf{Q: } If the miner can fully control K, how do you prevent a miner from setting K VERY high? Should not there be some sort of guarantee about the minimum value of $L_{max}$ BEFORE a transaction is made?}~\\
-\textbf{A: }
-
-
-
-
-
+\textbf{A: } We assume miners will behave rationally, so they do not want to kill the business by setting $K$ high. We propose to have a rule for changing $K$ slowly, as in Ethereum~(where a miner can increase or decrease gas price by 1\% per block) so $L_max$ could be estimated before the transaction being made with a good precision.
 
 
 \end{document}
