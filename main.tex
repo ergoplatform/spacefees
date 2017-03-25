@@ -155,10 +155,10 @@ We consider three options for the fee to be charged. Concretely, \textit{prepaid
 First option we are going to analyze is prepaid outputs. Each output of a size \textit{B} in a state is prepaid for a duration $L_{max}$ set explicitly in a transaction creating the output. After $L_{max}$ anyone~(presumably a miner generating first block after that) is able to spend the overdue output. Thus a spending script for any output must be a combination of regular spending script and loan period $L_{max}$:
 
 \begin{equation}
-(Height > self.height + L_{max}) \lor (regular\_script)
+(Height > out.height + L_{max}) \lor (regular\_script)
 \end{equation}
 
-where \textit{Height} is current blockchain height and \textit{regular\_script} is user-defined spending script for the output\dnote{What is self.height?}. This form of a script is a part of consensus and a mandatory space-time fee is to be paid by a transaction creating the output:
+where \textit{Height} is current blockchain height and \textit{regular\_script} is user-defined spending script for the output\dnote{What is out.height?}. This form of a script is a part of consensus and a mandatory space-time fee is to be paid by a transaction creating the output:
 
 \begin{equation}
 f_{s-prepaid} = K \cdot (\sum_i{(B_i \cdot (L_{max\_i} - Height))} - \sum_j{(B_j \cdot (L_{max\_j} - Height)}))
@@ -185,7 +185,7 @@ H_{max} = {H_{creation} + {V \over {K \cdot B}}}
 After that anyone should be able to spend this output, sending the whole value to transaction fee and a spending script looks like
 
 \begin{equation}
-(Height > self.height + H_{max}) \lor (regular\_script)
+(Height > out.height + H_{max}) \lor (regular\_script)
 \end{equation}
 \dnote{TODO: space-time fee may be enforced by a script)}
 
@@ -197,8 +197,8 @@ The last model we introduce is a combination of the prepaid and postpaid models.
 \begin{align}
 \begin{split}
 &(regular\_script) \lor \\
-&(Height > (self.height + D_s) \land \\  
-&\qquad has\_output(value = self.value - K \cdot B \cdot D_s, script = self.script))
+&(Height > (out.height + D_s) \land \\  
+&\qquad has\_output(value = out.value - K \cdot B \cdot D_s, script = out.script))
 \end{split}
 \end{align}
 
@@ -442,7 +442,7 @@ In this section we analyze the main goal of \esse{} model which is to control st
 
 \paragraph{Constant Rewards}
 
-For a state of size $S$ miner is getting $S \cdot K$ space-time fees every block. For them to be a replacement for the current constant reward in Bitcoin $M_c$ following equality should holds:
+For a state of size $S$ miner is getting $S \cdot K$ space-time fees every block. For them to be a replacement for the current constant reward in Bitcoin $M_c$ following equality should hold:
 
 \begin{equation}
 \label{eq:statesizeexp}
@@ -513,10 +513,13 @@ Thus, additional subsidized space-time parameter allows to use the same blockcha
 \section{Questions and Answers}
 
 
-If the miner can fully control K, how do you prevent a miner from setting K VERY high? Should not there be some sort of guarantee about the minimum value of $L_{max}$ BEFORE a transaction is made?
+\paragraph{\textbf{Q: } Aren't there important use-cases for ``storing data forever''? Like when the ledger is used for storing property deeds or university degrees or other public, "official" documents?}~\\
+\textbf{A: }
+
+\paragraph{\textbf{Q: } If the miner can fully control K, how do you prevent a miner from setting K VERY high? Should not there be some sort of guarantee about the minimum value of $L_{max}$ BEFORE a transaction is made?}~\\
+\textbf{A: }
 
 
-Aren't there important use-cases for ``storing data forever''? Like when the ledger is used for storing property deeds or university degrees or other public, "official" documents?
 
 
 
