@@ -1,4 +1,4 @@
-pdflatex main
-bibtex main
-pdflatex main
-pdflatex main
+pdflatex sse
+bibtex sse
+pdflatex sse
+pdflatex sse
