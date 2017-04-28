@@ -32,8 +32,6 @@
 
 \newcommand{\knote}[1]{{\authnote{\textcolor{green}{Alex notes}}{#1}}}
 \newcommand{\dnote}[1]{{\authnote{\textcolor{red}{Dima notes}}{#1}}}
-\newcommand{\anote}[1]{{\authnote{\textcolor{blue}{Amitabh notes}}{#1}}}
-
 
 % type user-defined commands here
 \usepackage[T1]{fontenc}
@@ -86,7 +84,7 @@
 \maketitle
 
 \begin{abstract}
-In this paper we study space-scarce economy in massively replicated open blockchain systems. In these systems, such as Bitcoin, memory to hold a current state snapshot needed to validate transactions becomes the most scarce resource eventually. The issue is even more critical for blockchain systems used to store data~(votes, certificates, logs etc.). Uncontrolled state size growth could lead to security issues, such as denial-of-service attacks. Only technical solutions, not economic, have been proposed to tackle this problem to the moment. In contrast, we propose to add a new component to a transaction fee scheme based on how much additional space will be needed for new objects created in result of transaction processing and for how long they will live in the state. We provide three possible options towards implementing the new fee component, namely \textit{prepaid outputs}, \textit{postpaid outputs} and \textit{scheduled payments}. We provide an analysis of the model with respect to all the three options. We show that the state growth could be bounded by a fee factor, miners are getting additional stable rewards and lost coins are being taken back into circulation eventually.    
+In this paper we study space-scarce economy in massively replicated open blockchain systems, such as Bitcoin. In these systems memory to hold a state needed to validate transactions becomes the most scarce resource eventually. The issue is more critical for blockchain systems used to store data~(votes, certificates, logs etc.). Uncontrolled state size growth could lead to security issues, such as denial-of-service attacks. Only technical solutions, not economic, have been proposed to tackle this problem to the moment. In contrast, we propose to add a new component to a transaction fee scheme, which is a fee with a mandatory minimum based on how much additional space will be needed for new objects created in result of transaction processing, and for how long they will live in the state. We provide three possible options towards implementing the new fee component, namely \textit{prepaid outputs}, \textit{postpaid outputs} and \textit{scheduled payments}. We provide an analysis of the model with respect to all the three options. We show that the state growth could be bounded by a fee factor, miners are getting additional rewards, and lost coins are being taken back into circulation eventually.    
 \end{abstract}
 
 \section{Introduction}
@@ -519,7 +517,7 @@ Thus, additional subsidized space-time parameter allows to use the same blockcha
 \textbf{A: } While this is very appealing for a user to store something forever paying just once~(or not paying anything at all), a resulting economy where miners need to store increasingly growing amount of data getting bounded rewards may be unstable or just not viable. As a solution, we propose a system where a state size could be bounded, then, as new data is to be introduced each block, expiration is strictly needed. However, for some real-life scenarios we can imagine hybrid systems, where some special actors~(governments or universities) can store something forever~(paying once, or not paying at all), while other participants are paying as we are proposing thus subsidizing public good.
 
 \paragraph{\textbf{Q: } If the miner can fully control K, how do you prevent a miner from setting K VERY high? Should not there be some sort of guarantee about the minimum value of $L_{max}$ BEFORE a transaction is made?}~\\
-\textbf{A: } We assume miners will behave rationally, so they do not want to kill the business by setting $K$ high. We propose to have a rule for changing $K$ slowly, as block gas limit in Ethereum~(say, a miner can increase or decrease $K$ by 0.1\% per block) so $L_max$ could be estimated before the transaction being made with a good precision.
+\textbf{A: } We assume that miners will behave rationally, so they do not want to kill the business by setting $K$ high. We propose to have a rule for changing $K$ slowly, as block gas limit in Ethereum~(say, a miner can increase or decrease $K$ by 0.1\% per block) so $L_{max}$ could be estimated before the transaction being made with a good precision.
 
 
 \end{document}
