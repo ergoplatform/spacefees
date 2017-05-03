@@ -91,38 +91,36 @@ In this paper we study space-scarce economy in massively replicated open blockch
 
 \section{Introduction}
 
-Bitcoin \cite{Nakamoto2008} was introduced in 2008 by S. Nakamoto as a purely peer-to-peer version of electronic cash with a ledger written into a blockchain data structure maintained by the whole network. Security of the scheme is relied on a mining process. If a majority of miners is honest then Bitcoin meets its security goals as formal analysis~\cite{Garay2015} shows. For the work done a miner is claiming a reward which consists of two parts. First, some constant number of bitcoins are created out of thin air according to a predefined and hard-coded token emission schedule. Second, a miner claims fees for all the transactions included into the block. A transaction fee is set by a user during transaction creation.
+Bitcoin \cite{Nakamoto2008} was introduced in 2008 by S. Nakamoto as a purely peer-to-peer version of electronic cash with a ledger written into blockchain data structure maintained by the whole network. Security of the scheme is relied on a mining process. If a majority of miners is honest then Bitcoin meets its security goals as formal analysis~\cite{Garay2015} shows. For the work done a miner is claiming a reward which consists of two parts. First, some constant number of bitcoins are created out of thin air according to a predefined and hard-coded token emission schedule. Second, a miner claims fees for all the transactions included into the block. A transaction fee is set by a user during transaction creation.
 
 
 A user pay fees to miners to have his transactions included into the blockchain. Fees are useful for an existing cryptocurrency economy for two reasons:
 
 \begin{enumerate}
-  \item{Incentivizing miner's activity. } A rational Bitcoin miner does not include all the valid transactions into blocks as, due to the increased chances of orphaning a block, the cost of adding transactions to a block could not be ignored~\cite{andersen2013,rizun2015transaction}. As shown in \cite{rizun2015transaction}, even in absence of block size limit, Bitcoin fee market is healthy and the miners surplus is maximized at a finite quantity of block space. Thus the miner is incentivized to produce a block of a limited size. This means that only a subset of transactions providing enough value to a miner will be included in a block. A paper~\cite{rizun2015transaction} provides a procedure to calculate transaction fee based on block propagation time, i.e. miners network resources utilization.
+  \item{Incentivizing miner's activity. } A rational Bitcoin miner does not include all the valid transactions into blocks as, due to the increased chances of orphaning a block, the cost of adding transactions to a block could not be ignored~\cite{andersen2013,rizun2015transaction}. As shown in \cite{rizun2015transaction}, even in absence of block size limit, Bitcoin fee market is healthy and the miners surplus is maximized at a finite quantity of block space. Thus the miner is incentivized to produce a block of a limited size. This means that only a subset of transactions which provides enough value to a miner will be included in a block. A paper~\cite{rizun2015transaction} provides a procedure to calculate transaction fee based on block propagation time, i.e. miners network resources utilization.
 
-  \item{Limit resources usage and spam. } Besides of network utilization, transaction processing requires a miner to spend some computational resources. For most of cryptocurrencies, transactional language is limited \cite{script}, so a number of CPU cycles needed to process a transaction is bounded, and corresponding computational costs are not directly considered. In contrast, in cryptocurrencies supporting  smart contract languages, such as~\cite{seijas2016scripting,tezosScript,solidity}, transaction processing may require a lot of computations, and computational costs are included to transaction fees. This cost is specific to concrete transactional language and is out of scope of this paper.
+  \item{Limit resources usage and spam. } Besides of network utilization, transaction processing requires a miner to spend some computational resources. For most of cryptocurrencies a transactional language is limited \cite{script}, so a number of CPU cycles needed to process a transaction is bounded, and corresponding computational costs are not directly considered. In contrast, in cryptocurrencies supporting  smart contract languages, such as~\cite{seijas2016scripting,tezosScript,solidity}, transaction processing may require a lot of computations, and computational costs are included to transaction fees. This cost is specific to concrete transactional language and is out of scope of this paper.
 \end{enumerate}
 
-A transaction in Bitcoin spends outputs from previous transactions and creates new ones. A notable and the only exception is a coinbase transaction of a block which creates fixed amount of money out of thin air and also claims transaction fees without referring to any outputs~(a fee for an ordinary transaction is sum of claimed outputs values minus sum of values for created outputs). A node is checking a transaction in Bitcoin by using a set of unspent outputs. In other cryptocurrencies a representation of a \textit{state} needed to validate an arbitrary transaction could be different~(for example, in Ethereum~\cite{ethyp} such a structure is called the \textit{world state} and is a part of the protocol).  For fast validation, the state~(or most accessed part of it) should reside in random-access memory. Once it becomes too big to fit into RAM an attacker can perform denial-of-service attacks against cryptocurrency nodes. For example, during attacks on Ethereum in Autumn, 2016, an attacker added about 18 million accounts to the state~(whose size was less than 1 million accounts before the attack) and then performed succesful denial-of-service attacks against the nodes. Similarly, in 2013 a denial-of-service attack against output storage residing in a secondary storage~(HDD or SSD) was discovered in Bitcoin. 
+A transaction in Bitcoin spends outputs from previous transactions and creates new ones. A notable and the only exception is a coinbase transaction of a block which creates fixed amount of money out of thin air and also claims transaction fees without referring to any outputs~(a fee for an ordinary transaction is sum of claimed outputs values minus sum of values for created outputs). A node is checking a transaction in Bitcoin by using a set of unspent outputs. In other cryptocurrencies a representation of a \textit{state} needed to validate and process an arbitrary transaction could be different~(for example, in Ethereum~\cite{ethyp} such a structure is called the \textit{world state} and is a part of the protocol). To process a transaction quickly, the state~(or most accessed part of it) should reside in random-access memory. Once it becomes too big to fit into RAM an attacker can perform denial-of-service attacks against cryptocurrency nodes. For example, during attacks on Ethereum in Autumn, 2016, an attacker added about 18 million accounts to the state~(whose size was less than 1 million accounts before the attack) and then performed succesful denial-of-service attacks against the nodes. Similarly, in 2013 a denial-of-service attack against output storage residing in a secondary storage~(HDD or SSD) was discovered in Bitcoin. 
 
 
-The main purpose of this paper is to consider a new mandatory component for a transaction fee scheme reflecting state growth. In all known cryptocurrencies of today, a state element once created lives possibly forever without paying anything for that. This leads to continuously increasing state~(we point to the Bitcoin UTXO set size as an example~\cite{utxoChart}). Moreover, state may grow fast during spam attack, for example, 15M additional outputs where introduced to Bitcoins UTXO during spam attacks in July 2015~\cite{bitcoin2015flood} and most of these outputs are not spent yet. The paper~\cite{reyzin2016improving} proposes a technical solution for non-mining nodes where only miners hold the full state~(assuming they can invest money in sufficiently big RAM storages) while other full-nodes are checking proofs of state transformations generated by miners, and size of a proof (in average and also in worst case) is about $log(S)$ in regards with a state size $S$. Nevertheless, big state could lead to centralization of mining or SPV mining~\cite{spvMining}, and these concerns should be addressed.
-Also, there is an increasing demand to use a blockchain as a data storage, and storing permanently objects in the state without a cleaning procedure is not a viable option.
+The main purpose of this paper is to consider a new mandatory component in a transaction fee scheme reflecting state growth. In all known cryptocurrencies of today, a state element once created lives possibly forever without paying anything for that. This leads to continuously increasing state~(we point to the Bitcoin UTXO set size as an example~\cite{utxoChart}). Moreover, state may grow fast during spam attack, for example, 15M additional outputs where introduced to Bitcoins UTXO during spam attacks in July 2015~\cite{bitcoin2015flood} and most of these outputs are not spent yet. The paper~\cite{reyzin2016improving} proposes a technical solution for non-mining nodes where only miners hold the full state~(assuming that they can invest money in sufficiently big RAM storages) while other full-nodes are checking proofs of state transformations generated by miners, and size of a proof (in average and also in worst case) is about $log(|S|)$ in regards with a state size $|S|$. Nevertheless, big state could lead to centralization of mining or SPV mining~\cite{spvMining}, and these concerns should be addressed. Also, there is an increasing demand to use a blockchain as a data storage, and storing permanently objects in the state without a cleaning procedure is not a viable option.
 
-We propose an economic solution to the problem of unreasonable state growth (such as spam attacks or objects not being using anymore but living forever). The solution is a new mandatory fee component. We state that users should pay fee for both the state increasement and time new bytes will live in massively replicated storage of blockchain nodes for. This model is usual for cloud storage services where users pay for gigabyte of data per month. Such an approach prevents putting any data to the storage forever. Also miners can control their storage requirements by changing a fee factor. Later in this paper we will refer to the new fee component as to a \textit{space-time fee}.
+We propose an economic solution to the problem of unreasonable state growth (such as spam attacks or objects not being using anymore but living forever). The solution is a new mandatory fee component. We state that users should pay fee for both the state increasement and time new bytes will live in massively replicated storage of blockchain nodes for. This model is usual for cloud storage services where users pay for gigabytes of data per month. We provide a possibility for miners to control their storage requirements by changing a fee factor. Later in this paper we will refer to the new fee component as to a \textit{space-time fee}.
 
 Proposed fee regime is promoting money circulation in the blockchain economy. The limited lifetime of a state element also leads to lost coins being taken back into circulation~(by miners). 
 
-Summarizing, we study an economy where memory of a massively-replicated system node becomes the most scarce resource eventually. Thus we call such an economy a \textit{space-scarce economy}. The model of it considered in this paper is called space-scarce economy, or \esse{}, model.
-
-\knote{note that we're talking about minimal fees}
+Summarizing, we study an economy where quick-access storage of a node in a massively-replicated system becomes the most scarce resource eventually. Thus we call such an economy a \textit{space-scarce economy}.
 
 \subsection{Assumptions}
 \begin{itemize}
-  \item{} We assume that all the fees for a block are going to a single miner like in Bitcoin. There are proposals to share the rewards for a block within a group of miners~(for example, share fees with miners of some number of blocks before or after current one \cite{eyal2016bitcoin,kogias2016enhancing}). One difference is that in Bitcoin a miner can include his transactions into a block for free.
-  \item{} We assume that a state consists of unspent outputs. An output is not modifiable so could be created and spent only. An output is protected by a script which is defined as a logical formula which can refer to properties of a blockchain (for example, its current height), spending transaction and an outputs itself. \knote{example} 
-  \item{} For simplicity, we assume that a block is of a finite size but all the transactions a miner has at a given moment of time could be packed into it, if otherwise is not stated explicitly.
-  \item{} Time is measured via notion of \textit{height} which is a number of blocks since an initial block~(a genesis block) till a particular one. 
+  \item{} We assume that all the fees for a block are going to a single miner like in Bitcoin. There are proposals to share the rewards for a block within a group of miners, for example in \cite{eyal2016bitcoin,kogias2016enhancing}. One notable difference is that in Bitcoin a miner can include his transactions into a block for free.
+  \item{} We assume that a state consists of unspent outputs. An output is not modifiable so can be only created and then spent fully. An output is protected by a script which is defined as a logical formula which can refer to properties of a blockchain (for example, its current height), spending transaction and an outputs itself. \knote{example} 
+  \item{} For simplicity, we assume that a block is of a finite size but all the transactions a miner has at a moment of block generation can be packed into it, if otherwise is not stated explicitly.
+  \item{} Time is measured via \textit{height} which is a number of blocks since an initial block~(a genesis block) till the block. 
   \item{} All anyone-can-spend outputs are collected by miners, presumably immediately as they appear.
+  \item{} We are considering minimum mandatory fees in the paper. All the nodes are checking that a fee paid by a transaction is not less than a minimum and rejecting the whole block if it contains a transaction violating fee rules. Thus a fee regime is considered as a part of consensus protocol in our work. A user can pay more than a minimum to have a higher priority for a transaction of interest.   
 \end{itemize}
 
 \subsection{Structure of the Paper}
@@ -134,33 +132,33 @@ The paper is organized as follows. A design of our model is described in Section
 \section{The Model}
 \label{sec:model}
 
-In our model transaction fee $f$ consists of 3 parts: \textit{validation cost} $f_v$, \textit{propagation cost} $f_p$ and \textit{state space-time difference cost} $f_s$ and is non-negative value:
+In our model transaction fee $f$ consists of 3 parts: \textit{validation and processing cost} $f_v$, \textit{propagation cost} $f_p$ and \textit{state space-time difference cost} $f_s$ and is a non-negative value:
 
 \begin{equation}
 f = f_v + f_p + f_s , f \ge 0
 \end{equation}
 
-Validation and propagation costs are non-negative and assumed to be independent from the space-time fee. We assume that space-time fee impact to total fee $f$ may range from negligible to dominant. It is possible for $f_s$ to be negative since a transaction may both increase or decrease the state. It depends on size of outputs to be marked as spent, newly created outputs and their time to live. If a transaction is freeing some space-time \textit{$T_{cleared}$} and claiming space-time \textit{$T_{filled}$}, then the  resulting space-time fee can be calculated as follows:
+Validation and propagation costs are non-negative and assumed to be independent from the space-time fee. It is possible for $f_s$ to be negative since a transaction may both increase or decrease the state. It depends on size of outputs to be marked as spent, newly created outputs and their time to live. If a transaction is freeing some space-time \textit{$T_{cleared}$} and claiming space-time \textit{$T_{filled}$}, then the  resulting space-time fee can be calculated as follows:
 \begin{equation}
 f_s = K \cdot (T_{filled} - T_{cleared})
 \end{equation}
 
 \knote{we need to say somehow here about prepaid and postpaid outputs defined below}
 
-where \textit{K} is a space-time price. We assume that miners can change this price like they change ``gas'' cost in Ethereum~(based on hardware prices and token exchange rate) and thus control cost of maintaining the blockchain.
+where \textit{K} is a space-time price. As time in a blockchain system is associated with blocks~(precisely, height), and space is measured in byte, $K$ is to be a price of byte per block. We assume that miners can change this price based on hardware prices and token exchange rate, like they change ``gas'' cost in Ethereum.
 
 We consider three options for the fee to be charged. Concretely, \textit{prepaid outputs} are defined in Section~\ref{sec-prepaid}, \textit{postpaid outputs} are described in Section~\ref{sec-postpaid} and \textit{scheduled payments} are proposed in Section~\ref{sec-scheduled}.
 
 \subsection{Prepaid Outputs}
 \label{sec-prepaid}
 
-First option we are going to analyze is prepaid outputs. Each output of a size \textit{B} in a state is prepaid for a duration $L_{max}$ set explicitly in a transaction creating the output. After $L_{max}$ anyone~(presumably a miner generating first block after that) is able to spend the overdue output. Thus a spending script for any output must be a combination of regular spending script and loan period $L_{max}$:
+First option we are going to analyze is prepaid outputs. Each output of a size \textit{B} in a state is prepaid for a duration $L_{max}$ set explicitly in a transaction creating the output. After $L_{max}$ anyone~(presumably, a miner generating a first block) is able to spend the overdue output. Thus a spending script for any output must be a combination of regular spending script and loan period $L_{max}$:
 
 \begin{equation}
 (Height > out.height + L_{max}) \lor (regular\_script)
 \end{equation}
 
-where \textit{Height} is current blockchain height and \textit{regular\_script} is user-defined spending script for the output\dnote{What is out.height?}. This form of a script is a part of consensus and a mandatory space-time fee is to be paid by a transaction creating the output:
+where \textit{Height} is current blockchain height and \textit{regular\_script} is user-defined spending script for the output\dnote{What is out.height?}. A mandatory minimum space-time fee ito be paid by a transaction creating the output is following:
 
 \begin{equation}
 f_{s-prepaid} = K \cdot (\sum_i{(B_i \cdot (L_{max\_i} - Height))} - \sum_j{(B_j \cdot (L_{max\_j} - Height)}))
@@ -189,28 +187,33 @@ After that anyone should be able to spend this output, sending the whole value t
 \begin{equation}
 (Height > out.height + H_{max}) \lor (regular\_script)
 \end{equation}
-\dnote{TODO: space-time fee may be enforced by a script)}
+
 
 \subsection{Scheduled Payments}
 \label{sec-scheduled}
 
-The last model we introduce is a combination of the prepaid and postpaid models. Like in the postpaid model, a user pays for an output when he spends it in a transaction. In addition, the output is also enforced to be moved before a known duration $D_{s}$ since its creation. That is, if the user do not move the coins before this then anyone~(presumably, a miner) can create a transaction claiming this output, returning all the coins back to the owner except of a space-time fee ${K \cdot B \cdot D_{s}}$. A spending script for the output would be like:
+The last model we introduce is a combination of the prepaid and postpaid models. Like in the postpaid model, a user pays for an output when he spends it in a transaction. In addition, the output is also enforced to be moved after a known duration $D_{s}$ since being touched last time. That is, if the user do not move the coins before this then anyone~(presumably, a miner) can create a transaction claiming this output, returning all the coins back to the owner except of a space-time fee ${K \cdot B \cdot D_{s}}$. A spending script for the output would be like:
 
 \begin{align}
 \begin{split}
 &(regular\_script) \lor \\
-&(Height > (out.height + D_s) \land \\  
-&\qquad has\_output(value = out.value - K \cdot B \cdot D_s, script = out.script))
+&(Height > (out.height + D_s) \land (out.value - K.B.D_s \lor \\  
+&\qquad tx.has\_output(value = out.value - K \cdot B \cdot D_s, script = out.script)))
 \end{split}
 \end{align}
 
 In this model $D_s$ is another protocol parameter which may be fixed by a protocol design or changed via miners voting like \textit{K}.
 
+\subsection{On K Parameter}
+\label{sec-kparameter}
+
+\knote{todo: choose proper title for the sub-section and fill the description}
+
+
 \section{Analysis of the Model}
 \label{sec:analysis}
 
-In this section we provide analysis of the model. We show how the proposal is meeting its goal to control state size. We get estimations for additional miners
-rewards as well as lost coins recirculation. Throughout this section we use following values got from current state of the Bitcoin network:
+In this section we provide analysis of the model. We show how the proposal is meeting its main goal which is state size control. We get estimations for additional miners rewards as well as lost coins recirculation. Throughout this section we use following values got from the Bitcoin network at the moment of writing the paper~(February, 2017):
 
 \begin{itemize}
   \item number of unspent transaction outputs: $N_{utxo} \approx 45,000,000$
@@ -225,14 +228,14 @@ rewards as well as lost coins recirculation. Throughout this section we use foll
   \item average number of outputs spent in a block $N_{moved} \approx 5,500$ 
 \end{itemize}
 
-We use the numbers from the Bitcoin to make calculations for some typical cases as this is the most used cryptocurrency with longest history. However, a cryptocurrency with SSE being deployed would have different values for the metrics. Thus results from this section got with the Bitcoin statistical data should be considered as initial.
+We use the numbers from the Bitcoin to make calculations for some typical cases as this is the most used cryptocurrency with longest history. However, a cryptocurrency with our proposal being deployed would have different values for its metrics. Thus the results from this section should be considered as initial estimations.
 
 We study money flows in a space-scarce economy while dividing them into two types. Miners claim lost coins and also charge every output in the system state every block. Users are incentivized to move coins more frequently thus increasing mining rewards due to increased economic activity.  
 
 \subsection{Lost coins recirculation}
 \label{sec:re}
 
-The need of lost coins recirculation has been discussed in literature~\cite{gjermundrod2014recirculating,gjermundrod2016going} in regards with combat deflation that will inevitably occur in cryptocurrencies with fixed supply. Coins declared supply is known by cryptocurrency design, but available supply is not known due to lost coins locked in outputs that will never be spent~\cite{ron2013quantitative}. On the other hand, deflation is a real problem in the traditional monetary system, however, it is still an open question whether it will be problematic for the Bitcoin economy~\cite{bitcoinDeflationarySpiral,barber2012bitter}.
+The need of lost coins recirculation has been discussed in the literature~\cite{gjermundrod2014recirculating,gjermundrod2016going} in regards with combat deflation that will inevitably occur in cryptocurrencies with fixed supply. Possible cryptocurrency supply is known by design but actual supply is not known due to lost coins locked in outputs that will never be spent~\cite{ron2013quantitative}. Deflation is a problem in traditional monetary systems, however, it is still an open question whether it will be problematic for the Bitcoin economy~\cite{bitcoinDeflationarySpiral,barber2012bitter}.
 
 
 Our model provides lost coins recirculation mechanism by design while its properties vary from model implementation and parameters. In this section we study how lost coins recirculation depends from the both.
@@ -249,15 +252,15 @@ Maximum lifetime of a concrete output depends on the miner-controlled \textit{K}
 {L_{max} \approx {1 \over 100 \cdot K}}
 \end{equation}
 
-From this equation it is possible to calcualte \textit{K} by specifying target maximum output lifetime. For example, in case of 50 years period of full recirculation for an output value \textit{K} parameter would be $10^{-9}$. Significant difference between \textit{Postpaid} and \textit{Scheduled payments} is that in \textit{Postpaid} all coins will return to economy all at once after potentially big $L_{max}$ period, while in the \textit{Scheduled payments} mode they will return to economy by portions during this period. This makes \textit{Scheduled payments} preferable to \textit{Postpaid} because lost coins from big enough outputs in \textit{Postpaid} will not return to the circulation in foreseeable future. Anyway coins recirculation rate for both the modes in a long-term would be calculated as
+From this equation it is possible to calculate \textit{K} by specifying target expected lifetime for an output with an average value. For example, in case of 50 years period of full recirculation for an output value \textit{K} parameter would be about $10^{-9}$. Significant difference between \textit{Postpaid} and \textit{Scheduled payments} is that in \textit{Postpaid} lost output coins will return to economy all at once after potentially big $L_{max}$ period, while in the \textit{Scheduled payments} mode they will return to economy by portions during this period. This makes \textit{Scheduled payments} preferable to \textit{Postpaid} in regards with mining rewards stability. Anyway coins recirculation rate for both the modes in a long-term would be calculated as
 
 \begin{equation}
 R_{postpaid} = R_{scheduled} = {N_{lost} \cdot V_{output} \over L_{max}} = {N_{lost} \cdot K \cdot B}
 \end{equation}
 
-where $N_{lost}$ is the number of outputs with lost keys. Assuming current Bitcoins statistics, $N_{lost}\approx10^6$ and $K = 10^{-9}$ we can estimate, that $\approx0.036$ bitcoin are to be released from abandoned outputs in every block.
+where $N_{lost}$ is the number of outputs with lost keys. Assuming current Bitcoins statistics, $N_{lost}\approx10^6$ and $K = 10^{-9}$ we can estimate that $\approx0.036$ bitcoins are to be released from abandoned outputs in every block.
 
-In the \textit{Prepaid} mode a user defines $L_{max}$ by himself when he creates an output and number of released coins after $L_{max}$ is equals to output value $V_{output}$ rater than much smaller space-time fee $f_s$. Note here, that $L_{max}$ do not directly depends on \textit{K} and coins recirculation rate will only depend on $V_{output}$, user-defined $L_{max}$ and number of lost outputs $N_{lost}$:
+In the \textit{Prepaid} mode a user defines $L_{max}$ by himself when he creates an output and number of released coins after $L_{max}$ is equals to output value $V_{output}$ rater than much smaller space-time fee $f_s$. Note that $L_{max}$ do not directly depends on \textit{K} and coins recirculation rate will only depend on $V_{output}$, user-defined $L_{max}$ and number of lost outputs $N_{lost}$:
 
 \begin{equation}
 R_{prepaid} = {N_{lost} \cdot V_{output} \over L_{max}}
@@ -271,7 +274,7 @@ Assuming that $K\approx10^{-9}$ we can estimate difference between prepaid and p
 
 For example, if user-defined coin recirculation period $L_{max}\approx10$ years then ${R_{prepaid} \over R_{postpaid}} \approx 19$
 
-Concluding, \esse{} model by design provides a way to return lost coins to circulation thus preventing potential deflation. \textit{Postpaid} model has a disadvantage  that lost coins could be returned to circulation in far future. In \textit{Prepaid} model coin recirculation rate is presumably much higher than in other models and \textit{Scheduled payments} mode is a most smooth way to recycle coins.
+Concluding, our fee model by its design provides a way to return lost coins to circulation thus preventing potential deflation. \textit{Postpaid} model has a disadvantage  that lost coins could be returned to circulation in far future. In \textit{Prepaid} model coin recirculation rate is presumably much higher than in other models and \textit{Scheduled payments} mode is a most smooth way to recycle coins.
 
 
 
@@ -279,18 +282,6 @@ Concluding, \esse{} model by design provides a way to return lost coins to circu
 \label{sec:flow}
 
 From users point of view, the longer you keep some output, the bigger space-time fee you pay. Thus the proposed fee regime provides an incentive to move coins more frequently stimulating economic activity. In all the fee models introduced in Section~\ref{sec:model}, user pays ${K \cdot B}$ coins every block for keeping his output in the state. 
-
-
-\ignore{
-  If he uses blockchain with output size \textit{B} is relatively small and do not depend on output value.
-
-  To estimate money flow let's assume, that user will move his money when space-time fee will start dominate over other transactional costs \dnote{why?}. Thus we can estimate expected mean output lifetime as
-
-  \begin{equation}
-  \label{eq:ltmean}
-  L_{mean}={f_p \over K \cdot B}
-  \end{equation}
-}
 
 Currently in Bitcoin $N_{moved}$ outputs are moved in a block, and this number can be defined as: 
 
@@ -306,7 +297,7 @@ L_{mu} = {N_{utxo} \over {N_{moved}}}
 In Bitcoin, $L_{mu} \approx 8182$ blocks.
 
 
-With \esse{} fee component enabled users move coins more frequently, thus mean lifetime becomes $L_{mi} < L_{mu}$. It is hard to estimate $L_{mi}$ as it depends on K and also on blockchain-specific usage scenarios. Increasement in money flow could be calcualted as:
+We expect users moving coins more frequently thus mean lifetime becomes $L_{mi} < L_{mu}$. $L_{mi}$ depends on K and also on blockchain-specific usage scenarios. Increasement in money flow could be calcualted as:
 
 $\Delta N_{moved} = {N_{utxo} \over L_{mi}} - {N_{utxo} \over L_{mu}} = N_{utxo} \cdot {{L_{mu}-L_{mi}} \over {L_{mu} \cdot L_{mi}}}$
 
@@ -436,7 +427,7 @@ Thus the additional mining reward is:
   that is naturally coincide to estimations from section \ref{eq:ltmean} while miner reward equals to user losses.
 }
 
-We remark that space-time reward $K \cdot N_{utxo} \cdot B$ does not depend on network throughput and can be easily predicted. Since it will be accrued to generator of a block of a concrete height, and may be considered as a constant block reward. The reward value may be controlled by adjusting $K$ parameter making mining more stable and thus securing the network.
+We remark that space-time reward $K \cdot N_{utxo} \cdot B$ does not depend on network throughput and can be easily predicted. thus it can be considered as a constant block reward making mining more stable and thus securing the network. The value of it may be controlled by adjusting $K$ parameter.
 
 \subsection{State size}
 
