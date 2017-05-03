@@ -132,33 +132,33 @@ The paper is organized as follows. A design of our model is described in Section
 \section{The Model}
 \label{sec:model}
 
-In our model transaction fee $f$ consists of 3 parts: \textit{validation cost} $f_v$, \textit{propagation cost} $f_p$ and \textit{state space-time difference cost} $f_s$ and is non-negative value:
+In our model transaction fee $f$ consists of 3 parts: \textit{validation and processing cost} $f_v$, \textit{propagation cost} $f_p$ and \textit{state space-time difference cost} $f_s$ and is a non-negative value:
 
 \begin{equation}
 f = f_v + f_p + f_s , f \ge 0
 \end{equation}
 
-Validation and propagation costs are non-negative and assumed to be independent from the space-time fee. We assume that space-time fee impact to total fee $f$ may range from negligible to dominant. It is possible for $f_s$ to be negative since a transaction may both increase or decrease the state. It depends on size of outputs to be marked as spent, newly created outputs and their time to live. If a transaction is freeing some space-time \textit{$T_{cleared}$} and claiming space-time \textit{$T_{filled}$}, then the  resulting space-time fee can be calculated as follows:
+Validation and propagation costs are non-negative and assumed to be independent from the space-time fee. It is possible for $f_s$ to be negative since a transaction may both increase or decrease the state. It depends on size of outputs to be marked as spent, newly created outputs and their time to live. If a transaction is freeing some space-time \textit{$T_{cleared}$} and claiming space-time \textit{$T_{filled}$}, then the  resulting space-time fee can be calculated as follows:
 \begin{equation}
 f_s = K \cdot (T_{filled} - T_{cleared})
 \end{equation}
 
 \knote{we need to say somehow here about prepaid and postpaid outputs defined below}
 
-where \textit{K} is a space-time price. We assume that miners can change this price like they change ``gas'' cost in Ethereum~(based on hardware prices and token exchange rate) and thus control cost of maintaining the blockchain.
+where \textit{K} is a space-time price. As time in a blockchain system is associated with blocks~(precisely, height), and space is measured in byte, $K$ is to be a price of byte per block. We assume that miners can change this price based on hardware prices and token exchange rate, like they change ``gas'' cost in Ethereum.
 
 We consider three options for the fee to be charged. Concretely, \textit{prepaid outputs} are defined in Section~\ref{sec-prepaid}, \textit{postpaid outputs} are described in Section~\ref{sec-postpaid} and \textit{scheduled payments} are proposed in Section~\ref{sec-scheduled}.
 
 \subsection{Prepaid Outputs}
 \label{sec-prepaid}
 
-First option we are going to analyze is prepaid outputs. Each output of a size \textit{B} in a state is prepaid for a duration $L_{max}$ set explicitly in a transaction creating the output. After $L_{max}$ anyone~(presumably a miner generating first block after that) is able to spend the overdue output. Thus a spending script for any output must be a combination of regular spending script and loan period $L_{max}$:
+First option we are going to analyze is prepaid outputs. Each output of a size \textit{B} in a state is prepaid for a duration $L_{max}$ set explicitly in a transaction creating the output. After $L_{max}$ anyone~(presumably, a miner generating a first block) is able to spend the overdue output. Thus a spending script for any output must be a combination of regular spending script and loan period $L_{max}$:
 
 \begin{equation}
 (Height > out.height + L_{max}) \lor (regular\_script)
 \end{equation}
 
-where \textit{Height} is current blockchain height and \textit{regular\_script} is user-defined spending script for the output\dnote{What is out.height?}. This form of a script is a part of consensus and a mandatory space-time fee is to be paid by a transaction creating the output:
+where \textit{Height} is current blockchain height and \textit{regular\_script} is user-defined spending script for the output\dnote{What is out.height?}. A mandatory minimum space-time fee ito be paid by a transaction creating the output is following:
 
 \begin{equation}
 f_{s-prepaid} = K \cdot (\sum_i{(B_i \cdot (L_{max\_i} - Height))} - \sum_j{(B_j \cdot (L_{max\_j} - Height)}))
@@ -192,23 +192,28 @@ After that anyone should be able to spend this output, sending the whole value t
 \subsection{Scheduled Payments}
 \label{sec-scheduled}
 
-The last model we introduce is a combination of the prepaid and postpaid models. Like in the postpaid model, a user pays for an output when he spends it in a transaction. In addition, the output is also enforced to be moved before a known duration $D_{s}$ since its creation. That is, if the user do not move the coins before this then anyone~(presumably, a miner) can create a transaction claiming this output, returning all the coins back to the owner except of a space-time fee ${K \cdot B \cdot D_{s}}$. A spending script for the output would be like:
+The last model we introduce is a combination of the prepaid and postpaid models. Like in the postpaid model, a user pays for an output when he spends it in a transaction. In addition, the output is also enforced to be moved after a known duration $D_{s}$ since being touched last time. That is, if the user do not move the coins before this then anyone~(presumably, a miner) can create a transaction claiming this output, returning all the coins back to the owner except of a space-time fee ${K \cdot B \cdot D_{s}}$. A spending script for the output would be like:
 
 \begin{align}
 \begin{split}
 &(regular\_script) \lor \\
-&(Height > (out.height + D_s) \land \\  
-&\qquad has\_output(value = out.value - K \cdot B \cdot D_s, script = out.script))
+&(Height > (out.height + D_s) \land (out.value - K.B.D_s \lor \\  
+&\qquad tx.has\_output(value = out.value - K \cdot B \cdot D_s, script = out.script)))
 \end{split}
 \end{align}
 
 In this model $D_s$ is another protocol parameter which may be fixed by a protocol design or changed via miners voting like \textit{K}.
 
+\subsection{On K Parameter}
+\label{sec-kparameter}
+
+\knote{todo: choose proper title for the sub-section and fill the description}
+
+
 \section{Analysis of the Model}
 \label{sec:analysis}
 
-In this section we provide analysis of the model. We show how the proposal is meeting its goal to control state size. We get estimations for additional miners
-rewards as well as lost coins recirculation. Throughout this section we use following values got from current state of the Bitcoin network:
+In this section we provide analysis of the model. We show how the proposal is meeting its main goal which is state size control. We get estimations for additional miners rewards as well as lost coins recirculation. Throughout this section we use following values got from the Bitcoin network at the moment of writing the paper~(February, 2017):
 
 \begin{itemize}
   \item number of unspent transaction outputs: $N_{utxo} \approx 45,000,000$
@@ -223,14 +228,14 @@ rewards as well as lost coins recirculation. Throughout this section we use foll
   \item average number of outputs spent in a block $N_{moved} \approx 5,500$ 
 \end{itemize}
 
-We use the numbers from the Bitcoin to make calculations for some typical cases as this is the most used cryptocurrency with longest history. However, a cryptocurrency with SSE being deployed would have different values for the metrics. Thus results from this section got with the Bitcoin statistical data should be considered as initial.
+We use the numbers from the Bitcoin to make calculations for some typical cases as this is the most used cryptocurrency with longest history. However, a cryptocurrency with our proposal being deployed would have different values for its metrics. Thus the results from this section should be considered as initial estimations.
 
 We study money flows in a space-scarce economy while dividing them into two types. Miners claim lost coins and also charge every output in the system state every block. Users are incentivized to move coins more frequently thus increasing mining rewards due to increased economic activity.  
 
 \subsection{Lost coins recirculation}
 \label{sec:re}
 
-The need of lost coins recirculation has been discussed in literature~\cite{gjermundrod2014recirculating,gjermundrod2016going} in regards with combat deflation that will inevitably occur in cryptocurrencies with fixed supply. Coins declared supply is known by cryptocurrency design, but available supply is not known due to lost coins locked in outputs that will never be spent~\cite{ron2013quantitative}. On the other hand, deflation is a real problem in the traditional monetary system, however, it is still an open question whether it will be problematic for the Bitcoin economy~\cite{bitcoinDeflationarySpiral,barber2012bitter}.
+The need of lost coins recirculation has been discussed in the literature~\cite{gjermundrod2014recirculating,gjermundrod2016going} in regards with combat deflation that will inevitably occur in cryptocurrencies with fixed supply. Possible cryptocurrency supply is known by design but actual supply is not known due to lost coins locked in outputs that will never be spent~\cite{ron2013quantitative}. Deflation is a problem in traditional monetary systems, however, it is still an open question whether it will be problematic for the Bitcoin economy~\cite{bitcoinDeflationarySpiral,barber2012bitter}.
 
 
 Our model provides lost coins recirculation mechanism by design while its properties vary from model implementation and parameters. In this section we study how lost coins recirculation depends from the both.
@@ -247,15 +252,15 @@ Maximum lifetime of a concrete output depends on the miner-controlled \textit{K}
 {L_{max} \approx {1 \over 100 \cdot K}}
 \end{equation}
 
-From this equation it is possible to calcualte \textit{K} by specifying target maximum output lifetime. For example, in case of 50 years period of full recirculation for an output value \textit{K} parameter would be $10^{-9}$. Significant difference between \textit{Postpaid} and \textit{Scheduled payments} is that in \textit{Postpaid} all coins will return to economy all at once after potentially big $L_{max}$ period, while in the \textit{Scheduled payments} mode they will return to economy by portions during this period. This makes \textit{Scheduled payments} preferable to \textit{Postpaid} because lost coins from big enough outputs in \textit{Postpaid} will not return to the circulation in foreseeable future. Anyway coins recirculation rate for both the modes in a long-term would be calculated as
+From this equation it is possible to calculate \textit{K} by specifying target expected lifetime for an output with an average value. For example, in case of 50 years period of full recirculation for an output value \textit{K} parameter would be about $10^{-9}$. Significant difference between \textit{Postpaid} and \textit{Scheduled payments} is that in \textit{Postpaid} lost output coins will return to economy all at once after potentially big $L_{max}$ period, while in the \textit{Scheduled payments} mode they will return to economy by portions during this period. This makes \textit{Scheduled payments} preferable to \textit{Postpaid} in regards with mining rewards stability. Anyway coins recirculation rate for both the modes in a long-term would be calculated as
 
 \begin{equation}
 R_{postpaid} = R_{scheduled} = {N_{lost} \cdot V_{output} \over L_{max}} = {N_{lost} \cdot K \cdot B}
 \end{equation}
 
-where $N_{lost}$ is the number of outputs with lost keys. Assuming current Bitcoins statistics, $N_{lost}\approx10^6$ and $K = 10^{-9}$ we can estimate, that $\approx0.036$ bitcoin are to be released from abandoned outputs in every block.
+where $N_{lost}$ is the number of outputs with lost keys. Assuming current Bitcoins statistics, $N_{lost}\approx10^6$ and $K = 10^{-9}$ we can estimate that $\approx0.036$ bitcoins are to be released from abandoned outputs in every block.
 
-In the \textit{Prepaid} mode a user defines $L_{max}$ by himself when he creates an output and number of released coins after $L_{max}$ is equals to output value $V_{output}$ rater than much smaller space-time fee $f_s$. Note here, that $L_{max}$ do not directly depends on \textit{K} and coins recirculation rate will only depend on $V_{output}$, user-defined $L_{max}$ and number of lost outputs $N_{lost}$:
+In the \textit{Prepaid} mode a user defines $L_{max}$ by himself when he creates an output and number of released coins after $L_{max}$ is equals to output value $V_{output}$ rater than much smaller space-time fee $f_s$. Note that $L_{max}$ do not directly depends on \textit{K} and coins recirculation rate will only depend on $V_{output}$, user-defined $L_{max}$ and number of lost outputs $N_{lost}$:
 
 \begin{equation}
 R_{prepaid} = {N_{lost} \cdot V_{output} \over L_{max}}
@@ -269,7 +274,7 @@ Assuming that $K\approx10^{-9}$ we can estimate difference between prepaid and p
 
 For example, if user-defined coin recirculation period $L_{max}\approx10$ years then ${R_{prepaid} \over R_{postpaid}} \approx 19$
 
-Concluding, \esse{} model by design provides a way to return lost coins to circulation thus preventing potential deflation. \textit{Postpaid} model has a disadvantage  that lost coins could be returned to circulation in far future. In \textit{Prepaid} model coin recirculation rate is presumably much higher than in other models and \textit{Scheduled payments} mode is a most smooth way to recycle coins.
+Concluding, our fee model by its design provides a way to return lost coins to circulation thus preventing potential deflation. \textit{Postpaid} model has a disadvantage  that lost coins could be returned to circulation in far future. In \textit{Prepaid} model coin recirculation rate is presumably much higher than in other models and \textit{Scheduled payments} mode is a most smooth way to recycle coins.
 
 
 
@@ -277,18 +282,6 @@ Concluding, \esse{} model by design provides a way to return lost coins to circu
 \label{sec:flow}
 
 From users point of view, the longer you keep some output, the bigger space-time fee you pay. Thus the proposed fee regime provides an incentive to move coins more frequently stimulating economic activity. In all the fee models introduced in Section~\ref{sec:model}, user pays ${K \cdot B}$ coins every block for keeping his output in the state. 
-
-
-\ignore{
-  If he uses blockchain with output size \textit{B} is relatively small and do not depend on output value.
-
-  To estimate money flow let's assume, that user will move his money when space-time fee will start dominate over other transactional costs \dnote{why?}. Thus we can estimate expected mean output lifetime as
-
-  \begin{equation}
-  \label{eq:ltmean}
-  L_{mean}={f_p \over K \cdot B}
-  \end{equation}
-}
 
 Currently in Bitcoin $N_{moved}$ outputs are moved in a block, and this number can be defined as: 
 
@@ -304,7 +297,7 @@ L_{mu} = {N_{utxo} \over {N_{moved}}}
 In Bitcoin, $L_{mu} \approx 8182$ blocks.
 
 
-With \esse{} fee component enabled users move coins more frequently, thus mean lifetime becomes $L_{mi} < L_{mu}$. It is hard to estimate $L_{mi}$ as it depends on K and also on blockchain-specific usage scenarios. Increasement in money flow could be calcualted as:
+We expect users moving coins more frequently thus mean lifetime becomes $L_{mi} < L_{mu}$. $L_{mi}$ depends on K and also on blockchain-specific usage scenarios. Increasement in money flow could be calcualted as:
 
 $\Delta N_{moved} = {N_{utxo} \over L_{mi}} - {N_{utxo} \over L_{mu}} = N_{utxo} \cdot {{L_{mu}-L_{mi}} \over {L_{mu} \cdot L_{mi}}}$
 
@@ -434,7 +427,7 @@ Thus the additional mining reward is:
   that is naturally coincide to estimations from section \ref{eq:ltmean} while miner reward equals to user losses.
 }
 
-We remark that space-time reward $K \cdot N_{utxo} \cdot B$ does not depend on network throughput and can be easily predicted. Since it will be accrued to generator of a block of a concrete height, and may be considered as a constant block reward. The reward value may be controlled by adjusting $K$ parameter making mining more stable and thus securing the network.
+We remark that space-time reward $K \cdot N_{utxo} \cdot B$ does not depend on network throughput and can be easily predicted. thus it can be considered as a constant block reward making mining more stable and thus securing the network. The value of it may be controlled by adjusting $K$ parameter.
 
 \subsection{State size}
 
