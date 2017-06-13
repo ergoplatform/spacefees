@@ -32,7 +32,6 @@
 
 \newcommand{\knote}[1]{{\authnote{\textcolor{green}{Alex notes}}{#1}}}
 \newcommand{\dnote}[1]{{\authnote{\textcolor{red}{Dima notes}}{#1}}}
-\newcommand{\anote}[1]{{\authnote{\textcolor{blue}{Amitabh notes}}{#1}}}
 
 
 % type user-defined commands here
@@ -43,24 +42,6 @@
 \definecolor{dkgreen}{rgb}{0,0.6,0}
 \definecolor{gray}{rgb}{0.5,0.5,0.5}
 \definecolor{mauve}{rgb}{0.58,0,0.82}
-\lstdefinestyle{myScalastyle}{
-  frame=tb,
-  language=scala,
-  aboveskip=3mm,
-  belowskip=3mm,
-  showstringspaces=false,
-  columns=flexible,
-  basicstyle={\small\ttfamily},
-  numbers=none,
-  numberstyle=\tiny\color{gray},
-  keywordstyle=\color{blue},
-  commentstyle=\color{dkgreen},
-  stringstyle=\color{mauve},
-  frame=single,
-  breaklines=true,
-  breakatwhitespace=true,
-  tabsize=3,
-}
 
 \newcommand{\ma}{\mathcal{A}}
 \newcommand{\mb}{\mathcal{B}}
@@ -426,6 +407,4 @@ Thus, additional subsidized space-time parameter allows to use the same blockcha
 
 \paragraph{\textbf{Q: } If the miner can fully control K, how do you prevent a miner from setting K VERY high? Should not there be some sort of guarantee about the minimum value of $L_{max}$ BEFORE a transaction is made?}~\\
 \textbf{A: } We assume miners will behave rationally, so they do not want to kill the business by setting $K$ high. We propose to have a rule for changing $K$ slowly, as block gas limit in Ethereum~(say, a miner can increase or decrease $K$ by 0.1\% per block) so $L_max$ could be estimated before the transaction being made with a good precision.
-
-
 \end{document}
