@@ -431,7 +431,7 @@ We remark that space-time reward $K \cdot N_{utxo} \cdot B$ does not depend on n
 
 \subsection{State size}
 
-In this section we analyze the main goal of \esse{} model which is to control state size. We study two most important cases. First, we estimate how big the state should be to give miners rewards comparable to Bitcoin's constant reward of today. Second, we study what is the maximum size of state could be considering a user having coins in the system and performing constant spam attack. \dnote{last sentense is not clean}
+In this section we analyze the main goal of the proposed fee model which is to control size of the state. We study two most important cases. First, we estimate how big the state should be to give miners rewards comparable to Bitcoin's constant reward of today. Second, we study what is the maximum size of state could be considering a user having coins in the system and performing constant spam attack. \dnote{last sentense is not clean}
 
 \paragraph{Constant Rewards}
 
@@ -475,8 +475,8 @@ In PascalCoin \cite{pascalCoin}, if an account has not made any operations for 4
 We left some questions for further research:
 
 \begin{itemize}
-  \item{}it is interesting to see how tokens in a cryptocurrency with a \esse{} fee component can be compared with a Gesell's demurrage currency\cite{gesell1958natural}.
-  \item{}an interesting research vector is how to find appropriate mandatory minimal $f_v$, $f_p$, $f_s$ values. Another question is how these component could be combined in a transaction fee $f$. One possible option is to set $f = max(f_p, f_v, f_s)$.
+  \item{}it is interesting to see how tokens in a cryptocurrency with a proposed fee component can be compared with a Gesell's demurrage currency\cite{gesell1958natural}.
+  \item{}an interesting research vector is how to find appropriate mandatory minimal $f_v$, $f_p$, $f_s$ values. Another question is how these component could be combined in a minimal transaction fee $f$. One possible option is to set $f = max(f_p, f_v, f_s)$.
   \item{}concrete dependency of space-time fee from output size and lifetime is another topic of discussion. One possible option is discussed in Appendix \ref{sec:subsidy}.
   \item{}a possible interaction with the problem of blockchain instability without the constant block reward~\cite{carlsten2016instability} in the setting of increased fee supply is another concern to study.
 \end{itemize}
