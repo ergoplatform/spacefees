@@ -94,13 +94,15 @@ Proposed fee regime is promoting money circulation in the blockchain economy. Th
 Summarizing, we study an economy where quick-access storage of a node in a massively-replicated system becomes the most scarce resource eventually. Thus we call such an economy a \textit{space-scarce economy}.
 
 \subsection{Assumptions}
+Here we provide assumptions our model is based on:
+
 \begin{itemize}
-  \item{} We assume that all the fees for a block are going to a single miner like in Bitcoin. There are proposals to share the rewards for a block within a group of miners, for example in~\cite{eyal2016bitcoin,kogias2016enhancing}. One notable difference is that in Bitcoin a miner can include his transactions into a block for free.
-  \item{} We assume that a state consists of unspent outputs. An output is not modifiable so can be only created and then spent fully. An output is protected by a script which is defined as a logical formula which can refer to properties of a blockchain (for example, its current height), spending transaction and an outputs itself. \knote{example} 
-  \item{} For simplicity, we assume that a block is of a finite size but all the transactions a miner has at a moment of block generation can be packed into it, if otherwise is not stated explicitly.
-  \item{} Time is measured via \textit{height} which is a number of blocks since an initial block~(a genesis block) till the block. 
-  \item{} All anyone-can-spend outputs are collected by miners, presumably immediately as they appear.
-  \item{} We are considering minimum mandatory fees in the paper. All the nodes are checking that a fee paid by a transaction is not less than a minimum and rejecting the whole block if it contains a transaction violating fee rules. Thus a fee regime is considered as a part of consensus protocol in our work. A user can pay more than a minimum to have a higher priority for a transaction of interest.   
+  \item{} we assume that all the fees for a block are going to a single miner like in Bitcoin. There are proposals to share the rewards for a block within a group of miners, for example in~\cite{eyal2016bitcoin,kogias2016enhancing}. One notable difference is that in Bitcoin a miner can include his transactions into a block for free.
+  \item{} we assume that a state consists of unspent outputs. An output is not modifiable so can be only created and then spent fully. An output is protected by a script which is defined as a logical formula which can refer to properties of a blockchain (for example, its current height), spending transaction and an outputs itself. \knote{example} 
+  \item{} for simplicity, we assume that a block is of a finite size but all the transactions a miner has at a moment of block generation can be packed into it, if otherwise is not stated explicitly.
+  \item{} time is measured via \textit{height} which is a number of blocks since an initial block~(a genesis block) till the block. 
+  \item{} all anyone-can-spend outputs are collected by miners, presumably immediately as they appear.
+  \item{} we are considering minimum mandatory fees in the paper. All the nodes are checking that a fee paid by a transaction is not less than a minimum and rejecting the whole block if it contains a transaction violating fee rules. Thus a fee regime is considered as a part of consensus protocol in our work. A user can pay more than a minimum to have a higher priority for a transaction of interest.   
 \end{itemize}
 
 \subsection{Structure of the Paper}
