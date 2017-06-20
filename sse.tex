@@ -51,8 +51,8 @@
 \newcommand{\la}{\leftarrow}
 \newcommand{\state}{state}
 
-\newcommand{\ignore}[1]{} % may contain useful stuff (that needs more work)
-\newcommand{\full}[1]{} % use only for full version
+\newcommand{\ignore}[1]{} 
+\newcommand{\full}[1]{}
 \newcommand{\notfull}[1]{#1}
 \newcommand{\rand}{\stackrel{R}{\leftarrow}}
 \newcommand{\mypar}[1]{\smallskip\noindent\textbf{#1.}\ \ \ }
@@ -102,9 +102,7 @@ Here we provide assumptions our model is based on:
 
 \subsection{Structure of the Paper}
 
-The paper is organized as follows. A design of our model is described in Section~\ref{sec:model}. The model is analyzed in Section~\ref{sec:analysis}.  
-\knote{finish}
-
+The paper is organized as follows. A design of our new fee component is provided in Section~\ref{sec:model}. The model then is analyzed in Section~\ref{sec:analysis}. In Section~\ref{sec:rel-work} we observe related work, and in Section~\ref{sec:further-work} we shape a plan for further research.
 
 \section{The Model}
 \label{sec:model}
@@ -360,6 +358,7 @@ Note that it is upper-bound of \state{} size calculated from non-realistic assum
 Summarizing, the new fee regime allows to control state growth with $K$ parameter and allows to estimate expected state size as well as an upper bound. Reasonable $K$ value for a Bitcoin-like system leads to 13 Gb of expected state size and 183 GB for a spam attack backed by all the system tokens. Thus the model is preventing spam attacks like~\cite{bitcoin2015flood} and provide a guarantee that miners can have state fit in RAM.
 
 \section{Related Work}
+\label{sec:rel-work}
 
 Ethereum~\cite{ethyp} introduced a fee to cover computational costs for processing a transaction~(via rewarding a miner), with a mandatory minimum. A price of a computational unit~(which is an instruction of Ethereum Virtual Machine) is controlled by miners via adjusting ``gas'' price. We consider to adopt this approach toward charging users for consuming space-time units.
 
@@ -368,6 +367,7 @@ FreiCoin~\cite{freicoin} is a cryptocurrency with demurrage. Demurrage-adjusted 
 In PascalCoin~\cite{pascalCoin}, if an account has not made any operations for 420,480 blocks then its balance is considered as forgotten and miner can claim it. Our approach to recover lost coins is more flexible and natural. %In the \textit{prepaid} mode a user sets expiration time on his side~(paying accordingly), in \textit{postpaid} and \textit{scheduled payments} modes a forgotten output is to be turned into space-time fees eventually.
 
 \section{Further Work}
+\label{sec:further-work}
 
 We left some questions for further research:
 
