@@ -92,11 +92,13 @@ Summarizing, we study an economy where quick-access storage of a node in a massi
 Here we provide assumptions our model is based on:
 
 \begin{itemize}
-  \item{} we assume that all the fees for a block are going to a single miner like in Bitcoin. There are proposals to share the rewards for a block within a group of miners, for example in~\cite{eyal2016bitcoin,kogias2016enhancing}. One notable difference is that in Bitcoin a miner can include his transactions into a block for free.
-  \item{} we assume that a state consists of unspent outputs. An output is not modifiable so can be only created and then spent fully. An output is protected by a script which is defined as a logical formula which can refer to properties of a blockchain (for example, its current height), spending transaction and an outputs itself. \knote{example} 
+  \item{} all the fees for a block are going to a single miner like in Bitcoin. There are proposals to share the rewards for a block within a group of miners, for example in~\cite{eyal2016bitcoin,kogias2016enhancing}, and they are out of scope of the paper.
+  \item{} a state is a set of unspent outputs. An output is not modifiable so can be only created and then spent at whole. 
+  \item{} an output is protected by a spending condition which is defined as a logical formula. Predicates in the formula can refer to properties of a blockchain (for example, its current height available via variable $Height$), spending transaction $tx$ and the output $out$ itself. We assume that it is possible to compare two scripts, and it is possible to determine whether the spending transaction contains an output with a given property. For example, $tx.has\_output(script = out.script)$ evaluates to true if the spending transaction contains an output with the same script as the output has. Note that Bitcoin Script is too limited to support scripts comparison as well as using the spending transaction and the output to spend in a spending condition.
+
   \item{} for simplicity, we assume that a block is of a finite size but all the transactions a miner has at a moment of block generation can be packed into it, if otherwise is not stated explicitly.
   \item{} time is measured via \textit{height} which is a number of blocks since an initial block~(a genesis block) till a block of interest. 
-  \item{} all anyone-can-spend outputs are collected by miners, presumably immediately as they appear.
+  \item{} all anyone-can-spend outputs are collected by miners immediately as they appear.
   \item{} we are considering minimum mandatory fees in the paper. All the nodes are checking that a fee paid by a transaction is not less than a minimum and rejecting the whole block if it contains a transaction violating fee rules. Thus a fee regime is considered as a part of consensus protocol in our work. A user can pay more than a minimum to have a higher priority for a transaction of interest.   
 \end{itemize}
 
