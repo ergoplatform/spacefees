@@ -353,8 +353,8 @@ assuming that number of unspent outputs is big enough. Resulting state size:
 S = S_{block} \cdot O_{max} = \sqrt { 2 \cdot N_{coins} \cdot S_{block} \over K}
 \end{equation}
 
-which is about 183 gigabytes for Bitcoin network parameters and $K=10^{-9}$ $\frac{BTC}{Byte \cdot Block}$. %Taking into account that \state{} should be kept in memory, 183GB is quite big state size, however, miners can keep it in RAM. 
-Note that it is upper-bound of \state{} size calculated from non-realistic assumptions that all available supply will be paid for space-time fee, and $K$ is constant.
+which is about 183 gigabytes for Bitcoin network parameters and $K=10^{-9}$ $\frac{BTC}{Byte \cdot Block}$. 
+Note that it is upper-bound of \state{} size calculated from non-realistic assumptions that all available supply will be put into the attack, and that miners do not raise $K$ during the attack.
 
 Summarizing, the new fee regime allows to control state growth with $K$ parameter and allows to estimate expected state size as well as an upper bound. Reasonable $K$ value for a Bitcoin-like system leads to 13 Gb of expected state size and 183 GB for a spam attack backed by all the system tokens. Thus the model is preventing spam attacks like~\cite{bitcoin2015flood} and provide a guarantee that miners can have state fit in RAM.
 
@@ -365,7 +365,7 @@ Ethereum~\cite{ethyp} introduced a fee to cover computational costs for processi
 
 FreiCoin~\cite{freicoin} is a cryptocurrency with demurrage. Demurrage-adjusted running balance~(aggregated for all the outputs associated with a key) is to be recalculated when a transaction is touching any output which is a part of the balance. Unlike FreiCoin, miners are watching over the state constantly to clean it in our proposal, and coins being lost are getting back into circulation~(in FreiCoin, outputs forgotten do live forever in the unspent outputs set).
 
-In PascalCoin~\cite{pascalCoin}, if an account has not made any operations for 420,480 blocks then its balance is considered as forgotten and miner can claim it. Our approach to recover lost coins is more flexible and natural. %In the \textit{prepaid} mode a user sets expiration time on his side~(paying accordingly), in \textit{postpaid} and \textit{scheduled payments} modes a forgotten output is to be turned into space-time fees eventually.
+In PascalCoin~\cite{pascalCoin}, if an account has not made any operations for 420,480 blocks then its balance is considered as forgotten and miner can claim it. Our approach to recover lost coins is more flexible and natural. 
 
 \section{Further Work}
 \label{sec:further-work}
@@ -374,9 +374,10 @@ We left some questions for further research:
 
 \begin{itemize}
   \item{}it is interesting to see how tokens in a cryptocurrency with a proposed fee component can be compared with a Gesell's demurrage currency~\cite{gesell1958natural}.
-  \item{}an interesting research vector is how to find appropriate mandatory minimal $f_v$, $f_p$, $f_s$ values. Another question is how these component could be combined in a compound minimal transaction fee $f$. aside of a simple sum, one possible option is to set $f = max(f_p, f_v, f_s)$.
+  \item{}an interesting research vector is how to find appropriate mandatory minimal $f_v$, $f_p$, $f_s$ values. Another question is how these components can be combined in a compound minimal transaction fee $f$. Aside of a simple sum, one possible option is to set $f = max(f_p, f_v, f_s)$.
   \item{}for currency blockchains, a subsidized period of free storage could be applied. One possible option is discussed in Appendix~\ref{sec:subsidy}.
   \item{}a possible interaction with the problem of blockchain instability without the constant block reward~\cite{carlsten2016instability} in the setting of increased fee supply is another concern to study.
+  \item{}miners can choose different strategies on changing $K$ value, based on estimated demand curve and storage pricing. Finding a set of optimal strategies is the another interesting topic to study. 
 \end{itemize}
 
 \bibliographystyle{elsarticle-num}
@@ -393,16 +394,12 @@ For sure, this free space time will increase \state{} size upper bound. To maxim
 
 Thus, additional subsidized space-time parameter allows to use the same blockchain for both money and data applications. Also this additional parameter provide a new way to configure cryptocurrency, for example to increase $K$ value painlessly for regular users, but increasing lost coin recirculation rate.
 
-\section{Unified Transactions}
-
-\knote{We can throw away special coinbase transactions getting unified transaction format, by requiring fees to be paid in form of anyone-can-spend output, and by creating constant rewards in predefined and hard-coded pre-genesis state, where a reward for a certain height is an output in the pre-genesis UTXO spendable only at this height.}
-
 \section{Questions and Answers}
 
 
 \paragraph{\textbf{Q: } Aren't there important use-cases for ``storing data forever''? Like when the ledger is used for storing property deeds or university degrees or other public, "official" documents?}~\\
 \textbf{A: } While this is very appealing for a user to store something forever paying just once~(or not paying anything at all), a resulting economy where miners need to store increasingly growing amount of data getting bounded rewards may be unstable or just not viable. As a solution, we propose a system where a state size could be bounded, then, as new data is to be introduced each block, expiration is strictly needed. However, for some real-life scenarios we can imagine hybrid systems, where some special actors~(governments or universities) can store something forever~(paying once, or not paying at all), while other participants are paying as we are proposing thus subsidizing public good.
 
-\paragraph{\textbf{Q: } If the miner can fully control K, how do you prevent a miner from setting K VERY high? Should not there be some sort of guarantee about the minimum value of $L_{max}$ BEFORE a transaction is made?}~\\
+\paragraph{\textbf{Q: } If a miner can fully control $K$, how do you prevent him from setting K VERY high? Should not there be some sort of guarantee about the minimum value of $L_{max}$ BEFORE a transaction is made?}~\\
 \textbf{A: } We assume miners will behave rationally, so they do not want to kill the business by setting $K$ high. We propose to have a rule for changing $K$ slowly, as block gas limit in Ethereum~(say, a miner can increase or decrease $K$ by 0.1\% per block) so $L_max$ could be estimated before the transaction being made with a good precision.
 \end{document}
