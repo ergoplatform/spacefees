@@ -60,8 +60,9 @@
 \begin{document}
 
 \title{On Space-Scarce Economy\\ In Blockchain Systems}
-\author{Alexander Chepurnoy \and Dmitry Meshkov}
-\institute{IOHK Research}
+
+%\author{Alexander Chepurnoy \and Dmitry Meshkov}
+%\institute{IOHK Research}
 \maketitle
 
 \begin{abstract}
@@ -315,9 +316,7 @@ We remark that space-time reward $K \cdot N_{utxo} \cdot B$ does not depend on n
 
 In this section we analyze the main goal of the proposed fee model which is to control size of the state. We study two most important cases. First, we estimate how big the state should be to give miners rewards comparable to Bitcoin's constant block reward of today~(12.5 bitcoins per block at the moment of writing this paper). Second, we study what is the maximum size of state could be considering an attacker having all the coins in the system initially and performing constant spam attack.
 
-\paragraph{Constant Rewards}
-
-For a state of size $S$ miner is getting $S \cdot K$ space-time fees every block. For them to be a replacement for the current constant reward in Bitcoin $M_c$ following equality should hold:
+\subsubsection{Constant Rewards.} For a state of size $S$ miner is getting $S \cdot K$ space-time fees every block. For them to be a replacement for the current constant reward in Bitcoin $M_c$ following equality should hold:
 
 \begin{equation}
 \label{eq:statesizeexp}
@@ -326,9 +325,7 @@ S \cdot K = M_c
 which leads to 13 GB state for $K=10^{-9}$ $\frac{BTC}{Byte \cdot Block}$.
 
 
-\paragraph{Spam Attack}
-
-We consider an attacker who creates an output roughly of size of a block $S_{block}$ for every block in a row. Initially the attacker has all the $N_{coins}$ of the system and he does not buy new coins during the attack~(miners do not sell the coins to him). We also assume that $K$ is constant during the attack~(however, in real world miners would probably raise $K$ during the attack). As soon as each block space-time fee should be paid for all previously created outputs, maximum possible number of such outputs $O_{max}$ is to be calculated from equation:
+\subsubsection{Spam Attack.} We consider an attacker who creates an output roughly of size of a block $S_{block}$ for every block in a row. Initially the attacker has all the $N_{coins}$ of the system and he does not buy new coins during the attack~(miners do not sell the coins to him). We also assume that $K$ is constant during the attack~(however, in real world miners would probably raise $K$ during the attack). As soon as each block space-time fee should be paid for all previously created outputs, maximum possible number of such outputs $O_{max}$ is to be calculated from equation:
 
 \begin{equation}
 N_{coins} = \sum_i^{O_{max}}{K \cdot S_{block} \cdot i} \approx K \cdot S_{block} \cdot O_{max}^2 / 2
@@ -343,7 +340,7 @@ S = S_{block} \cdot O_{max} = \sqrt { 2 \cdot N_{coins} \cdot S_{block} \over K}
 which is about 183 gigabytes for Bitcoin network parameters and $K=10^{-9}$ $\frac{BTC}{Byte \cdot Block}$. 
 Note that it is upper-bound of \state{} size calculated from non-realistic assumptions that all available supply will be put into the attack, and that miners do not raise $K$ during the attack.
 
-Summarizing, the new fee regime allows to control state growth with $K$ parameter and allows to estimate expected state size as well as an upper bound. Reasonable $K$ value for a Bitcoin-like system leads to 13 Gb of expected state size and 183 GB for a spam attack backed by all the system tokens. Thus the model is preventing spam attacks like~\cite{bitcoin2015flood} and provide a guarantee that miners can have state fit in RAM.
+Summarizing, the new fee regime allows to control state growth with $K$ parameter and allows to estimate preferable state size as well as an upper bound. Reasonable $K$ value for a Bitcoin-like system leads to state of 13 GB in case of replacing current constant block rewards in Bitcoin with space-time fees, and of 183 GB for the spam attack backed by all the system tokens. Thus the model is preventing spam attacks like~\cite{bitcoin2015flood} and provides guarantee that miners can have state fit in RAM.
 
 \section{Related Work}
 \label{sec:rel-work}
@@ -370,6 +367,7 @@ We left some questions for further research:
 \bibliographystyle{elsarticle-num}
 \bibliography{sources.bib}
 
+\ignore{
 \appendix
 
 \section{On Subsidizing Space-time}
@@ -389,4 +387,5 @@ Thus, additional subsidized space-time parameter allows to use the same blockcha
 
 \paragraph{\textbf{Q: } If a miner can fully control $K$, how do you prevent him from setting K VERY high? Should not there be some sort of guarantee about the minimum value of $L_{max}$ BEFORE a transaction is made?}~\\
 \textbf{A: } We assume miners will behave rationally, so they do not want to kill the business by setting $K$ high. We propose to have a rule for changing $K$ slowly, as block gas limit in Ethereum~(say, a miner can increase or decrease $K$ by 0.1\% per block) so $L_max$ could be estimated before the transaction being made with a good precision.
+}
 \end{document}
