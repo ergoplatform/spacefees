@@ -115,14 +115,7 @@ In our model transaction fee $f$ consists of 3 parts: \textit{validation and pro
 f = f_v + f_p + f_s , f \ge 0
 \end{equation}
 
-Validation and propagation costs are non-negative and assumed to be independent from the space-time fee. It is possible for $f_s$ to be negative since a transaction may decrease size of the state. The space-time fee $f_s$ depends on size of outputs to be marked as spent, remaining lifetimes for them, newly created outputs and their time to live. If a transaction is freeing some space-time \textit{$T_{cleared}$} and claiming space-time \textit{$T_{filled}$}, then the  resulting space-time fee can be calculated as follows:
-\begin{equation}
-f_s = K \cdot (T_{filled} - T_{cleared})
-\end{equation}
-
-\knote{we need to say somehow here about prepaid and postpaid outputs defined below}
-
-where \textit{K} is a space-time price. As time in a blockchain system is associated with blocks~(precisely, height of a block), and space is measured in byte, $K$ is to be a price of byte per block. We assume that miners can change this price based on hardware prices and token exchange rate, like they change ``gas'' cost in Ethereum.
+Validation and propagation costs are non-negative and assumed to be independent from the space-time fee. It is possible for $f_s$ to be negative since a transaction may decrease size of the state. The space-time fee $f_s$ depends on size of outputs to be marked as spent, remaining lifetimes for them, newly created outputs and their time to live. If a transaction is freeing some space-time \textit{$T_{cleared}$} and claiming space-time \textit{$T_{filled}$}, then the  resulting space-time fee can be defined as $f_s = K \cdot (T_{filled} - T_{cleared})$, where \textit{K} is a space-time price. As time in a blockchain system is associated with blocks~(precisely, height of a block), and space is measured in byte, $K$ is to be a price of byte per block. We assume that miners can steadily change this price like they change ``gas'' limit per block in Ethereum. For example, a miner can be given a right to raise or lower $K$ value by $0.1\%$ per block. Or miners can vote during an epoch of $1,000-2,000$ blocks on whether to raise or lower $K$ for the next epoch by $1\%$, or leave it intact.
 
 We consider three options for the fee to be charged. Concretely, \textit{prepaid outputs} are defined in Section~\ref{sec-prepaid}, \textit{postpaid outputs} are described in Section~\ref{sec-postpaid} and \textit{scheduled payments} are proposed in Section~\ref{sec-scheduled}.
 
@@ -141,7 +134,7 @@ where \textit{Height} is current blockchain height and {\em regular\_script} is 
 f_{s-prepaid} = K \cdot (\sum_i{(B_i \cdot (L_{max\_i} - Height))} - \sum_j{(B_j \cdot (L_{max\_j} - Height)}))
 \end{equation}
 
-\knote{Height is subjective here, write about that}
+%\knote{Height is subjective here, write about that}
 
 \subsection{Postpaid Outputs}
 \label{sec-postpaid}
@@ -179,12 +172,6 @@ The last model we introduce is a combination of the prepaid and postpaid models.
 \end{align}
 
 In this model $D_s$ is another protocol parameter which may be fixed by a protocol design or changed via miners voting like \textit{K}.
-
-\subsection{On K Parameter}
-\label{sec-kparameter}
-
-\knote{todo: choose proper title for the sub-section and fill the description}
-
 
 \section{Analysis of the Model}
 \label{sec:analysis}
