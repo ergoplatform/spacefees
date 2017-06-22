@@ -336,7 +336,7 @@ For a state of size $S$ miner is getting $S \cdot K$ space-time fees every block
 \label{eq:statesizeexp}
 S \cdot K = M_c
 \end{equation}
-which leads to 13 GB state for $K=10^{-9}$ ($BTC / (Byte \cdot Block)$).
+which leads to 13 GB state for $K=10^{-9}$ $\frac{BTC}{Byte \cdot Block}$.
 
 
 \paragraph{Spam Attack}
@@ -353,7 +353,7 @@ assuming that number of unspent outputs is big enough. Resulting state size:
 S = S_{block} \cdot O_{max} = \sqrt { 2 \cdot N_{coins} \cdot S_{block} \over K}
 \end{equation}
 
-which is about 183 gigabytes for Bitcoin statistics and $K=10^{-9}$ ($BTC / (Byte \cdot Block)$). %Taking into account that \state{} should be kept in memory, 183GB is quite big state size, however, miners can keep it in RAM. 
+which is about 183 gigabytes for Bitcoin network parameters and $K=10^{-9}$ $\frac{BTC}{Byte \cdot Block}$. %Taking into account that \state{} should be kept in memory, 183GB is quite big state size, however, miners can keep it in RAM. 
 Note that it is upper-bound of \state{} size calculated from non-realistic assumptions that all available supply will be paid for space-time fee, and $K$ is constant.
 
 Summarizing, the new fee regime allows to control state growth with $K$ parameter and allows to estimate expected state size as well as an upper bound. Reasonable $K$ value for a Bitcoin-like system leads to 13 Gb of expected state size and 183 GB for a spam attack backed by all the system tokens. Thus the model is preventing spam attacks like~\cite{bitcoin2015flood} and provide a guarantee that miners can have state fit in RAM.
