@@ -6,11 +6,18 @@
     \begin{tikzpicture}
         \def\overallwidth{\textwidth}
         \def\xshift{.54*\overallwidth}
-        \def\xwidth{.3*\overallwidth}
-        \def\yshifta{.5*\overallwidth}
-        \def\yshiftb{.17*\overallwidth}
+        \def\xwidth{.25*\overallwidth}
+        \def\yshifta{.45*\overallwidth}
+        \def\yshiftb{.15*\overallwidth}
 
         \begin{axis}[
+                y tick label style={
+                    /pgf/number format/.cd,
+                    fixed,
+                    fixed zerofill,
+                    precision=2,
+                    /tikz/.cd
+                },
                 width=\overallwidth,
                 domain=-1:1,
                 xmin=0, xmax=2,
