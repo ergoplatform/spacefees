@@ -1,6 +1,9 @@
 ##PDF 
 # sse.pdf
 
+*.ipynb_checkpoints*
+*__pycache_*
+
 ## Core latex/pdflatex auxiliary files:
 *.aux
 *.lof
