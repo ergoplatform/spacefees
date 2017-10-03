@@ -1,0 +1,65 @@
+\documentclass{standalone}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=newest}
+\begin{document}
+    \begin{tikzpicture}
+        \def\overallwidth{\textwidth}
+        \def\xshift{.54*\overallwidth}
+        \def\xwidth{.3*\overallwidth}
+        \def\yshifta{.5*\overallwidth}
+        \def\yshiftb{.17*\overallwidth}
+
+        \begin{axis}[
+                width=\overallwidth,
+                domain=-1:1,
+                xmin=0, xmax=2,
+                ymin=0, ymax=0.5,
+                grid=major,
+                xlabel=current state size $x$,
+                ylabel=miners' rewards $y$
+            ]
+            \addplot[smooth, blue, very thick] table [x index=0, y
+            index=3]{ps.txt}; 
+            \draw [very thick, red, dashed](0.615,0) -- (0.615,0.429);
+            \node [pin=60:{optimal state size}] at (0.615,0) {};
+        \end{axis}
+        \begin{axis}[
+                width=\xwidth,
+                xshift=\xshift,
+                yshift=\yshifta,
+                scale only axis,
+                axis background/.style={fill=white},
+                xmin=0,xmax=2,
+                ymin=0,ymax=1.2,
+                xlabel=price $p$,
+            ylabel=spending ability $N$]
+            \addplot[smooth, red, very thick] table [x index=0, y index=1]{ns.txt};
+        \end{axis}
+        \begin{axis}[
+                width=\xwidth,
+                xshift=\xshift,
+                yshift=\yshiftb,
+                scale only axis,
+                axis background/.style={fill=white},
+                xmin=0,xmax=1.6,
+                ymin=0,ymax=1.2,
+                axis y line*=left,
+                xlabel=state size $x$,
+            ylabel={\color{red}submission rate $f(x)$}]
+            \addplot[smooth, red, very thick] table [x index=0, y index=2]{ps.txt};
+        \end{axis}
+        \begin{axis}[
+                width=\xwidth,
+                xshift=\xshift,
+                yshift=\yshiftb,
+                scale only axis,
+                xmin=0,xmax=1.6,
+                ymin=0,ymax=5.2,
+                axis y line*=right,
+                axis x line=none,
+            ylabel={\color{blue}pricing curve $p(x)$}]
+            \addplot[smooth, blue,very thick] table [x index=0, y index=1]{ps.txt};
+        \end{axis}
+    \end{tikzpicture}
+\end{document}
