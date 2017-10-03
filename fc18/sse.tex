@@ -218,7 +218,6 @@ Here we provide assumptions our model is based on:
 %research.
 
 \section{Algorithm of the fee assignment}
-
 In spite of the problems and the possible solution outlined in the introduction,
 the essential element of the space-scarce economy is the method of assigning the
 fee to every transaction \vk{or block?} in a sensible way. In this chapter we
@@ -298,38 +297,7 @@ $\vec{n}$ adjusting the formal fee prescription to the sensible values.\vk{It
 network.}
 \begin{figure}
     \center
-    \begin{tikzpicture}[rotate around y=-30]
-        \draw[thick,-stealth] (0,0,0)--(0,0,6) node [below] {$N_c$};
-        \draw[thick,-stealth] (0,0,0)--(0,6,0) node [right] {$N_b$};
-        \draw[thick,-stealth] (0,0,0)--(6,0,0) node [below] {$N_s$};
-        \draw[thick,-stealth,red] (0,0,0)--(4,4,4) node [above] {$\vec{n}$};
-
-        \coordinate[label=$O$] (O) at (0,0,0);
-        \coordinate[] (X) at (5,5,5);
-        \coordinate[] (A) at (0,5,5);
-        \coordinate[] (B) at (5,5,0);
-        \coordinate[] (C) at (5,0,5);
-
-        \draw plot [mark=*, mark size=1] coordinates{(5,2.3,2)} node[above]
-        {space-oriented $tx$};
-        \draw plot [mark=*, mark size=1] coordinates{(3,2.2,5)} node[above]
-        {computation-oriented $tx$};
-        \draw plot [mark=*, mark size=1] coordinates{(1,4,1)} node[above]
-        {network-oriented $tx$};
-
-        \draw[fill=blue,opacity=0.3] (X)--(A)--(O);
-        \draw[fill=red,opacity=0.3] (B)--(X)--(O);
-        \draw[fill=brown,opacity=0.3] (X)--(C)--(O);
-        \draw[dashed] (A)--(0,0,5);
-        \draw[dashed] (A)--(0,5,0);
-        \draw[] (O)--(0,6,6);
-        \draw[dashed] (B)--(5,0,0);
-        \draw[dashed] (B)--(0,5,0);
-        \draw[] (O)--(6,6,0);
-        \draw[dashed] (C)--(5,0,0);
-        \draw[dashed] (C)--(0,0,5);
-        \draw[] (O)--(6,0,6);
-    \end{tikzpicture}
+    \includestandalone[width=\textwidth]{figures/max_est}
     \caption{Space of transactions splitted by
         Eq.~\eqref{eq:max} into the subregions of the dominant fees.\label{fig:max}}
 \end{figure}
@@ -460,15 +428,7 @@ divergence guards the upper size limit.
 pay-as-you-go?}
 \begin{figure}
     \center
-    \begin{tikzpicture}
-        \draw[thick,-stealth] (0,0)--(6,0) node [below] {$t$};
-        \draw[thick,-stealth] (0,0)--(0,3) node [right] {Fee};
-        \draw[thick, dashed] (0,0)--(2,1);
-        \draw[dashed] (2,1)--(2,0) node [below]{subsidized period};
-        \draw[thick,blue] (0,1) node[left] {\textcolor{black}{$\max(\alpha
-        N_b,\beta N_c)$}} --(2,1) -- (5,2.5);
-
-    \end{tikzpicture}
+    \includestandalone[width=\textwidth]{figures/subsid}
     \caption{Transaction cost as a function of output existance time.\label{fig:max_t}}
 \end{figure}
 
@@ -512,6 +472,14 @@ is ready to pay, and will also try to submit something if current price is
 lower; for sufficiently large price no one is ready to pay). In these notations
 $f(x)=N(p(x))$ (see inset on Fig.~\ref{fig:rewards}), and the profit rate which
 miners get from current submissions is $y(t) = p(x(t))f(x(t))$.
+\begin{figure}
+    \includestandalone[width=\textwidth]{figures/dynamics}
+    \caption{
+        \label{fig:dynamics} Dynamics of the state size for various initial
+        rates. The numbers above the curves are the miners reward rates with
+        respect to maximal possible stationary rewards.
+    }
+\end{figure}
 
 \subsection{Constant storage price}
 \subsection{State-dependent storage price}
