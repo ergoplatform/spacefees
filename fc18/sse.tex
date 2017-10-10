@@ -260,8 +260,8 @@ be charged for storage, the computation--oriented transactions should be charged
 for script execution, and all the others --- by the minimal transaction fee for
 the network load. The last sentence can be formalized in its simplest form as follows:
 \begin{equation}
-    \operatorname{Fee}(tx) = \max(\alpha N_b(tx), \beta N_c(tx),
-    S(state,tx)L[tx])\,.
+    \operatorname{Fee}(tx) = \max(\alpha \cdot N_b(tx), \beta \cdot N_c(tx),
+    S(state,tx) \cdot L[tx])\,.
     \label{eq:max}
 \end{equation}
 Here $\alpha$ and $\beta$ are the pricing coefficients, $N_b$ is the
@@ -288,7 +288,7 @@ Assume for now, that for every transaction we know the time the outputs will be
 stored in the state $L[tx]$. We will overcome this difficulty later. Based on
 Eq.~\eqref{eq:max}, we come up with the notion of space of transactions, which
 is three--dimensional in our case --- every transaction is defined by three
-numbers: $N_b(tx)$, $N_c(tx)$, $N_s = S(tx)L[tx]$. Eq.~\eqref{eq:max} provides a
+numbers: $N_b(tx)$, $N_c(tx)$, $N_s(tx) = S(tx)L[tx]$. Eq.~\eqref{eq:max} provides a
 prescription of splitting this space into three regions: network--oriented
 transactions, space--oriented transactions, and computation--oriented
 transactions (see Fig.~\ref{fig:max}). All the splitting is governed by the
@@ -385,7 +385,7 @@ $N(p^*)+p^*N'(p^*)=0$, where prime is derivative with respect to price. As
 usual, the optimal price here does not depend on the pricing policy, but rather
 the implicit property of the network.  Having the price varying freely can be
 considered beneficial both for miners and for network as a whole, since it
-allows the first ones to optimise signing strategy, and with this given the
+allows the first ones to optimize signing strategy, and with this given the
 state size is automatically adjusted to the relatively predictable level
 $p^{-1}(p^*)$.
 
@@ -431,7 +431,7 @@ pay-as-you-go?}
 \begin{figure}
     \center
     \includestandalone[width=\textwidth]{figures/subsid}
-    \caption{Transaction cost as a function of output existance time.\label{fig:max_t}}
+    \caption{Transaction cost as a function of output existence time.\label{fig:max_t}}
 \end{figure}
 
 \bibliographystyle{elsarticle-num}
