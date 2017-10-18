@@ -157,7 +157,7 @@ concerns should be addressed. Also, there is an increasing demand to use a
 blockchain as a data storage, and storing permanently objects in the state
 without a cleaning procedure is not a viable option.
 
-\subsection{Our contribution}
+\subsection{Our contributions}
 
 We propose an economic solution to the problem of unreasonable state growth
 (such as spam attacks, or objects not being using anymore but still living in
@@ -195,21 +195,21 @@ In order to simplify analysis, we fix following assumptions:
 
 
 \section{Algorithm of the fee assignment}
+
 In spite of the problems and the possible solution outlined in the introduction,
 the essential element of the space-scarce economy is the method of assigning the
-fee to every transaction \vk{or block?} in a sensible way. In this chapter we
-start by a reasoning about the guiding principles for the fee assignment, and
-end up with the example of a practical fee assignment protocol \knote{rule?}.
+fee to every transaction in a sensible way. In this chapter we reason about the guiding 
+principles for the fee assignment, and end up with the example of a practical fee assignment rule.
 
 The evolution of the blockchain networks has demonstrated the main obstacles for
 the system to be truly distributed in the real world. First and the most
 important so far, the storage capacity of the nodes is limited. In particular, it
-makes running a full node almost impossible on a desktop hardware in a system 
-where the full blockchain is needed for the node operation \vk{more details}.
+becomes more costly with time to run a node on a desktop hardware in a system 
+where the full blockchain is needed for the operation \vk{more details}.
 Elegant solutions have already been found for this problems in recent years
 \vk{citations}, consisting in practical unnecessity of storing the blockchain
 itself, but rather parts of header chain, and the state described above.
-However, the part of this vulnerability remains, as a possibility of flooding
+However, the part of this problem remains, as a possibility of flooding
 the state with a long list of UTXO, which are never spent. This also has a side
 economical effects, since coins from lost (accidentally or intentionally) UTXO's
 are never returned to the circulation, and it becomes important if the total
@@ -220,20 +220,20 @@ that a transaction ``cost'' for the node can be more than just a storage:
 transactions can contain relatively complicated scripts which are meant to be
 executed by the nodes, providing additional overhead. The extreme and most
 famous example is the Ethereum network with the concept of the ``World
-Computer''. As we are trying to provide the economical solution for
-decentralization up to the pocket device scale (at least up to the smartphones),
-the aspect of heavy calculations should be also taken into account.
+Computer''. %As we are trying to provide the economical solution for
+%decentralization up to the pocket device scale (at least up to the smartphones),
+%the aspect of heavy calculations should be also taken into account.
 
 Third, there is the network load created by every transaction. If
-the output is created in one block, and spent right in the next one, it provided
-almost zero overhead in terms of storage, but created the basic network load
+an output is created in one block and spent right in the next one, it provides
+almost zero overhead in terms of storage, but creates the network load
 needed for synchronization.
 
-From the prospective presented in the introduction, the transaction fee must
-incorporate all three of these aspects. The storage--oriented transactions should
-be charged for storage, the computation--oriented transactions should be charged
-for script execution, and all the others --- by the minimal transaction fee for
-the network load. The last sentence can be formalized in its simplest form as follows:
+\knote{refer here to a fee as a security measure concepts in the intro?}
+
+As stated in the intro, a transaction fee is an anti-overload tool. Thus a transaction fee should 
+incorporate all the three of components above. We propose to charge for a component which processing demands more resources. That is,  storage-oriented transactions should be charged for storage consumption, the computation-oriented transactions should be charged
+for script execution, and all the others by the network load. The last sentence can be formalized in its simplest form as follows:
 \begin{equation}
     \operatorname{Fee}(tx) = \max(\alpha \cdot N_b(tx), \beta \cdot N_c(tx),
     S(state,tx) \cdot L[tx])\,.
