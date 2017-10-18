@@ -247,7 +247,7 @@ transaction is being stored in the state. \vk{Oops. Do we mean now that if the
     transaction frees the space in the state, the corresponding output can be
 stored forever? If yes, it cancels vast part of the reasoning: I create $tx_0$ with
 two outputs; in the next block $tx_1$ merging them, and store the output of
-$tx_1$ for free.} \knote{Initially it was $\gamma \cdot S(state) \cdot (\sum{L([coin_{created}])} - \sum{L([coin_{spent}])})$, so the fee could be negative, but newly created coins are living for finite time nevertheless} The obvious problems here are: What are the guiding principles
+$tx_1$ for free.} \knote{Initially it was $S(state) \cdot (\sum{B(coin_{created})*L(coin_{created})} - \sum{B(coin_{created})*L(coin_{spent})})$, so the fee could be negative, but newly created coins are living for finite time nevertheless} The obvious problems here are: What are the guiding principles
 for choosing $\alpha$, $\beta$ and $S$? How to arrange the charging for state
 spacetime consumption, if transaction contains no information on when the
 outputs will be spent? We address these problems in the following sections.
