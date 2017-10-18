@@ -53,7 +53,7 @@
 
 \title{On Space-Scarce Economy\\ In Blockchain Systems}
 
-\author{Alexander Chepurnoy \and Vasily Kharin \and Dmitry Meshkov}
+%\author{Alexander Chepurnoy \and Vasily Kharin \and Dmitry Meshkov}
 %\institute{IOHK Research}
 \maketitle
 
@@ -68,13 +68,13 @@ to security issues, such as denial-of-service attacks. Only technical solutions,
 not economic, have been proposed to tackle this problem to the moment. In
 contrast, we propose to add a new component to a transaction fee scheme based on
 how much additional space will be needed for new objects created in result of
-transaction processing and for how long they will live in the state. We provide
-three possible options towards implementing the new fee component, namely
+transaction processing and for how long they will live in the state. \knote{write abt fee adjustment rule} 
+We provide three possible options towards implementing the new fee component, namely
 \textit{prepaid outputs}, \textit{postpaid outputs} and \textit{scheduled
 payments}. We provide an analysis of the model with respect to all the three
 options. We show that the state growth could be bounded by a fee factor, miners
 are getting additional stable rewards and lost coins are being taken back into
-circulation eventually.    
+circulation eventually.    \knote{check this}
 
 \end{abstract}
 
@@ -157,6 +157,8 @@ concerns should be addressed. Also, there is an increasing demand to use a
 blockchain as a data storage, and storing permanently objects in the state
 without a cleaning procedure is not a viable option.
 
+\subsection{Our contribution}
+
 We propose an economic solution to the problem of unreasonable state growth
 (such as spam attacks, or objects not being using anymore but still living in
 the blockchain). The solution is a new mandatory fee component. We state that a
@@ -167,6 +169,8 @@ month. We provide a possibility for miners to control their storage requirements
 by changing a fee factor. Later in this paper we will refer to this new fee
 component as to a {\em space-time fee}.
 
+\knote{write abt fee adjustment rule}
+
 Proposed fee regime is promoting money circulation in the blockchain economy.
 The limited lifetime of a state element also leads to lost coins being taken
 back into circulation~(supposedly by miners). 
@@ -175,49 +179,20 @@ Summarizing, we study an economy where quick-access storage of a node in a
 massively-replicated system becomes the most scarce system resource eventually.
 Thus we call such an economy a {\em space-scarce economy}.
 
-\subsection{Assumptions}
-Here we provide assumptions our model is based on:
-
-\begin{itemize}
-  \item{} all the fees for a block are going to a single miner like in Bitcoin.
-      There are proposals to share the rewards for a block within a group of
-      miners, for example in~\cite{eyal2016bitcoin,kogias2016enhancing}, and
-      they are out of scope of the paper.
-  \item{} a state is a set of unspent outputs. An output is not modifiable so
-      can be only created and then spent at whole. 
-  \item{} an output is protected by a spending condition which is defined as a
-      logical formula. Predicates in the formula can refer to properties of a
-      blockchain (for example, its current height available via variable
-      $Height$), spending transaction $tx$ and the output $out$ itself. We
-      assume that it is possible to compare two scripts, and also it is possible
-      to determine whether the spending transaction contains an output with a
-      given property. For example, $tx.has\_output(script = out.script)$
-      evaluates to true if the spending transaction contains an output with the
-      same script as the output has. Note that Bitcoin Script is too limited to
-      support scripts comparison as well as using the spending transaction and
-      the output to spend in a spending condition.
-  \item{} for simplicity, we assume that a block is of a finite size but all the
-      transactions a miner has at a moment of block generation can be packed
-      into it, if otherwise is not stated explicitly.
-  \item{} time is measured via \textit{height} which is a number of blocks since
-      an initial block~(a genesis block) till a block of interest. 
-  \item{} all anyone-can-spend outputs are collected by miners immediately as
-      they appear.
-  \item{} we are considering minimal mandatory fees in the paper. All the nodes
-      are checking that a fee paid by a transaction is not less than a minimum
-      and rejecting the whole block if it contains a transaction violating fee
-      rules. Thus a fee regime is considered as a part of consensus protocol in
-      our work. A user can pay more than the minimum to have a higher priority
-      for a transaction of interest.   
-\end{itemize}
-
 \subsection{Structure of the paper}
 
+\knote{todo: write}
 %The paper is organized as follows. A design of our new fee component is
 %provided in Section~\ref{sec:model}. The model then is analyzed in
 %Section~\ref{sec:analysis}. In Section~\ref{sec:rel-work} we observe related
 %work, and in Section~\ref{sec:further-work} we shape a plan for further
 %research.
+
+\section{Preliminaries}
+
+In order to simplify analysis, we fix following assumptions: 
+
+
 
 \section{Algorithm of the fee assignment}
 In spite of the problems and the possible solution outlined in the introduction,
@@ -434,6 +409,10 @@ pay-as-you-go?}
     \caption{Transaction cost as a function of output existence time.\label{fig:max_t}}
 \end{figure}
 
+\section{Scheduled Payments}
+
+\section{Evaluation}
+
 \bibliographystyle{elsarticle-num}
 \bibliography{sources.bib}
 
@@ -486,7 +465,44 @@ miners get from current submissions is $y(t) = p(x(t))f(x(t))$.
 \subsection{Constant storage price}
 \subsection{State-dependent storage price}
 
-\knote{Scheduled Payments}
+
+\knote{to remove totally?}
+
+\section{Assumptions}
+Here we provide assumptions our model is based on:
+
+\begin{itemize}
+  \item{} all the fees for a block are going to a single miner like in Bitcoin.
+      There are proposals to share the rewards for a block within a group of
+      miners, for example in~\cite{eyal2016bitcoin,kogias2016enhancing}, and
+      they are out of scope of the paper.
+  \item{} a state is a set of unspent outputs. An output is not modifiable so
+      can be only created and then spent at whole. 
+  \item{} an output is protected by a spending condition which is defined as a
+      logical formula. Predicates in the formula can refer to properties of a
+      blockchain (for example, its current height available via variable
+      $Height$), spending transaction $tx$ and the output $out$ itself. We
+      assume that it is possible to compare two scripts, and also it is possible
+      to determine whether the spending transaction contains an output with a
+      given property. For example, $tx.has\_output(script = out.script)$
+      evaluates to true if the spending transaction contains an output with the
+      same script as the output has. Note that Bitcoin Script is too limited to
+      support scripts comparison as well as using the spending transaction and
+      the output to spend in a spending condition.
+  \item{} for simplicity, we assume that a block is of a finite size but all the
+      transactions a miner has at a moment of block generation can be packed
+      into it, if otherwise is not stated explicitly.
+  \item{} time is measured via \textit{height} which is a number of blocks since
+      an initial block~(a genesis block) till a block of interest. 
+  \item{} all anyone-can-spend outputs are collected by miners immediately as
+      they appear.
+  \item{} we are considering minimal mandatory fees in the paper. All the nodes
+      are checking that a fee paid by a transaction is not less than a minimum
+      and rejecting the whole block if it contains a transaction violating fee
+      rules. Thus a fee regime is considered as a part of consensus protocol in
+      our work. A user can pay more than the minimum to have a higher priority
+      for a transaction of interest.   
+\end{itemize}
 
 
 
