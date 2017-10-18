@@ -247,7 +247,7 @@ transaction is being stored in the state. \vk{Oops. Do we mean now that if the
     transaction frees the space in the state, the corresponding output can be
 stored forever? If yes, it cancels vast part of the reasoning: I create $tx_0$ with
 two outputs; in the next block $tx_1$ merging them, and store the output of
-$tx_1$ for free.} The obvious problems here are: What are the guiding principles
+$tx_1$ for free.} \knote{Initially it was $\gamma \cdot S(state) \cdot (\sum{L([coin_{created}])} - \sum{L([coin_{spent}])}), so the fee could be negative, but newly created coins are living for finite time nevertheless$} The obvious problems here are: What are the guiding principles
 for choosing $\alpha$, $\beta$ and $S$? How to arrange the charging for state
 spacetime consumption, if transaction contains no information on when the
 outputs will be spent? We address these problems in the following sections.
@@ -292,7 +292,7 @@ caveats. For example, once the state is kept (almost) full by the participants,
 it can be (almost) impossible to submit the transaction increasing the state size.
 The time till it becomes possible is hardly predictable. 
 
-Preferrable properties of the current state size could be formulated as follows:
+Preferable properties of the current state size could be formulated as follows:
 it should be predictable, stable, and below some externally given value (upper
 restriction on state size, being unique for the whole network). 
 
@@ -345,7 +345,7 @@ to use the difference? What if it is negative?}.
 \end{figure} 
 
 Note that the pricing curve is defined by a small number of parameters and
-fixed the same for all the network. To impose the upper restriction on the state
+to be the same for all the network. To impose the upper restriction on the state
 size one can choose the pricing curve formally going to infinity at some finite
 state size. One can also try to estimate the optimal state size for a given
 differentiable pricing curve. In the continual with the assumptions
