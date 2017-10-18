@@ -281,6 +281,8 @@ network.}
 
 \subsection{Choice of $S(tx)$}
 
+\knote{Why S(tx), not S(state, tx)? }
+
 The simplest way of assigning the value of $S(tx)$ is by making it proportional to
 the amount of data to be written into the state. That is, specifying the price
 of storage of 1 byte of data per one day. However, as it is shown in the
@@ -313,10 +315,13 @@ miners get nothing; and infinite price -- zero data submission -- miners get
 nothing. As usual, the maximal outcome is between.  The pricing policies
 described above are two particular cases of pricing curve (see
 Fig.~\ref{fig:steps}). The values of $S(tx)$ and $p(x)$ are connected via
+
+\knote{definitions of $y$ and $p()$ are missed}
 \begin{equation}
     S(tx)=\int_x^{x+\Delta(tx)}p(y)\,dy\,,
     \label{eq:Sp}
 \end{equation}
+
 where $x$ is the current state load, $\Delta(tx)$ is the change of the state
 size by transaction $tx$. \vk{How to order transactions in the block? Is it Ok
 to use the difference? What if it is negative?}.
