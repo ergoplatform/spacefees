@@ -236,13 +236,13 @@ incorporate all the three of components above. We propose to charge for a compon
 for script execution, and all the others by the network load. The last sentence can be formalized in its simplest form as follows:
 \begin{equation}
     \operatorname{Fee}(tx) = \max(\alpha \cdot N_b(tx), \beta \cdot N_c(tx),
-    S(state,tx) \cdot L[tx])\,.
+    S(state,tx) \cdot T[tx])\,.
     \label{eq:max}
 \end{equation}
 Here $\alpha$ and $\beta$ are the pricing coefficients, $N_b$ is the
 number of bytes in the transaction, which defines the network load, $N_c(tx)$ is
 the estimate of the computational cost of transaction, $S(state,tx)$ is the cost of
-the storage of outputs in the state for the unit of time, $L([tx])$ is the time which
+the storage of outputs in the state for the unit of time, $T([tx])$ is the time which
 transaction is being stored in the state. \vk{Oops. Do we mean now that if the
     transaction frees the space in the state, the corresponding output can be
 stored forever? If yes, it cancels vast part of the reasoning: I create $tx_0$ with
@@ -257,21 +257,19 @@ for the Turing--complete languages, however solvable with the restrictions on th
 language\vk{citations, which restrictions, or stick to one existing}. We leave
 it beyond the scope of the paper.
 
-\subsection{Choice of the relative values of $\alpha$, $\beta$, $S(tx)$}
+\subsection{Choice of the relative values of $\alpha$, $\beta$, $S(state,tx)$}
 
 Assume for now, that for every transaction we know the time the outputs will be
-stored in the state $L[tx]$. We will overcome this difficulty later. Based on
+stored in the state $T[tx]$. We will overcome this difficulty later. Based on
 Eq.~\eqref{eq:max}, we come up with the notion of space of transactions, which
 is three--dimensional in our case --- every transaction is defined by three
-numbers: $N_b(tx)$, $N_c(tx)$, $N_s(tx) = S(tx)L[tx]$. Eq.~\eqref{eq:max} provides a
+numbers: $N_b(tx)$, $N_c(tx)$, $N_s(tx) = S(tx)T[tx]$. Eq.~\eqref{eq:max} provides a
 prescription of splitting this space into three regions: network--oriented
 transactions, space--oriented transactions, and computation--oriented
 transactions (see Fig.~\ref{fig:max}). All the splitting is governed by the
 direction of vector $\vec{n}$ definig the line $\alpha N_b=\beta N_c=N_s$.
 Varying the coefficients $\alpha$ and $\beta$, one can change the direction of
-$\vec{n}$ adjusting the formal fee prescription to the sensible values.\vk{It
-    would be good and convincing to get some actual data from the existing
-network.}
+$\vec{n}$ adjusting the formal fee prescription to the sensible values.
 \begin{figure}
     \center
     \includestandalone[width=\textwidth]{figures/max_est}
@@ -279,20 +277,18 @@ network.}
         Eq.~\eqref{eq:max} into the subregions of the dominant fees.\label{fig:max}}
 \end{figure}
 
-\subsection{Choice of $S(tx)$}
+\subsection{Choice of $S(state,tx)$}
 
-\knote{Why S(tx), not S(state, tx)? }
-
-The simplest way of assigning the value of $S(tx)$ is by making it proportional to
-the amount of data to be written into the state. That is, specifying the price
-of storage of 1 byte of data per one day. However, as it is shown in the
-Appendix, this does not fully solve the problem of limiting the state size. What
-is being controlled in this case, is the rate at which the data is being
-submitted, but not the state size itself. One could also manually define the
-maximal volume of the state for the network. This solution, in turn, has its own
-caveats. For example, once the state is kept (almost) full by the participants,
-it can be (almost) impossible to submit the transaction increasing the state size.
-The time till it becomes possible is hardly predictable. 
+The simplest way of assigning the value of $S(state,tx)$ is by making it
+proportional to the amount of data to be written into the state. That is,
+specifying the price of storage of 1 byte of data per one day. However, as it is
+shown in the Appendix, this does not fully solve the problem of limiting the
+state size. What is being controlled in this case, is the rate at which the data
+is being submitted, but not the state size itself. One could also manually
+define the maximal volume of the state for the network. This solution, in turn,
+has its own caveats. For example, once the state is kept (almost) full by the
+participants, it can be (almost) impossible to submit the transaction increasing
+the state size.  The time till it becomes possible is hardly predictable. 
 
 Preferable properties of the current state size could be formulated as follows:
 it should be predictable, stable, and below some externally given value (upper
@@ -314,17 +310,15 @@ optimization parameter. Extreme cases are zero price -- huge data submission --
 miners get nothing; and infinite price -- zero data submission -- miners get
 nothing. As usual, the maximal outcome is between.  The pricing policies
 described above are two particular cases of pricing curve (see
-Fig.~\ref{fig:steps}). The values of $S(tx)$ and $p(x)$ are connected via
-
-\knote{definitions of $y$ and $p()$ are missed}
+Fig.~\ref{fig:steps}). That is, we assumed that the price of data storage in the
+state $p(x)$ varies with the current state load $x$. The values of $S(state,tx)$
+and $p(x)$ in the continual limit are connected via
 \begin{equation}
-    S(tx)=\int_x^{x+\Delta(tx)}p(y)\,dy\,,
+    S(state,tx)=\int_x^{x+\Delta(tx)}p(y)\,dy\,,
     \label{eq:Sp}
 \end{equation}
-
 where $x$ is the current state load, $\Delta(tx)$ is the change of the state
-size by transaction $tx$. \vk{How to order transactions in the block? Is it Ok
-to use the difference? What if it is negative?}.
+size by transaction $tx$.
 \begin{figure} 
     \hfill 
     \begin{tikzpicture} 
@@ -406,8 +400,7 @@ where $\eta=x_{max}/x_d$,$\Delta p=p^*-p_{min}$. Note that the logarithmic
 divergence guards the upper size limit.
 
 \subsection{Unknown storage time}
-\vk{Here --- Dima's idea as we discussed it in Moscow. Q: postpaid, or
-pay-as-you-go?}
+\vk{Here --- Dima's idea as we discussed it in Moscow.}
 \begin{figure}
     \center
     \includestandalone[width=\textwidth]{figures/subsid}
