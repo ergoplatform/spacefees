@@ -51,7 +51,9 @@
 
 \begin{document}
 
-\title{On Space-Scarce Economy\\ In Blockchain Systems}
+\title{Coins With Data: When Computer Memory Becomes a Scarce Resource}
+
+%\title{On Space-Scarce Economy\\ In Blockchain Systems}
 
 %\author{Alexander Chepurnoy \and Vasily Kharin \and Dmitry Meshkov}
 %\institute{IOHK Research}
@@ -190,8 +192,14 @@ Thus we call such an economy a {\em space-scarce economy}.
 
 \section{Preliminaries}
 
-In order to simplify analysis, we fix following assumptions: 
-
+We shape our model with the following assumptions: 
+\begin{itemize}
+  \item{} all the fees for a block are going to just a miner like in Bitcoin.
+      There are proposals to share the rewards for a block within a group of
+      miners, for example in~\cite{eyal2016bitcoin,kogias2016enhancing}, and
+      they are out of scope of the paper. A notable difference is that if a single
+      is taking all the rewards, she can include her own transactions in it for free. 
+\end{itemize}
 
 
 \section{Algorithm of the fee assignment}
@@ -416,17 +424,23 @@ pay-as-you-go?}
 
 \section{Scheduled Payments}
 
-If the user do not move the coins before this, then anyone~(presumably, a miner) can create a transaction claiming this output, returning all the coins back to the owner except of a space-time fee ${K \cdot B \cdot D_{s}}$. A spending script for the output would be like:
+In this section we propose a concrete way to charge for space consumed. There are few possible options. An user may, for example, to specify lifetime for a coin during its creation and pay in advance, but it is not very convenient for her. Another option is to charge when coins are being spent, or allow to spend a coin when its value is overweighted by space-time fee. As a drawback, if coin is associated with a big amount of tokens, it could live for very long. We propose more convenient method of charging, namely scheduled payments. 
+
+\knote{``We assume that $\alpha$ and $\beta$ are fixed''}
+
+In this scheme, \knote{How can a user set $sT$?}
+
+If an user do not move the coins before this, then anyone~(presumably, a miner) can create a transaction claiming this output, returning all the coins back to the owner except of a space-time fee ${K \cdot B \cdot T}$. A spending script for the output would be like:
 
 \begin{align}
 \begin{split}
 &(regular\_script) \lor \\
-&(Height > (out.height + D_s) \land (out.value \le K \cdot B \cdot D_s \lor \\  
-&\qquad tx.has\_output(value = out.value - K \cdot B \cdot D_s, script = out.script)))
+&(Height > (out.height + sT + T) \land (out.value \le K \cdot B \cdot T \lor \\  
+&\qquad tx.has\_output(value = out.value - K \cdot B \cdot T, script = out.script)))
 \end{split}
 \end{align}
 
-In this model $D_s$ is another protocol parameter which may be fixed by a protocol design or changed via miners voting like \textit{K}.
+In this model $T$ is another protocol parameter which may be fixed by a protocol design or changed via miners voting like \textit{K}.
 
 
 \section{Evaluation}
