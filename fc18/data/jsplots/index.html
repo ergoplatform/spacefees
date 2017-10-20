@@ -1,0 +1,42 @@
+<head>
+    <script src="plotly-latest.min.js"></script>
+    <div id="myDiv" style="width:600px;height:600px;"></div>
+    <script>
+        Plotly.d3.csv("http://localhost:9000//data_cut.csv", function(err, rows){
+            function unpack(rows, key) {
+                return rows.map(function(row)
+                    { return row[key]; });}
+
+            var tr1 = {
+                x:unpack(rows, 'bytes'), y: unpack(rows, 'sstoreBytes'), z: unpack(rows, 'gasUsed'),
+                mode: 'markers',
+                marker: {
+                    size: 3,
+                    line: {
+                        color: 'rgba(217, 217, 217, 0.14)',
+                        width: 0.2},
+                    opacity: 0.8},
+                type: 'scatter3d'
+            };
+
+            var data = [tr1]
+            var layout = {margin: {
+                l: 20,
+                r: 20,
+                b: 20,
+                t: 20
+            },
+                xaxis:{
+                    title: 'bytes',
+                },
+                yaxis:{
+                    title: 'sstoreBytes',
+                },
+                zaxis:{
+                    title: 'gasUsed',
+                }
+            };
+            Plotly.newPlot('myDiv', data, layout);
+        });
+    </script>
+</head>
