@@ -418,13 +418,13 @@ divergence guards the upper size limit.
 
 \section{Scheduled Payments}
 
-In this section we propose a concrete way to charge for state bytes consumed~(or released). There are few possible options for that. A user, for example, may specify lifetime for a coin during its creation and pay for it in advance, this is not very convenient for him though. Another option is to charge when coins are being spent, or allow to spend a coin~(by anyone, presumably, a miner) when its value is overweighted by space-time fee. As a drawback, if coin is associated with a big amount of tokens, it could live for very long, maybe without a reason. We propose more convenient method of charging, namely scheduled payments. 
+In this section we propose a concrete way to charge for state bytes consumed~(or released). There are few possible options for that. A user, for example, may specify lifetime for a coin during its creation and pay for it in advance, this is not very convenient for him though. Another option is to charge when coins are being spent, or allow to spend a coin~(by anyone, presumably, a miner) when its value is overweighted by space-time fee. As a drawback, if coin is associated with a big amount of tokens, it could live for very long, maybe without a reason. 
 
 \knote{``We assume that $\alpha$ and $\beta$ are fixed''}
 
 \knote{How can a user set $sT$?}
 
-In this scheme, a user must set special predefined script for a coin~(otherwise the transaction and also a block containing it are invalid), which contains a user-specific logic~(we call it regular script) and a spending condition which allows anyone~(presumably, a miner) to create a transaction claiming this output, returning all the coins back to the owner except of a space-time fee ${K \cdot B \cdot T}$. These two parts are connected by using $\lor$ conjecture. A spending script for the output would be like:
+We propose more convenient method of charging; we name it {\em scheduled payments}. In this scheme a user must set special predefined script for a coin~(otherwise a transaction and also a block containing it are invalid), which contains a user-specific logic~(we call it {\em regular script}) and a spending condition which allows anyone~(presumably, a miner) to create a transaction claiming this output, necessarily creating a the coin with the same guarding condition and a value not less than original minus a space-time fee. These two parts~(regular script and a fee) are connected by using $\lor$ conjecture. A spending script for the output would be like:
 
 \begin{align}
 \begin{split}
