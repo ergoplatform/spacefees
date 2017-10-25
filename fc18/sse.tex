@@ -199,7 +199,8 @@ We shape our model with the following assumptions:
       There are proposals to share the rewards for a block within a group of
       miners, for example in~\cite{eyal2016bitcoin,kogias2016enhancing}, and
       they are out of scope of the paper. A notable difference is that if a single miner
-      is taking all the rewards, he can include his own transactions in it for free. 
+      is taking all the rewards, he can include his own transactions in it for free.
+  \item{} We assume that a transaction does not change size of a validation state significantly.
 \end{itemize}
 
 
@@ -242,15 +243,15 @@ needed for synchronization.
 
 As stated in the intro, a transaction fee is an anti-overload tool. Thus a transaction fee should 
 incorporate all the three of components above. We propose to charge for a component which processing demands more resources. That is,  storage-oriented transactions should be charged for storage consumption, the computation-oriented transactions should be charged
-for script execution, and all the others by the network load. The last sentence can be formalized in its simplest form as follows:
+for script execution, and all the others by the network load. This can be formalized as follows:
 \begin{equation}
     \operatorname{Fee}(tx) = \max(\alpha \cdot N_b(tx), \beta \cdot N_c(tx),
-    S(state,tx) \cdot T[tx])\,.
+    S(state) \cdot T[tx])\,.
     \label{eq:max}
 \end{equation}
 Here $\alpha$ and $\beta$ are the pricing coefficients, $N_b$ is the
 number of bytes in the transaction, which defines the network load, $N_c(tx)$ is
-the estimate of the computational cost of transaction, $S(state,tx)$ is the cost of
+the estimate of the computational cost of transaction, $S(state)$ is the cost of
 the storage of outputs in the state for the unit of time, $T([tx])$ is the time which
 transaction is being stored in the state. \vk{Oops. Do we mean now that if the
     transaction frees the space in the state, the corresponding output can be
@@ -266,13 +267,13 @@ for the Turing--complete languages, however solvable with the restrictions on th
 language\vk{citations, which restrictions, or stick to one existing}. We leave
 it beyond the scope of the paper.
 
-\subsection{Choice of the relative values of $\alpha$, $\beta$, $S(state,tx)$}
+\subsection{Choice of the relative values of $\alpha$, $\beta$, $S(state)$}
 
 Assume for now, that for every transaction we know the time the outputs will be
 stored in the state $T[tx]$. We will overcome this difficulty later. Based on
 Eq.~\eqref{eq:max}, we come up with the notion of space of transactions, which
 is three--dimensional in our case --- every transaction is defined by three
-numbers: $N_b(tx)$, $N_c(tx)$, $N_s(tx) = S(tx)T[tx]$. Eq.~\eqref{eq:max} provides a
+numbers: $N_b(tx)$, $N_c(tx)$, $N_s(state,tx) = S(state)T[tx]$. Eq.~\eqref{eq:max} provides a
 prescription of splitting this space into three regions: network--oriented
 transactions, space--oriented transactions, and computation--oriented
 transactions (see Fig.~\ref{fig:max}). All the splitting is governed by the
@@ -286,9 +287,9 @@ $\vec{n}$ adjusting the formal fee prescription to the sensible values.
         Eq.~\eqref{eq:max} into the subregions of the dominant fees.\label{fig:max}}
 \end{figure}
 
-\subsection{Choice of $S(state,tx)$}
+\subsection{Choice of $S(state)$}
 
-The simplest way of assigning the value of $S(state,tx)$ is by making it
+The simplest way of assigning the value of $S(state)$ is by making it
 proportional to the amount of data to be written into the state. That is,
 specifying the price of storage of 1 byte of data per one day. However, as it is
 shown in the Appendix, this does not fully solve the problem of limiting the
@@ -320,10 +321,10 @@ miners get nothing; and infinite price -- zero data submission -- miners get
 nothing. As usual, the maximal outcome is between.  The pricing policies
 described above are two particular cases of pricing curve (see
 Fig.~\ref{fig:steps}). That is, we assumed that the price of data storage in the
-state $p(x)$ varies with the current state load $x$. The values of $S(state,tx)$
+state $p(x)$ varies with the current state load $x$. The values of $S(state)$
 and $p(x)$ in the continual limit are connected via
 \begin{equation}
-    S(state,tx)=\int_x^{x+\Delta(tx)}p(y)\,dy\,,
+    S(state)=\int_x^{x+\Delta(tx)}p(y)\,dy\,,
     \label{eq:Sp}
 \end{equation}
 where $x$ is the current state load, $\Delta(tx)$ is the change of the state
