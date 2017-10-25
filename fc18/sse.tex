@@ -420,22 +420,17 @@ divergence guards the upper size limit.
 
 In this section we propose a concrete way to charge for state bytes consumed~(or released). There are few possible options for that. A user, for example, may specify lifetime for a coin during its creation and pay for it in advance, this is not very convenient for him though. Another option is to charge when coins are being spent, or allow to spend a coin~(by anyone, presumably, a miner) when its value is overweighted by space-time fee. As a drawback, if coin is associated with a big amount of tokens, it could live for very long, maybe without a reason. 
 
-\knote{``We assume that $\alpha$ and $\beta$ are fixed''}
-
-\knote{How can a user set $sT$?}
-
-We propose more convenient method of charging; we name it {\em scheduled payments}. In this scheme a user must set special predefined script for a coin~(otherwise a transaction and also a block containing it are invalid), which contains a user-specific logic~(we call it {\em regular script}) and a spending condition which allows anyone~(presumably, a miner) to create a transaction claiming this output, necessarily creating a the coin with the same guarding condition and a value not less than original minus a space-time fee. These two parts~(regular script and a fee) are connected by using $\lor$ conjecture. A spending script for the output would be like:
+We propose more convenient method of charging; we name it {\em scheduled payments}. In this scheme a user must set special predefined script for a coin~(otherwise a transaction and also a block containing it are invalid), which contains a user-specific logic~(we call it {\em regular script}) and a spending condition which allows anyone~(presumably, a miner) to create a transaction claiming this output, necessarily creating a the coin with the same guarding condition and a value not less than original minus a space-time fee. These two parts~(regular script and a fee charging condition) are connected by using the $\lor$ conjecture. We assume that $\alpha$ and $\beta$ are fixed. We also assume that subsidized period $sT$ is to be stored along with the coin by each validating node. \knote{notation, link to fig. 4}  Then a guarding script for the coin would be like:
 
 \begin{align}
 \begin{split}
 &(regular\_script) \lor \\
-&(Height > (out.height + sT + T) \land (out.value \le K \cdot B \cdot T \lor \\  
-&\qquad tx.has\_output(value = out.value - K \cdot B \cdot T, script = out.script)))
+&(Height > (out.height + sT) \land (out.value \le K \cdot B \cdot sT \lor \\  
+&\qquad tx.has\_output(value = out.value - K \cdot B \cdot sT, script = out.script)))
 \end{split}
 \end{align}
 
-In this model $T$ is another protocol parameter which may be fixed by a protocol design or changed via miners voting like \textit{K}.
-
+\knote{notation}
 
 \section{Evaluation}
 
