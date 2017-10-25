@@ -182,9 +182,10 @@ massively-replicated system becomes the most scarce system resource eventually.
 Thus we call such an economy a {\em space-scarce economy}.
 
 \subsection{Structure of the paper}
+The paper is organized as follows.
 
 \knote{todo: write}
-%The paper is organized as follows. A design of our new fee component is
+%A design of our new fee component is
 %provided in Section~\ref{sec:model}. The model then is analyzed in
 %Section~\ref{sec:analysis}. In Section~\ref{sec:rel-work} we observe related
 %work, and in Section~\ref{sec:further-work} we shape a plan for further
@@ -198,7 +199,7 @@ We shape our model with the following assumptions:
       There are proposals to share the rewards for a block within a group of
       miners, for example in~\cite{eyal2016bitcoin,kogias2016enhancing}, and
       they are out of scope of the paper. A notable difference is that if a single
-      is taking all the rewards, she can include her own transactions in it for free. 
+      is taking all the rewards, he can include his own transactions in it for free. 
 \end{itemize}
 
 
@@ -417,13 +418,13 @@ divergence guards the upper size limit.
 
 \section{Scheduled Payments}
 
-In this section we propose a concrete way to charge for space consumed. There are few possible options. An user may, for example, to specify lifetime for a coin during its creation and pay in advance, but it is not very convenient for her. Another option is to charge when coins are being spent, or allow to spend a coin when its value is overweighted by space-time fee. As a drawback, if coin is associated with a big amount of tokens, it could live for very long. We propose more convenient method of charging, namely scheduled payments. 
+In this section we propose a concrete way to charge for state bytes consumed~(or released). There are few possible options for that. A user, for example, may specify lifetime for a coin during its creation and pay for it in advance, this is not very convenient for him though. Another option is to charge when coins are being spent, or allow to spend a coin~(by anyone, presumably, a miner) when its value is overweighted by space-time fee. As a drawback, if coin is associated with a big amount of tokens, it could live for very long, maybe without a reason. We propose more convenient method of charging, namely scheduled payments. 
 
 \knote{``We assume that $\alpha$ and $\beta$ are fixed''}
 
-In this scheme, \knote{How can a user set $sT$?}
+\knote{How can a user set $sT$?}
 
-If an user do not move the coins before this, then anyone~(presumably, a miner) can create a transaction claiming this output, returning all the coins back to the owner except of a space-time fee ${K \cdot B \cdot T}$. A spending script for the output would be like:
+In this scheme, a user must set special predefined script for a coin~(otherwise the transaction and also a block containing it are invalid), which contains a user-specific logic~(we call it regular script) and a spending condition which allows anyone~(presumably, a miner) to create a transaction claiming this output, returning all the coins back to the owner except of a space-time fee ${K \cdot B \cdot T}$. These two parts are connected by using $\lor$ conjecture. A spending script for the output would be like:
 
 \begin{align}
 \begin{split}
