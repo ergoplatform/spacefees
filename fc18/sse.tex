@@ -200,19 +200,19 @@ We shape our model with the following assumptions:
       miners, for example in~\cite{eyal2016bitcoin,kogias2016enhancing}, and
       they are out of scope of the paper. A notable difference is that if a single miner
       is taking all the rewards, he can include his own transactions in it for free.
-  \item{} We assume that a transaction does not change size of a validation state significantly.
+  \item{} we assume that a transaction does not change size of a validation state significantly.
 \end{itemize}
 
 
 \section{Algorithm of the fee assignment}
 
-In spite of the problems and the possible solution outlined in the introduction,
-the essential element of the space-scarce economy is the method of assigning the
-fee to every transaction in a sensible way. In this chapter we reason about the guiding 
-principles for the fee assignment, and end up with the example of a practical fee assignment rule.
+As mentioned in the introduction, we develop rules a fee regime having two goals in mind, namely incentivization of miners and
+spam prevention.
+%In spite of the problems and the possible solution outlined in the introduction,the essential element of the space-scarce economy 
+%is the method of assigning the fee to every transaction in a sensible way.
+In this chapter we reason about the guiding  principles for the fee assignment, and end up with the example of a practical fee assignment rule.
 
-The evolution of the blockchain networks has demonstrated the main obstacles for
-the system to be truly distributed in the real world. First and the most
+The evolution of the blockchain networks has demonstrated the main bottlenecks in resources being used. First and the most
 important so far, the storage capacity of the nodes is limited. In particular, it
 becomes more costly with time to run a node on a desktop hardware in a system 
 where the full blockchain is needed for the operation \vk{more details}.
