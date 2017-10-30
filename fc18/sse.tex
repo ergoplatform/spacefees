@@ -299,7 +299,7 @@ specifying the price of storage of 1 byte of data per one day. However, as it is
 shown in the Appendix~\ref{apx:statesize}, this does not fully solve the problem of limiting the
 state size. What is being controlled in this case, that is the rate at which the data
 is being submitted, but not the state size itself. One could also manually
-define the maximal volume of the state for the network. This solution, in turn,
+define the maximal size of the state for the network. This solution, in turn,
 has its own caveats. For example, once the state is kept (almost) full by the
 participants, it can be (almost) impossible to submit the transaction increasing
 the state size.  The time till it becomes possible is hardly predictable. 
@@ -322,7 +322,7 @@ equilibrium of the state size; the minimal dependence on initial conditions (if
 possible), and high rewards for miners. The latter could serve as good
 optimization parameter. Extreme cases are zero price -- huge data submission --
 miners get nothing; and infinite price -- zero data submission -- miners get
-nothing. As usual, the maximal outcome is between.  The pricing policies
+nothing. As usual, a maximal outcome is in between.  The pricing policies
 described above are two particular cases of pricing curve (see
 Fig.~\ref{fig:steps}). That is, we assume that the price of data storage in the
 state $p(x)$ varies with the current state load $x$. The values of $S(state)$
@@ -365,13 +365,13 @@ differentiable pricing curve. In the continual with the assumptions
 described in the appendix, the data submission rate $N(p(x))$ is fully defined by the
 current storage price $p(x)$.  Rewards rate obtained by the miners for stable
 state size at price $p$ is given by $y = p \cdot N(p)$. An example is provided at
-Fig.~\ref{fig:rewards} First, it provides a possible method of measuring
+Fig.~\ref{fig:rewards}. First, it provides a possible method of measuring
 explicit form of the function $N(p)$ in the model: one has to set up the price,
 and observe the static rewards. Second, one may wonder about the price $p^*$,
 optimal for the miners in terms of rewards. Obviously, it satisfies
 $N(p^*)+p^*N'(p^*)=0$, where prime is derivative with respect to price. As
 usual, the optimal price here does not depend on the pricing policy, but rather
-the implicit property of the network.  Having the price varying freely can be
+the implicit property of the network. \knote{what does the last sentence mean?}  Having the price varying freely can be
 considered beneficial both for miners and for network as a whole, since it
 allows the first ones to optimize signing strategy, and with this given the
 state size is automatically adjusted to the relatively predictable level
