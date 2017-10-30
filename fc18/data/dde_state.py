@@ -17,11 +17,12 @@ class DDE_state:
         self.N = np.vectorize(N)
         self.f = np.vectorize(lambda x: self.N(self.p(x)))
 
-    def evolve(self,ts,xs):
+    def evolve(self,ts,xs,noize=0.1):
         f = self.f
         xs_old = interp1d(ts,xs,fill_value=(xs[0],xs[-1]),bounds_error=False)
+        ys_rand = interp1d(ts,noize*(np.random.rand(len(xs)) - 0.5),fill_value=0.,bounds_error=False)
         def rhs(t,x):
-            return [f(x[0])-f(xs_old(t))]
+            return [f(x[0])-f(xs_old(t))+ys_rand(t)]
         r = ode(rhs).set_integrator('vode', method='bdf')
         r.set_initial_value([xs[-1]],ts[0])
         res = [xs[-1]]+[ r.integrate(t)[0] for t in ts[1:]]
@@ -36,14 +37,14 @@ class DDE_state:
         res = [0]+[ r.integrate(t)[0] for t in ts[1:]]
         return res
 
-    def evolve_n(self,ts,x0s,Nmax):
+    def evolve_n(self,ts,x0s,Nmax,noize=0.1):
         f = self.f
         inds = np.arange(Nmax)
         res = [x0s]
         for i in inds:
-            res.append(self.evolve(ts,res[-1]))
+            res.append(self.evolve(ts,res[-1],noize))
         return res
 
-    def consistent_evolve(self,ts,Nmax):
+    def consistent_evolve(self,ts,Nmax,noize=0.1):
         x0s = self.consistent_x0s(ts)
-        return self.evolve_n(ts,x0s,Nmax)
+        return self.evolve_n(ts,x0s,Nmax,noize)
