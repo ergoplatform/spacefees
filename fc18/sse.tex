@@ -51,7 +51,7 @@
 
 \begin{document}
 
-\title{Coins With Data: When Computer Memory Becomes a Scarce Resource}
+\title{A Comprehensive Approach To Cryptocurrency Fees}
 
 %\title{On Space-Scarce Economy\\ In Blockchain Systems}
 
@@ -71,10 +71,12 @@ not economic, have been proposed to tackle this problem to the moment. In
 contrast, we propose to add a new component to a transaction fee scheme based on
 how much additional space will be needed for new objects created in result of
 transaction processing and for how long they will live in the state. \knote{write abt fee adjustment rule} 
-We provide three possible options towards implementing the new fee component, namely
-\textit{prepaid outputs}, \textit{postpaid outputs} and \textit{scheduled
-payments}. We provide an analysis of the model with respect to all the three
-options. We show that the state growth could be bounded by a fee factor, miners
+%We provide three possible options towards implementing the new fee component, namely
+%\textit{prepaid outputs}, \textit{postpaid outputs} and \textit{scheduled
+%payments}. We provide an analysis of the model with respect to all the three
+%options.
+\knote{rewrite further} 
+ We show that the state growth could be bounded by a fee factor, miners
 are getting additional stable rewards and lost coins are being taken back into
 circulation eventually.    \knote{check this}
 
@@ -182,9 +184,8 @@ massively-replicated system becomes the most scarce system resource eventually.
 Thus we call such an economy a {\em space-scarce economy}.
 
 \subsection{Structure of the paper}
-The paper is organized as follows.
+The paper is organized as follows. We put assumptions behind our model and its analysis into Section~\ref{sec:preliminaries}. Then we provide an algorithm for the fee assignment in Section~\ref{sec:algorithm}. \knote{todo: finish}
 
-\knote{todo: write}
 %A design of our new fee component is
 %provided in Section~\ref{sec:model}. The model then is analyzed in
 %Section~\ref{sec:analysis}. In Section~\ref{sec:rel-work} we observe related
@@ -192,27 +193,40 @@ The paper is organized as follows.
 %research.
 
 \section{Preliminaries}
+\label{sec:preliminaries}
 
 We shape our model with the following assumptions: 
 \begin{itemize}
   \item{} all the fees for a block are going to just a miner like in Bitcoin.
       There are proposals to share the rewards for a block within a group of
       miners, for example in~\cite{eyal2016bitcoin,kogias2016enhancing}, and
-      they are out of scope of the paper. A notable difference is that if a single
-      is taking all the rewards, he can include his own transactions in it for free. 
+      they are out of scope of the paper. A notable difference is that if a single miner
+      is taking all the rewards, he can include his own transactions in it for free
+  \item{} we assume that a transaction does not change size of a validation state significantly
+  \item{} for an implementation, we assume that validation state in in the form of unspent transaction outputs set, like in Bitcoin
+  \item{} for simplicity, we assume that a block is of a finite size but all the
+      transactions a miner has at a moment of block generation can be packed
+      into it, if otherwise is not stated explicitly
+  \item{} we are considering minimal mandatory fees in the paper. All the nodes
+      are checking that a fee paid by a transaction is not less than a minimum
+      and rejecting the whole block if it contains a transaction violating fee
+      rules. Thus a fee regime is considered as a part of consensus protocol in
+      our work. A user can pay more than the minimum to have a higher priority
+      for a transaction of interest
 \end{itemize}
 
 
-\section{Algorithm of the fee assignment}
+\section{An algorithm for the fee assignment}
+\label{sec:algorithm}
 
-In spite of the problems and the possible solution outlined in the introduction,
-the essential element of the space-scarce economy is the method of assigning the
-fee to every transaction in a sensible way. In this chapter we reason about the guiding 
-principles for the fee assignment, and end up with the example of a practical fee assignment rule.
+As mentioned in the introduction, we develop rules a fee regime having two goals in mind, namely incentivization of miners and
+spam prevention.
+%In spite of the problems and the possible solution outlined in the introduction,the essential element of the space-scarce economy 
+%is the method of assigning the fee to every transaction in a sensible way.
+In this chapter we reason about the guiding  principles for the fee assignment, and end up with the example of a practical fee assignment rule.
 
-The evolution of the blockchain networks has demonstrated the main obstacles for
-the system to be truly distributed in the real world. First and the most
-important so far, the storage capacity of the nodes is limited. In particular, it
+The evolution of the blockchain networks has demonstrated the main resources being used. 
+First and the most important so far, the storage capacity of the nodes is limited. In particular, it
 becomes more costly with time to run a node on a desktop hardware in a system 
 where the full blockchain is needed for the operation \vk{more details}.
 Elegant solutions have already been found for this problems in recent years
@@ -222,12 +236,12 @@ However, the part of this problem remains, as a possibility of flooding
 the state with a long list of UTXO, which are never spent. This also has a side
 economical effects, since coins from lost (accidentally or intentionally) UTXO's
 are never returned to the circulation, and it becomes important if the total
-amount of coins is unchanged.
+amount of coins fixed.
 
 Second, it becomes obvious, especially with the development of smart contracts,
 that a transaction ``cost'' for the node can be more than just a storage:
 transactions can contain relatively complicated scripts which are meant to be
-executed by the nodes, providing additional overhead. The extreme and most
+executed by all the nodes in the network. The extreme and most
 famous example is the Ethereum network with the concept of the ``World
 Computer''. %As we are trying to provide the economical solution for
 %decentralization up to the pocket device scale (at least up to the smartphones),
@@ -235,48 +249,50 @@ Computer''. %As we are trying to provide the economical solution for
 
 Third, there is the network load created by every transaction. If
 an output is created in one block and spent right in the next one, it provides
-almost zero overhead in terms of storage, but creates the network load
+almost zero overhead in terms of validation state size, but creates the network load
 needed for synchronization.
 
 \knote{refer here to a fee as a security measure concepts in the intro?}
 
-As stated in the intro, a transaction fee is an anti-overload tool. Thus a transaction fee should 
-incorporate all the three of components above. We propose to charge for a component which processing demands more resources. That is,  storage-oriented transactions should be charged for storage consumption, the computation-oriented transactions should be charged
-for script execution, and all the others by the network load. The last sentence can be formalized in its simplest form as follows:
+A transaction fee should incorporate all the three of components above. We propose to charge 
+for a component which demands more resources. That is, storage-oriented transactions should be 
+charged for storage consumption, the computation-oriented transactions should be charged for 
+script execution, and all the others by the network load. This can be formalized as follows:
 \begin{equation}
     \operatorname{Fee}(tx) = \max(\alpha \cdot N_b(tx), \beta \cdot N_c(tx),
-    S(state,tx) \cdot T[tx])\,.
+    S(state) \cdot T[tx])\,.
     \label{eq:max}
 \end{equation}
-Here $\alpha$ and $\beta$ are the pricing coefficients, $N_b$ is the
+Here $\alpha$ and $\beta$ are the pricing coefficients, $N_b(tx)$ is the
 number of bytes in the transaction, which defines the network load, $N_c(tx)$ is
-the estimate of the computational cost of transaction, $S(state,tx)$ is the cost of
+the estimate of the computational cost of transaction, $S(state)$ is the cost of
 the storage of outputs in the state for the unit of time, $T([tx])$ is the time which
 transaction is being stored in the state. \vk{Oops. Do we mean now that if the
     transaction frees the space in the state, the corresponding output can be
 stored forever? If yes, it cancels vast part of the reasoning: I create $tx_0$ with
 two outputs; in the next block $tx_1$ merging them, and store the output of
-$tx_1$ for free.} \knote{Initially it was $S(state) \cdot (\sum{B(coin_{created})*L(coin_{created})} - \sum{B(coin_{created})*L(coin_{spent})})$, so the fee could be negative, but newly created coins are living for finite time nevertheless} The obvious problems here are: What are the guiding principles
-for choosing $\alpha$, $\beta$ and $S$? How to arrange the charging for state
-spacetime consumption, if transaction contains no information on when the
-outputs will be spent? We address these problems in the following sections.
-There is also the problem of estimating $N_c(tx)$, which is extremely hard \vk{or
+$tx_1$ for free.} \knote{Initially it was $S(state) \cdot (\sum{B(coin_{created})*L(coin_{created})} - \sum{B(coin_{created})*L(coin_{spent})})$, so the fee could be negative, but newly created coins are living for finite time nevertheless} 
+
+The obvious questions here are as follows. What are the guiding principles for 
+choosing $\alpha$, $\beta$ and $S(\cdot)$? How to arrange the charging for state
+space-time \knote{was this term introduced before?} consumption, if transaction contains no information on when the
+outputs will be spent? There is also the question of estimating $N_c(tx)$, which is extremely hard \vk{or
 unsolvable?} \vk{How hard, does anybody know the specific name of this problem?}
 for the Turing--complete languages, however solvable with the restrictions on the
 language\vk{citations, which restrictions, or stick to one existing}. We leave
-it beyond the scope of the paper.
+the last question beyond the scope of the paper, and answer affirmatively for the first two question further in this paper.
 
-\subsection{Choice of the relative values of $\alpha$, $\beta$, $S(state,tx)$}
+\subsection{Choice of the relative values of $\alpha$, $\beta$, $S(state)$}
 
 Assume for now, that for every transaction we know the time the outputs will be
 stored in the state $T[tx]$. We will overcome this difficulty later. Based on
 Eq.~\eqref{eq:max}, we come up with the notion of space of transactions, which
 is three--dimensional in our case --- every transaction is defined by three
-numbers: $N_b(tx)$, $N_c(tx)$, $N_s(tx) = S(tx)T[tx]$. Eq.~\eqref{eq:max} provides a
+numbers: $N_b(tx)$, $N_c(tx)$, $N_s(state,tx) = S(state)T[tx]$. Eq.~\eqref{eq:max} provides a
 prescription of splitting this space into three regions: network--oriented
 transactions, space--oriented transactions, and computation--oriented
 transactions (see Fig.~\ref{fig:max}). All the splitting is governed by the
-direction of vector $\vec{n}$ definig the line $\alpha N_b=\beta N_c=N_s$.
+direction of vector $\vec{n}$ which defines the line $\alpha N_b=\beta N_c=N_s$.
 Varying the coefficients $\alpha$ and $\beta$, one can change the direction of
 $\vec{n}$ adjusting the formal fee prescription to the sensible values.
 \begin{figure}
@@ -286,15 +302,15 @@ $\vec{n}$ adjusting the formal fee prescription to the sensible values.
         Eq.~\eqref{eq:max} into the subregions of the dominant fees.\label{fig:max}}
 \end{figure}
 
-\subsection{Choice of $S(state,tx)$}
+\subsection{Choice of $S(state)$}
 
-The simplest way of assigning the value of $S(state,tx)$ is by making it
+The simplest way of assigning the value of $S(state)$ is by making it
 proportional to the amount of data to be written into the state. That is,
 specifying the price of storage of 1 byte of data per one day. However, as it is
-shown in the Appendix, this does not fully solve the problem of limiting the
-state size. What is being controlled in this case, is the rate at which the data
+shown in the Appendix~\ref{apx:statesize}, this does not fully solve the problem of limiting the
+state size. What is being controlled in this case, that is the rate at which the data
 is being submitted, but not the state size itself. One could also manually
-define the maximal volume of the state for the network. This solution, in turn,
+define the maximal size of the state for the network. This solution, in turn,
 has its own caveats. For example, once the state is kept (almost) full by the
 participants, it can be (almost) impossible to submit the transaction increasing
 the state size.  The time till it becomes possible is hardly predictable. 
@@ -317,13 +333,13 @@ equilibrium of the state size; the minimal dependence on initial conditions (if
 possible), and high rewards for miners. The latter could serve as good
 optimization parameter. Extreme cases are zero price -- huge data submission --
 miners get nothing; and infinite price -- zero data submission -- miners get
-nothing. As usual, the maximal outcome is between.  The pricing policies
+nothing. As usual, a maximal outcome is in between.  The pricing policies
 described above are two particular cases of pricing curve (see
-Fig.~\ref{fig:steps}). That is, we assumed that the price of data storage in the
-state $p(x)$ varies with the current state load $x$. The values of $S(state,tx)$
+Fig.~\ref{fig:steps}). That is, we assume that the price of data storage in the
+state $p(x)$ varies with the current state load $x$. The values of $S(state)$
 and $p(x)$ in the continual limit are connected via
 \begin{equation}
-    S(state,tx)=\int_x^{x+\Delta(tx)}p(y)\,dy\,,
+    S(state)=\int_x^{x+\Delta(tx)}p(y)\,dy\,,
     \label{eq:Sp}
 \end{equation}
 where $x$ is the current state load, $\Delta(tx)$ is the change of the state
@@ -359,14 +375,14 @@ state size. One can also try to estimate the optimal state size for a given
 differentiable pricing curve. In the continual with the assumptions
 described in the appendix, the data submission rate $N(p(x))$ is fully defined by the
 current storage price $p(x)$.  Rewards rate obtained by the miners for stable
-state size at price $p$ is given by $y=pN(p)$. Example is provided at
-Fig.~\ref{fig:rewards} First, it provides a possible method of measuring
+state size at price $p$ is given by $y = p \cdot N(p)$. An example is provided at
+Fig.~\ref{fig:rewards}. First, it provides a possible method of measuring
 explicit form of the function $N(p)$ in the model: one has to set up the price,
 and observe the static rewards. Second, one may wonder about the price $p^*$,
 optimal for the miners in terms of rewards. Obviously, it satisfies
 $N(p^*)+p^*N'(p^*)=0$, where prime is derivative with respect to price. As
 usual, the optimal price here does not depend on the pricing policy, but rather
-the implicit property of the network.  Having the price varying freely can be
+the implicit property of the network. \knote{what does the last sentence mean?}  Having the price varying freely can be
 considered beneficial both for miners and for network as a whole, since it
 allows the first ones to optimize signing strategy, and with this given the
 state size is automatically adjusted to the relatively predictable level
@@ -379,11 +395,11 @@ $p^{-1}(p^*)$.
     }
 \end{figure}
 
-\subsection{Example of pricing curve}
+\subsection{An example of a pricing curve}
 From what was said above, the conclusion is that two values are particularly
 important for the model: maximal state size, and optimal price. In order to
 preserve the limitation on the stored amount of data, one can let the storage price go to infinity
-faster than $1/x$ moving closer to the limiting size. On the other side, there
+faster than $1/x$ moving closer to the limiting size. \knote{what does the last sentence mean?} On the other side, there
 may be some intermediate ``preferred'' size of the state $x_d$. This, in turn,
 can be matched to the optimal price. One may also wish to introduce the lower
 bound on the storage price $p_{min}$. Taking these values it is easy to
@@ -425,12 +441,12 @@ We propose more convenient method of charging; we name it {\em scheduled payment
 \begin{align}
 \begin{split}
 &(regular\_script) \lor \\
-&(Height > (out.height + sT) \land (out.value \le K \cdot B \cdot sT \lor \\  
-&\qquad tx.has\_output(value = out.value - K \cdot B \cdot sT, script = out.script)))
+&(Height > (out.height + sT) \land (out.value \le S(state) \cdot B \cdot sT \lor \\  
+&\qquad tx.has\_output(value = out.value - S(state) \cdot B \cdot sT, script = out.script)))
 \end{split}
 \end{align}
 
-\knote{notation}
+\knote{notation: B, sT}
 
 \section{Evaluation}
 
@@ -438,8 +454,10 @@ We propose more convenient method of charging; we name it {\em scheduled payment
 \bibliography{sources.bib}
 
 \appendix
+
 \section{State size dynamics}
-For the primary analysis assume that participants act honestly: they submit
+\label{apx:statesize}
+For the primary analysis we assume that participants act honestly: they submit
 data if they need to do so and it is affordable; they do not in the opposite
 case. For the sake of simplicity, suppose that the time of storage of data
 block is fixed, and equal to $T$. In order to reduce the discrete stochastic
@@ -485,47 +503,5 @@ miners get from current submissions is $y(t) = p(x(t))f(x(t))$.
 
 \subsection{Constant storage price}
 \subsection{State-dependent storage price}
-
-
-\knote{to remove totally?}
-
-\section{Assumptions}
-Here we provide assumptions our model is based on:
-
-\begin{itemize}
-  \item{} all the fees for a block are going to a single miner like in Bitcoin.
-      There are proposals to share the rewards for a block within a group of
-      miners, for example in~\cite{eyal2016bitcoin,kogias2016enhancing}, and
-      they are out of scope of the paper.
-  \item{} a state is a set of unspent outputs. An output is not modifiable so
-      can be only created and then spent at whole. 
-  \item{} an output is protected by a spending condition which is defined as a
-      logical formula. Predicates in the formula can refer to properties of a
-      blockchain (for example, its current height available via variable
-      $Height$), spending transaction $tx$ and the output $out$ itself. We
-      assume that it is possible to compare two scripts, and also it is possible
-      to determine whether the spending transaction contains an output with a
-      given property. For example, $tx.has\_output(script = out.script)$
-      evaluates to true if the spending transaction contains an output with the
-      same script as the output has. Note that Bitcoin Script is too limited to
-      support scripts comparison as well as using the spending transaction and
-      the output to spend in a spending condition.
-  \item{} for simplicity, we assume that a block is of a finite size but all the
-      transactions a miner has at a moment of block generation can be packed
-      into it, if otherwise is not stated explicitly.
-  \item{} time is measured via \textit{height} which is a number of blocks since
-      an initial block~(a genesis block) till a block of interest. 
-  \item{} all anyone-can-spend outputs are collected by miners immediately as
-      they appear.
-  \item{} we are considering minimal mandatory fees in the paper. All the nodes
-      are checking that a fee paid by a transaction is not less than a minimum
-      and rejecting the whole block if it contains a transaction violating fee
-      rules. Thus a fee regime is considered as a part of consensus protocol in
-      our work. A user can pay more than the minimum to have a higher priority
-      for a transaction of interest.   
-\end{itemize}
-
-
-
 
 \end{document}
