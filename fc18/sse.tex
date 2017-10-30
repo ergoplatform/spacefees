@@ -297,7 +297,7 @@ The simplest way of assigning the value of $S(state)$ is by making it
 proportional to the amount of data to be written into the state. That is,
 specifying the price of storage of 1 byte of data per one day. However, as it is
 shown in the Appendix~\ref{apx:statesize}, this does not fully solve the problem of limiting the
-state size. What is being controlled in this case, is the rate at which the data
+state size. What is being controlled in this case, that is the rate at which the data
 is being submitted, but not the state size itself. One could also manually
 define the maximal volume of the state for the network. This solution, in turn,
 has its own caveats. For example, once the state is kept (almost) full by the
@@ -324,7 +324,7 @@ optimization parameter. Extreme cases are zero price -- huge data submission --
 miners get nothing; and infinite price -- zero data submission -- miners get
 nothing. As usual, the maximal outcome is between.  The pricing policies
 described above are two particular cases of pricing curve (see
-Fig.~\ref{fig:steps}). That is, we assumed that the price of data storage in the
+Fig.~\ref{fig:steps}). That is, we assume that the price of data storage in the
 state $p(x)$ varies with the current state load $x$. The values of $S(state)$
 and $p(x)$ in the continual limit are connected via
 \begin{equation}
@@ -364,7 +364,7 @@ state size. One can also try to estimate the optimal state size for a given
 differentiable pricing curve. In the continual with the assumptions
 described in the appendix, the data submission rate $N(p(x))$ is fully defined by the
 current storage price $p(x)$.  Rewards rate obtained by the miners for stable
-state size at price $p$ is given by $y=pN(p)$. Example is provided at
+state size at price $p$ is given by $y = p \cdot N(p)$. An example is provided at
 Fig.~\ref{fig:rewards} First, it provides a possible method of measuring
 explicit form of the function $N(p)$ in the model: one has to set up the price,
 and observe the static rewards. Second, one may wonder about the price $p^*$,
@@ -443,8 +443,9 @@ We propose more convenient method of charging; we name it {\em scheduled payment
 \bibliography{sources.bib}
 
 \appendix
-\label{apx:statesize}
+
 \section{State size dynamics}
+\label{apx:statesize}
 For the primary analysis assume that participants act honestly: they submit
 data if they need to do so and it is affordable; they do not in the opposite
 case. For the sake of simplicity, suppose that the time of storage of data
