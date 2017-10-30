@@ -281,7 +281,7 @@ numbers: $N_b(tx)$, $N_c(tx)$, $N_s(state,tx) = S(state)T[tx]$. Eq.~\eqref{eq:ma
 prescription of splitting this space into three regions: network--oriented
 transactions, space--oriented transactions, and computation--oriented
 transactions (see Fig.~\ref{fig:max}). All the splitting is governed by the
-direction of vector $\vec{n}$ definig the line $\alpha N_b=\beta N_c=N_s$.
+direction of vector $\vec{n}$ which defines the line $\alpha N_b=\beta N_c=N_s$.
 Varying the coefficients $\alpha$ and $\beta$, one can change the direction of
 $\vec{n}$ adjusting the formal fee prescription to the sensible values.
 \begin{figure}
@@ -296,7 +296,7 @@ $\vec{n}$ adjusting the formal fee prescription to the sensible values.
 The simplest way of assigning the value of $S(state)$ is by making it
 proportional to the amount of data to be written into the state. That is,
 specifying the price of storage of 1 byte of data per one day. However, as it is
-shown in the Appendix, this does not fully solve the problem of limiting the
+shown in the Appendix~\ref{apx:statesize}, this does not fully solve the problem of limiting the
 state size. What is being controlled in this case, is the rate at which the data
 is being submitted, but not the state size itself. One could also manually
 define the maximal volume of the state for the network. This solution, in turn,
@@ -443,6 +443,7 @@ We propose more convenient method of charging; we name it {\em scheduled payment
 \bibliography{sources.bib}
 
 \appendix
+\label{apx:statesize}
 \section{State size dynamics}
 For the primary analysis assume that participants act honestly: they submit
 data if they need to do so and it is affordable; they do not in the opposite
