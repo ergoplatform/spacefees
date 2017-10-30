@@ -199,9 +199,18 @@ We shape our model with the following assumptions:
       There are proposals to share the rewards for a block within a group of
       miners, for example in~\cite{eyal2016bitcoin,kogias2016enhancing}, and
       they are out of scope of the paper. A notable difference is that if a single miner
-      is taking all the rewards, he can include his own transactions in it for free.
-  \item{} we assume that a transaction does not change size of a validation state significantly.
-  \knote{add more assumptions?}
+      is taking all the rewards, he can include his own transactions in it for free
+  \item{} we assume that a transaction does not change size of a validation state significantly
+  \item{} for an implementation, we assume that validation state in in the form of unspent transaction outputs set, like in Bitcoin
+  \item{} for simplicity, we assume that a block is of a finite size but all the
+      transactions a miner has at a moment of block generation can be packed
+      into it, if otherwise is not stated explicitly
+  \item{} we are considering minimal mandatory fees in the paper. All the nodes
+      are checking that a fee paid by a transaction is not less than a minimum
+      and rejecting the whole block if it contains a transaction violating fee
+      rules. Thus a fee regime is considered as a part of consensus protocol in
+      our work. A user can pay more than the minimum to have a higher priority
+      for a transaction of interest
 \end{itemize}
 
 
@@ -384,11 +393,11 @@ $p^{-1}(p^*)$.
     }
 \end{figure}
 
-\subsection{Example of pricing curve}
+\subsection{An example of a pricing curve}
 From what was said above, the conclusion is that two values are particularly
 important for the model: maximal state size, and optimal price. In order to
 preserve the limitation on the stored amount of data, one can let the storage price go to infinity
-faster than $1/x$ moving closer to the limiting size. On the other side, there
+faster than $1/x$ moving closer to the limiting size. \knote{what does the last sentence mean?} On the other side, there
 may be some intermediate ``preferred'' size of the state $x_d$. This, in turn,
 can be matched to the optimal price. One may also wish to introduce the lower
 bound on the storage price $p_{min}$. Taking these values it is easy to
@@ -430,12 +439,12 @@ We propose more convenient method of charging; we name it {\em scheduled payment
 \begin{align}
 \begin{split}
 &(regular\_script) \lor \\
-&(Height > (out.height + sT) \land (out.value \le K \cdot B \cdot sT \lor \\  
-&\qquad tx.has\_output(value = out.value - K \cdot B \cdot sT, script = out.script)))
+&(Height > (out.height + sT) \land (out.value \le S(state) \cdot B \cdot sT \lor \\  
+&\qquad tx.has\_output(value = out.value - S(state) \cdot B \cdot sT, script = out.script)))
 \end{split}
 \end{align}
 
-\knote{notation: K, B, sT}
+\knote{notation: B, sT}
 
 \section{Evaluation}
 
@@ -446,7 +455,7 @@ We propose more convenient method of charging; we name it {\em scheduled payment
 
 \section{State size dynamics}
 \label{apx:statesize}
-For the primary analysis assume that participants act honestly: they submit
+For the primary analysis we assume that participants act honestly: they submit
 data if they need to do so and it is affordable; they do not in the opposite
 case. For the sake of simplicity, suppose that the time of storage of data
 block is fixed, and equal to $T$. In order to reduce the discrete stochastic
@@ -492,47 +501,5 @@ miners get from current submissions is $y(t) = p(x(t))f(x(t))$.
 
 \subsection{Constant storage price}
 \subsection{State-dependent storage price}
-
-
-\knote{to remove totally?}
-
-\section{Assumptions}
-Here we provide assumptions our model is based on:
-
-\begin{itemize}
-  \item{} all the fees for a block are going to a single miner like in Bitcoin.
-      There are proposals to share the rewards for a block within a group of
-      miners, for example in~\cite{eyal2016bitcoin,kogias2016enhancing}, and
-      they are out of scope of the paper.
-  \item{} a state is a set of unspent outputs. An output is not modifiable so
-      can be only created and then spent at whole. 
-  \item{} an output is protected by a spending condition which is defined as a
-      logical formula. Predicates in the formula can refer to properties of a
-      blockchain (for example, its current height available via variable
-      $Height$), spending transaction $tx$ and the output $out$ itself. We
-      assume that it is possible to compare two scripts, and also it is possible
-      to determine whether the spending transaction contains an output with a
-      given property. For example, $tx.has\_output(script = out.script)$
-      evaluates to true if the spending transaction contains an output with the
-      same script as the output has. Note that Bitcoin Script is too limited to
-      support scripts comparison as well as using the spending transaction and
-      the output to spend in a spending condition.
-  \item{} for simplicity, we assume that a block is of a finite size but all the
-      transactions a miner has at a moment of block generation can be packed
-      into it, if otherwise is not stated explicitly.
-  \item{} time is measured via \textit{height} which is a number of blocks since
-      an initial block~(a genesis block) till a block of interest. 
-  \item{} all anyone-can-spend outputs are collected by miners immediately as
-      they appear.
-  \item{} we are considering minimal mandatory fees in the paper. All the nodes
-      are checking that a fee paid by a transaction is not less than a minimum
-      and rejecting the whole block if it contains a transaction violating fee
-      rules. Thus a fee regime is considered as a part of consensus protocol in
-      our work. A user can pay more than the minimum to have a higher priority
-      for a transaction of interest.   
-\end{itemize}
-
-
-
 
 \end{document}
