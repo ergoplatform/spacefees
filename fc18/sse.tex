@@ -316,16 +316,16 @@ $\vec{n}$ adjusting the formal fee prescription to the sensible values.
 
 \subsection{Choice of $S(state)$}
 
-The simplest way of assigning the value of $S(state)$ is by making it
-proportional to the amount of data to be written into the state. That is,
-specifying the price of storage of 1 byte of data per one day. However, as it is
-shown in the Appendix~\ref{apx:statesize}, this does not fully solve the problem of limiting the
-state size. What is being controlled in this case, that is the rate at which the data
-is being submitted, but not the state size itself. One could also manually
-define the maximal size of the state for the network. This solution, in turn,
-has its own caveats. For example, once the state is kept (almost) full by the
-participants, it can be (almost) impossible to submit the transaction increasing
-the state size.  The time till it becomes possible is hardly predictable. 
+The simplest way of assigning the value of $S(state)$ is by making it constant.
+That is, specifying the price of storage of 1 byte of data per one day. However,
+as it is shown in the Appendix~\ref{apx:statesize}, this does not fully solve
+the problem of limiting the state size. What is being controlled in this case,
+that is the rate at which the data is being submitted, but not the state size
+itself. One could also manually define the maximal size of the state for the
+network. This solution, in turn, has its own caveats. For example, once the
+state is kept (almost) full by the participants, it can be (almost) impossible
+to submit the transaction increasing the state size.  The time till it becomes
+possible is hardly predictable. 
 
 Preferable properties of the current state size could be formulated as follows:
 it should be predictable, stable, and below some externally given value (upper
@@ -485,14 +485,17 @@ The equations of this type are called delay differential equations (DDE), and ha
 been studied widely for the vast amount of control problems.
 
 Now few words about the function $f$, and how to convert it to the miner's
-income. What participants know is the pricing curve $p(x)$. For every value $P$
-of this function there is amount of people $N(P)$ who want to submit data and
-can afford it at time interval $T$. The function $N(P)$ is non-increasing, and
-going to zero for sufficiently large $P$ (every participant has maximal price he
+income. What participants know is the pricing curve $S(x)$. For every value $P$
+of this function there is amount of people $N(S)$ who want to submit data and
+can afford it at time interval $T$. The function $N(S)$ is non-increasing, and
+going to zero for sufficiently large $S$ (every participant has maximal price he
 is ready to pay, and will also try to submit something if current price is
 lower; for sufficiently large price no one is ready to pay). In these notations
-$f(x)=N(p(x))$ (see inset on Fig.~\ref{fig:rewards}), and the profit rate which
-miners get from current submissions is $y(t) = p(x(t))f(x(t))$.
+$f(x)=N(S(x))$ (see inset on Fig.~\ref{fig:rewards}), and the profit rate which
+miners get from current submissions is $y(t) = S(x(t))f(x(t))$.
+
+\subsection{Constant storage price}
+\subsection{State-dependent storage price}
 \begin{figure}
     \includestandalone[width=\textwidth]{figures/dynamics}
     \caption{
@@ -501,8 +504,5 @@ miners get from current submissions is $y(t) = p(x(t))f(x(t))$.
         respect to maximal possible stationary rewards.
     }
 \end{figure}
-
-\subsection{Constant storage price}
-\subsection{State-dependent storage price}
 
 \end{document}
