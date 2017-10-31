@@ -39,7 +39,7 @@
                 axis background/.style={fill=white},
                 xmin=0,xmax=2,
                 ymin=0,ymax=1.2,
-                xlabel=price $p$,
+                xlabel=price $S$,
             ylabel=spending ability $N$]
             \addplot[smooth, red, very thick] table [x index=0, y index=1]{ns.txt};
         \end{axis}
@@ -65,7 +65,7 @@
                 ymin=0,ymax=5.2,
                 axis y line*=right,
                 axis x line=none,
-            ylabel={\color{blue}pricing curve $p(x)$}]
+            ylabel={\color{blue}pricing curve $S(x)$}]
             \addplot[smooth, blue,very thick] table [x index=0, y index=1]{ps.txt};
         \end{axis}
     \end{tikzpicture}

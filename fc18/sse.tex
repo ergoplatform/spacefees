@@ -3,6 +3,7 @@
 \usepackage{color}
 \usepackage{graphicx}
 \graphicspath{{./figures/}}
+\usepackage{subcaption}
 %% The amssymb package provides various useful mathematical symbols
 \usepackage{amssymb}
 \usepackage{standalone}
@@ -219,68 +220,85 @@ We shape our model with the following assumptions:
 \section{An algorithm for the fee assignment}
 \label{sec:algorithm}
 
-As mentioned in the introduction, we develop rules a fee regime having two goals in mind, namely incentivization of miners and
-spam prevention.
-%In spite of the problems and the possible solution outlined in the introduction,the essential element of the space-scarce economy 
-%is the method of assigning the fee to every transaction in a sensible way.
-In this chapter we reason about the guiding  principles for the fee assignment, and end up with the example of a practical fee assignment rule.
+As mentioned in the introduction, we develop rules a fee regime having two goals
+in mind, namely incentivization of miners and spam prevention.  In this chapter
+we reason about the guiding  principles for the fee assignment, and end up with
+the example of a practical fee assignment rule.
 
-The evolution of the blockchain networks has demonstrated the main resources being used. 
-First and the most important so far, the storage capacity of the nodes is limited. In particular, it
-becomes more costly with time to run a node on a desktop hardware in a system 
-where the full blockchain is needed for the operation \vk{more details}.
-Elegant solutions have already been found for this problems in recent years
-\vk{citations}, consisting in practical unnecessity of storing the blockchain
-itself, but rather parts of header chain, and the state described above.
-However, the part of this problem remains, as a possibility of flooding
-the state with a long list of UTXO, which are never spent. This also has a side
-economical effects, since coins from lost (accidentally or intentionally) UTXO's
-are never returned to the circulation, and it becomes important if the total
-amount of coins fixed.
+The evolution of the blockchain networks has demonstrated the main resources
+being used.  First and the most important so far, the storage capacity of the
+nodes is limited. In particular, it becomes more costly with time to run a node
+on a desktop hardware in a system where the full blockchain is needed for the
+operation \vk{more details}.  Elegant solutions have already been found for this
+problems in recent years \vk{citations}, consisting in practical unnecessity of
+storing the blockchain itself, but rather parts of header chain, and the state
+described above.  However, the part of this problem remains, as a possibility of
+flooding the state with a long list of UTXO, which are never spent. This also
+has a side economical effects, since coins from lost (accidentally or
+intentionally) UTXO's are never returned to the circulation, and it becomes
+important if the total amount of coins fixed.
 
 Second, it becomes obvious, especially with the development of smart contracts,
 that a transaction ``cost'' for the node can be more than just a storage:
 transactions can contain relatively complicated scripts which are meant to be
-executed by all the nodes in the network. The extreme and most
-famous example is the Ethereum network with the concept of the ``World
-Computer''. %As we are trying to provide the economical solution for
-%decentralization up to the pocket device scale (at least up to the smartphones),
-%the aspect of heavy calculations should be also taken into account.
+executed by all the nodes in the network. The extreme and most famous example is
+the Ethereum network with the concept of the ``World Computer''. 
 
-Third, there is the network load created by every transaction. If
-an output is created in one block and spent right in the next one, it provides
-almost zero overhead in terms of validation state size, but creates the network load
-needed for synchronization.
+Third, there is the network load created by every transaction. If an output is
+created in one block and spent right in the next one, it provides almost zero
+overhead in terms of validation state size, but creates the network load needed
+for synchronization.
 
 \knote{refer here to a fee as a security measure concepts in the intro?}
 
-A transaction fee should incorporate all the three of components above. We propose to charge 
-for a component which demands more resources. That is, storage-oriented transactions should be 
-charged for storage consumption, the computation-oriented transactions should be charged for 
-script execution, and all the others by the network load. This can be formalized as follows:
+A transaction fee should incorporate all the three of components above. We
+propose to charge for a component which demands more resources. That is,
+storage-oriented transactions should be charged for storage consumption, the
+computation-oriented transactions should be charged for script execution, and
+all the others by the network load. This can be formalized as follows:
 \begin{equation}
-    \operatorname{Fee}(tx) = \max(\alpha \cdot N_b(tx), \beta \cdot N_c(tx),
-    S(state) \cdot T[tx])\,.
+    \operatorname{Fee}(tx) = \max\left(\alpha \cdot N_b(tx), \beta \cdot N_c(tx),
+    S(state) \sum_i B_i\, sT_i\right)\,.
     \label{eq:max}
 \end{equation}
-Here $\alpha$ and $\beta$ are the pricing coefficients, $N_b(tx)$ is the
-number of bytes in the transaction, which defines the network load, $N_c(tx)$ is
-the estimate of the computational cost of transaction, $S(state)$ is the cost of
-the storage of outputs in the state for the unit of time, $T([tx])$ is the time which
-transaction is being stored in the state. \vk{Oops. Do we mean now that if the
-    transaction frees the space in the state, the corresponding output can be
-stored forever? If yes, it cancels vast part of the reasoning: I create $tx_0$ with
-two outputs; in the next block $tx_1$ merging them, and store the output of
-$tx_1$ for free.} \knote{Initially it was $S(state) \cdot (\sum{B(coin_{created})*L(coin_{created})} - \sum{B(coin_{created})*L(coin_{spent})})$, so the fee could be negative, but newly created coins are living for finite time nevertheless} 
+Here $\alpha$ and $\beta$ are the pricing coefficients, $N_b(tx)$ is the number
+of bytes in the transaction, which defines the network load, $N_c(tx)$ is the
+estimate of the computational cost of transaction, $S(state)$ is the cost of the
+storage of byte of output in the state for the unit of time, $sT_i$ is the time
+for which the output $i$ is being stored in the state, and $B_i$ is its size in
+bytes.
 
-The obvious questions here are as follows. What are the guiding principles for 
-choosing $\alpha$, $\beta$ and $S(\cdot)$? How to arrange the charging for state
-space-time \knote{was this term introduced before?} consumption, if transaction contains no information on when the
-outputs will be spent? There is also the question of estimating $N_c(tx)$, which is extremely hard \vk{or
-unsolvable?} \vk{How hard, does anybody know the specific name of this problem?}
-for the Turing--complete languages, however solvable with the restrictions on the
-language\vk{citations, which restrictions, or stick to one existing}. We leave
-the last question beyond the scope of the paper, and answer affirmatively for the first two question further in this paper.
+Since the time for the data to reside in  the state is initially unknown,
+the right hand side of Eq.~\eqref{eq:max} cannot be deduced directly at
+transaction submission time. For this purpose the scheduled payment is
+intorduced. As the output remains in the state for some time, the latter
+argument in Eq.~\eqref{eq:max} becomes dominant. Starting at this moment, the
+fee applies at a constant rate (see Fig.~\ref{fig:max_t}). The possible
+formal implementation of this algorithm is described in Section 4.
+\begin{figure}
+    \centering
+    \begin{subfigure}[b]{.45\textwidth}
+    \includestandalone[width=\textwidth]{figures/subsid}
+    \caption{Transaction cost as a function of the output existence time.
+        \newline
+        \label{fig:max_t}}
+    \end{subfigure}
+    ~
+    \begin{subfigure}[b]{.45\textwidth}
+        \includestandalone[width=\textwidth]{figures/max_est}
+        \caption{Space of transactions splitted by
+            Eq.~\eqref{eq:max} into the subregions of the dominant fees.
+            \label{fig:max}}
+        \end{subfigure}
+        \caption{Fee differentiation by resource consumption}
+\end{figure}
+
+The obvious questions here are as follows. What are the guiding principles for
+choosing $\alpha$, $\beta$ and $S(\cdot)$? There is also the
+question of estimating $N_c(tx)$, which can be solved only by executing the
+script for Turing--complete languages. It is known as the worst case execution
+time problem~\cite{Wilhelm2008}.  We leave the latter question beyond the scope of
+the paper, and answer the former below.
 
 \subsection{Choice of the relative values of $\alpha$, $\beta$, $S(state)$}
 
@@ -295,12 +313,6 @@ transactions (see Fig.~\ref{fig:max}). All the splitting is governed by the
 direction of vector $\vec{n}$ which defines the line $\alpha N_b=\beta N_c=N_s$.
 Varying the coefficients $\alpha$ and $\beta$, one can change the direction of
 $\vec{n}$ adjusting the formal fee prescription to the sensible values.
-\begin{figure}
-    \center
-    \includestandalone[width=\textwidth]{figures/max_est}
-    \caption{Space of transactions splitted by
-        Eq.~\eqref{eq:max} into the subregions of the dominant fees.\label{fig:max}}
-\end{figure}
 
 \subsection{Choice of $S(state)$}
 
@@ -336,25 +348,18 @@ miners get nothing; and infinite price -- zero data submission -- miners get
 nothing. As usual, a maximal outcome is in between.  The pricing policies
 described above are two particular cases of pricing curve (see
 Fig.~\ref{fig:steps}). That is, we assume that the price of data storage in the
-state $p(x)$ varies with the current state load $x$. The values of $S(state)$
-and $p(x)$ in the continual limit are connected via
-\begin{equation}
-    S(state)=\int_x^{x+\Delta(tx)}p(y)\,dy\,,
-    \label{eq:Sp}
-\end{equation}
-where $x$ is the current state load, $\Delta(tx)$ is the change of the state
-size by transaction $tx$.
+state $S(state)$ varies with the current state load $x$. 
 \begin{figure} 
     \hfill 
     \begin{tikzpicture} 
-        \draw[thick,-stealth] (0,0) -- (0,3) node [right]{$p(x)$}; 
+        \draw[thick,-stealth] (0,0) -- (0,3) node [right]{$S(state)$}; 
         \draw[thick,-stealth] (0,0) -- (5,0) node [above]{load}; 
         \draw[very thick] (0,0.3) -- (3,0.3) -- (3,3); 
         \draw[dotted] (3,1) -- (3,0) node[below]{$10$MB}; 
     \end{tikzpicture} 
     \hfill 
     \begin{tikzpicture} 
-        \draw[thick,-stealth] (0,0) -- (0,3) node [right]{$p(x)$}; 
+        \draw[thick,-stealth] (0,0) -- (0,3) node [right]{$S(state)$}; 
         \draw[thick,-stealth] (0,0) -- (5,0) node [above]{load}; 
         \draw[very thick] (0,0.3) -- (3,0.3) -- (3,2) -- (5,2); 
         \draw[dotted] (3,1) -- (3,0) node[below]{$10$MB}; 
@@ -371,69 +376,29 @@ size by transaction $tx$.
 Note that the pricing curve is defined by a small number of parameters and
 to be the same for all the network. To impose the upper restriction on the state
 size one can choose the pricing curve formally going to infinity at some finite
-state size. One can also try to estimate the optimal state size for a given
+state size. The rigid boundary can be provided by divergence higher than
+$1/(x_{max}-x)$. One can also try to estimate the optimal state size for a given
 differentiable pricing curve. In the continual with the assumptions
-described in the appendix, the data submission rate $N(p(x))$ is fully defined by the
-current storage price $p(x)$.  Rewards rate obtained by the miners for stable
-state size at price $p$ is given by $y = p \cdot N(p)$. An example is provided at
+described in the appendix, the data submission rate $N(S(x))$ is fully defined by the
+current storage price $S(x)$.  Rewards rate obtained by the miners for stable
+state size at price $S$ is given by $y = S \cdot N(S)$. An example is provided at
 Fig.~\ref{fig:rewards}. First, it provides a possible method of measuring
-explicit form of the function $N(p)$ in the model: one has to set up the price,
-and observe the static rewards. Second, one may wonder about the price $p^*$,
+explicit form of the function $N(S)$ in the model: one has to set up the price,
+and observe the static rewards. Second, one may wonder about the price $S^*$,
 optimal for the miners in terms of rewards. Obviously, it satisfies
-$N(p^*)+p^*N'(p^*)=0$, where prime is derivative with respect to price. As
+$N(S^*)+S^*N'(S^*)=0$, where prime is derivative with respect to price. As
 usual, the optimal price here does not depend on the pricing policy, but rather
 the implicit property of the network. \knote{what does the last sentence mean?}  Having the price varying freely can be
 considered beneficial both for miners and for network as a whole, since it
 allows the first ones to optimize signing strategy, and with this given the
 state size is automatically adjusted to the relatively predictable level
-$p^{-1}(p^*)$.
+$S^{-1}(S^*)$.
 
 \begin{figure}
     \includestandalone[width=\textwidth]{figures/rewards}
     \caption{
-        \label{fig:rewards} Rewards curve.
+        \label{fig:rewards} Example of the rewards curve.
     }
-\end{figure}
-
-\subsection{An example of a pricing curve}
-From what was said above, the conclusion is that two values are particularly
-important for the model: maximal state size, and optimal price. In order to
-preserve the limitation on the stored amount of data, one can let the storage price go to infinity
-faster than $1/x$ moving closer to the limiting size. \knote{what does the last sentence mean?} On the other side, there
-may be some intermediate ``preferred'' size of the state $x_d$. This, in turn,
-can be matched to the optimal price. One may also wish to introduce the lower
-bound on the storage price $p_{min}$. Taking these values it is easy to
-construct the function $p(x)$ with the desired properties. As an example,
-\begin{equation}
-    p(x) = p_{min}+(p^*-p_{min})\frac{x}{x_d}\frac{x_{max}-x_d}{x_{max}-x}\,,
-    \label{eq:sample_price}
-\end{equation}
-Another question is how one should deal with the chunks of data comparable to
-the state size. The logical way is to treat $p(x)$ as the differential property
-(which it actually is). So if the current state size is $x_0$, and the
-participant is willing to submit the data block of size $L$ for unit time, he is
-charged by the amount of $\int_{x_0}^{x_0+L}p(x)\,dx$. For the sample pricing
-curve it is
-\begin{equation}
-    P = L\left(p^*-\eta \Delta p \right)
-    -
-    \eta(\eta-1)\Delta p\, x_d
-    \log\left(1-\frac{L}{x_{max}-x_0}\right)\,,
-    \label{eq:sample_chunk}
-\end{equation}
-where $\eta=x_{max}/x_d$,$\Delta p=p^*-p_{min}$. Note that the logarithmic
-divergence guards the upper size limit.
-
-\subsection{Unknown storage time}
-
-Since the time for the data to reside in  the state is initially unknown,
-the right hand side of Eq.~\eqref{eq:max} cannot be deduced directly at
-transaction submission time. For this purpose the scheduled payment is
-intorduced as described below.
-\begin{figure}
-    \center
-    \includestandalone[width=.5\textwidth]{figures/subsid}
-    \caption{Transaction cost as a function of output existence time.\label{fig:max_t}}
 \end{figure}
 
 \section{Scheduled Payments}
