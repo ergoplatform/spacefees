@@ -347,15 +347,15 @@ size by transaction $tx$.
 \begin{figure} 
     \hfill 
     \begin{tikzpicture} 
-        \draw[->] (0,0) -- (0,3) node [right]{$p(x)$}; 
-        \draw[->] (0,0) -- (5,0) node [above]{load}; 
+        \draw[thick,-stealth] (0,0) -- (0,3) node [right]{$p(x)$}; 
+        \draw[thick,-stealth] (0,0) -- (5,0) node [above]{load}; 
         \draw[very thick] (0,0.3) -- (3,0.3) -- (3,3); 
         \draw[dotted] (3,1) -- (3,0) node[below]{$10$MB}; 
     \end{tikzpicture} 
     \hfill 
     \begin{tikzpicture} 
-        \draw[->] (0,0) -- (0,3) node [right]{$p(x)$}; 
-        \draw[->] (0,0) -- (5,0) node [above]{load}; 
+        \draw[thick,-stealth] (0,0) -- (0,3) node [right]{$p(x)$}; 
+        \draw[thick,-stealth] (0,0) -- (5,0) node [above]{load}; 
         \draw[very thick] (0,0.3) -- (3,0.3) -- (3,2) -- (5,2); 
         \draw[dotted] (3,1) -- (3,0) node[below]{$10$MB}; 
     \end{tikzpicture} 
@@ -425,10 +425,14 @@ where $\eta=x_{max}/x_d$,$\Delta p=p^*-p_{min}$. Note that the logarithmic
 divergence guards the upper size limit.
 
 \subsection{Unknown storage time}
-\vk{Here --- Dima's idea as we discussed it in Moscow.}
+
+Since the time for the data to reside in  the state is initially unknown,
+the right hand side of Eq.~\eqref{eq:max} cannot be deduced directly at
+transaction submission time. For this purpose the scheduled payment is
+intorduced as described below.
 \begin{figure}
     \center
-    \includestandalone[width=\textwidth]{figures/subsid}
+    \includestandalone[width=.5\textwidth]{figures/subsid}
     \caption{Transaction cost as a function of output existence time.\label{fig:max_t}}
 \end{figure}
 
@@ -449,6 +453,38 @@ We propose more convenient method of charging; we name it {\em scheduled payment
 \knote{notation: B, sT}
 
 \section{Evaluation}
+
+The question we address in this section is ``What should be the real--world
+ratio between the pricing coefficients?'' To extract the realistic possible
+values, and verify the validity of described transaction classification, the
+data from the Ethereum network was taken. We consider Ethereum a good example,
+since all three components of the resource consumption are present in its
+network. The network load parameter $N_b(tx)$ is a transaction size; the state
+load $\Delta(tx)$ can also be deduced from the blockchain, and to quantify the
+computational load $N_c(tx)$, the built-in Ethereum gas system was used.  As the
+base cost of the Ethereum transaction contains the terms proportional to the
+transaction size (treating zero and non-zero bytes separately), the
+corresponding gas has been substracted (by our terms it falls into the network
+load). Another parameter of interest is the storage time.  Using it directly
+from the blockchain in weakly relevant to our scheme because the participants do
+not get any reward for removing it from the state earlier rather than later.
+However, we consider the time delay between the data submission and its
+addressing to be the reliable parameter reflecting the needs of the users.
+
+\vk{block range; justify representativeness}
+
+The results are presented on Fig. .. and .. Each point corresponds to the
+transaction.  One can notice that parts of the distribution on Fig.~(3d) extend
+along the coordinate axis --- these are the transactions which can be
+unambiguously distinguished by their type of the resource consumption. Their
+presence confirms our expectations on the nature of resource consumption, and
+serves as a justification of the proposed classification scheme. The space of
+transactions is split into three parts by the aforementioned vector $\mathbf{n}$
+with the endpoint at the first momentum of the distribution. This gives the
+following estimate on the ratio between the pricing coefficients for the
+expected state size:
+
+\section{Conclusions}
 
 \bibliographystyle{elsarticle-num}
 \bibliography{sources.bib}
