@@ -412,7 +412,7 @@ We propose more convenient method of charging; we name it {\em scheduled payment
 \end{split}
 \end{align}
 
-, where $height$ is a height of a block which contains a spending transaction, $out.height$ is a height when the output was created, $out.height$ and $out.script$ contain the output's value and spending script respectively, predicate $tx.has\_output()$   
+, where $height$ is a height of a block which contains a spending transaction, $out.height$ is a height when the output was created, $out.height$ and $out.script$ contain the output's value and spending script respectively, predicate $tx.has\_output()$ checks whether a spending transaction has an output with conditions given as the predicate arguments. As in Section~\ref{sec:algorithm}, $B$ is the output size.     
 
 
 \section{Evaluation}
@@ -433,23 +433,23 @@ operations, the corresponding gas has been substracted from computational load.
 
 \begin{figure}[h]
     \centering
-    \begin{subfigure}[b]{0.44\textwidth}
+    \begin{subfigure}[b]{0.48\textwidth}
         \includegraphics[width=\textwidth]{figures/txs3d}
         \caption{}
         \label{fig:a}
     \end{subfigure}
-    \begin{subfigure}[b]{0.44\textwidth}
+    \begin{subfigure}[b]{0.48\textwidth}
         \includegraphics[width=\textwidth]{figures/txs-size-computation}
         \caption{}
         \label{fig:b}
     \end{subfigure}
 
-    \begin{subfigure}[b]{0.44\textwidth}
+    \begin{subfigure}[b]{0.48\textwidth}
         \includegraphics[width=\textwidth]{figures/txs-size-storage}
         \caption{}
         \label{fig:a}
     \end{subfigure}
-    \begin{subfigure}[b]{0.44\textwidth}
+    \begin{subfigure}[b]{0.48\textwidth}
         \includegraphics[width=\textwidth]{figures/txs-storage-computation}
         \caption{}
         \label{fig:b}
