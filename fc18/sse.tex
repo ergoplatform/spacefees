@@ -312,9 +312,9 @@ $\vec{n}$ adjusting the formal fee prescription to the sensible values.
 
 \subsection{Choice of $S(state)$}
 
-The simplest way of assigning the value of $S(state)$ is by making it constant.
-That is, specifying the price of storage of 1 byte of data per one day. However,
-as it is shown in the Appendix~\ref{apx:statesize}, this does not fully solve
+The simplest way of assigning the $S(state)$ value is by making it constant.
+%That is, specifying the price of storage of 1 byte of data per one day. 
+However, as it is shown in the Appendix~\ref{apx:statesize}, this does not fully solve
 the problem of limiting the state size. What is being controlled in this case,
 that is the rate at which the data is being submitted, but not the state size
 itself. One could also manually define the maximal size of the state for the
@@ -324,8 +324,8 @@ to submit the transaction increasing the state size.  The time till it becomes
 possible is hardly predictable. 
 
 Preferable properties of the current state size could be formulated as follows:
-it should be predictable, stable, and below some externally given value (upper
-restriction on state size, being unique for the whole network). 
+it should be predictable, stable, and below some externally given value (an upper
+bound on state size, being unique for the whole network). 
 
 Another natural question arising is whether the rigid state size restriction is
 necessary?  It is easy to imagine the situation where the formal possibility of
@@ -400,9 +400,9 @@ $S^{-1}(S^*)$.
 \section{Scheduled Payments}
 \label{sec:scheduled}
 
-In this section we propose a concrete way to charge for state bytes consumed~(or released). There are few possible options for that. A user, for example, may specify lifetime for a coin during its creation and pay for it in advance, this is not very convenient for him though. Another option is to charge when coins are being spent, or allow to spend a coin~(by anyone, presumably, a miner) when its value is overweighted by space-time fee. As a drawback, if coin is associated with a big amount of tokens, it could live for very long, maybe without a reason. 
+In this section we propose a concrete way to charge for state bytes consumed~(or released). There are few possible options for that. A user, for example, may specify lifetime for a coin during its creation and pay for it in advance, this is not very convenient for him though. Another option is to charge when coin is spent, or allow to spend a coin~(by anyone, presumably, a miner) when its value is overweighted by state fee. As a drawback, if coin is associated with a big value, it could live for very long, maybe without a reason. 
 
-We propose more convenient method of charging; we name it {\em scheduled payments}. In this scheme a user must set special predefined script for a coin~(otherwise a transaction and also a block containing it are invalid), which contains a user-specific logic~(we call it {\em regular script}) and a spending condition which allows anyone~(presumably, a miner) to create a transaction claiming this output, necessarily creating a the coin with the same guarding condition and a value not less than original minus a space-time fee. These two parts~(regular script and a fee charging condition) are connected by using the $\lor$ conjecture. We assume that $\alpha$ and $\beta$ are fixed. We also assume that subsidized period $sT$ is to be stored along with the coin by each validating node. \knote{notation, link to fig. 4}  Then a guarding script for the coin would be like:
+We propose more convenient method of charging; we name it {\em scheduled payments}. In this scheme a user must set special predefined script for a coin~(otherwise a transaction and also a block containing it are invalid), which contains a user-specific logic~(we call it {\em regular script}) and a spending condition which allows anyone~(presumably, a miner) to create a transaction claiming this output, necessarily creating a the coin with the same guarding condition and a value not less than original minus a state fee. These two parts~(regular script and a fee charging condition) are connected by using the $\lor$ conjecture. We assume that $\alpha$ and $\beta$ are fixed. We also assume that subsidized period $sT$ is to be stored along with the coin by each validating node. Then a guarding script for the coin would be like:
 
 \begin{align}
 \begin{split}
@@ -415,6 +415,7 @@ We propose more convenient method of charging; we name it {\em scheduled payment
 \knote{notation: B, sT}
 
 \section{Evaluation}
+\label{sec:evaluation}
 
 The question we address in this section is ``What should be the real--world
 ratio between the pricing coefficients?'' To extract the realistic possible
@@ -446,7 +447,8 @@ with the endpoint at the first momentum of the distribution. This gives the
 following estimate on the ratio between the pricing coefficients for the
 expected state size:
 
-\section{Conclusions}
+\section{Conclusion}
+\label{sec:conslusion}
 
 \bibliographystyle{ieeetr}
 \bibliography{sources.bib}
