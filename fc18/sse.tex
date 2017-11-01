@@ -407,12 +407,13 @@ We propose more convenient method of charging; we name it {\em scheduled payment
 \begin{align}
 \begin{split}
 &(regular\_script) \lor \\
-&(Height > (out.height + sT) \land (out.value \le S(state) \cdot B \cdot sT \lor \\  
+&(height > (out.height + sT) \land (out.value \le S(state) \cdot B \cdot sT \lor \\  
 &\qquad tx.has\_output(value = out.value - S(state) \cdot B \cdot sT, script = out.script)))
 \end{split}
 \end{align}
 
-\knote{notation: B, sT}
+, where $height$ is a height of a block which contains a spending transaction, $out.height$ is a height when the output was created, $out.height$ and $out.script$ contain the output's value and spending script respectively, predicate $tx.has\_output()$   
+
 
 \section{Evaluation}
 \label{sec:evaluation}
