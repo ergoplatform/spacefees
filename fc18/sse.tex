@@ -229,20 +229,16 @@ we reason about the guiding  principles for the fee assignment, and end up with
 the example of a practical fee assignment rule.
 
 The evolution of the blockchain networks has demonstrated the main resources
-being used.  First and the most important so far, the storage capacity of the
-nodes is limited. In particular, it becomes more costly with time to run a node
-on desktop hardware in a system where the full blockchain is needed for the
-operation \vk{more details}.  Elegant solutions have already been found for this
-problems in recent years \vk{citations}, consisting in practical unnecessity of
-storing the blockchain itself, but rather parts of header chain, and the state
-described above.  However, the part of this problem remains, as a possibility of
-flooding the state with a long list of UTXO, which are never spent. This also
-has a side economical effects, since coins from lost (accidentally or
-intentionally) UTXO's are never returned to the circulation, and it becomes
-important if the total amount of coins fixed.
+being used. First and the most important so far, the memory of the network nodes 
+is limited resource. Blocks in the blockchain after processing are storing on a 
+secondary storage, where a cost of a storage unit is low. In contrast, to validate a 
+transaction, some state is needed~(for example, unspent outputs set in Bitcoin is used 
+to validate a transaction), and this state should reside in expensive random-access memory.   
+An elegant solution has already been found recently, making state size growth irrelevant for 
+a non-mining full-node, a mining node still needs to store the state in full though.
 
 Second, it becomes obvious, especially with the development of smart contracts,
-that a transaction ``cost'' for the node can be more than just a storage:
+that a transactional ``cost'' for the node can be more than just a storage:
 transactions can contain relatively complicated scripts which are meant to be
 executed by all the nodes in the network. The extreme and most famous example is
 the Ethereum network implementing the concept of the ``World Computer''~\cite{ethyp}. 
@@ -252,9 +248,7 @@ created in one block and spent right in the next one, it provides almost zero
 overhead in terms of validation state size, but creates the network load needed
 for synchronization.
 
-\knote{refer here to a fee as a security measure concepts in the intro?}
-
-A transaction fee should incorporate all the three of components above. We
+A transaction fee should incorporate all the three components stated above. We
 propose to charge for a component which demands more resources. That is,
 storage-oriented transactions should be charged for storage consumption, the
 computation-oriented transactions should be charged for script execution, and
