@@ -255,7 +255,7 @@ computation-oriented transactions should be charged for script execution, and
 all the others by the network load. This can be formalized as follows:
 \begin{equation}
     \operatorname{Fee}(tx) = \max\left(\alpha \cdot N_b(tx), \beta \cdot N_c(tx),
-    S(state) \sum_i B_i\, sT_i\right)\,.
+    S(state) \cdot \sum_i (B_i \cdot sT_i) \right)\,.
     \label{eq:max}
 \end{equation}
 Here $\alpha$ and $\beta$ are the pricing coefficients, $N_b(tx)$ is the number
@@ -265,13 +265,13 @@ storage of byte of output in the state for the unit of time, $sT_i$ is the time
 for which the output $i$ is being stored in the state, and $B_i$ is its size in
 bytes.
 
-Since the time for the data to reside in  the state is initially unknown,
+Since the time for the data to reside in the state is usually unknown,
 the right hand side of Eq.~\eqref{eq:max} cannot be deduced directly at
 transaction submission time. For this purpose we introduce a proposal for 
 scheduled payments later in Section~\ref{sec:scheduled}. The latter
 argument in Eq.~\eqref{eq:max} becomes dominant with time. Starting at the moment when it happens, the
-fee is increasing at a constant rate (see Fig.~\ref{fig:max_t}). The possible
-formal implementation of this algorithm is described in Section~\ref{sec:scheduled}.
+fee is increasing at a constant rate (see Fig.~\ref{fig:max_t}). The possible implementation of this 
+algorithm is described in Section~\ref{sec:scheduled}.
 \begin{figure}
     \centering
     \begin{subfigure}[b]{.45\textwidth}
@@ -295,7 +295,7 @@ choosing $\alpha$, $\beta$ and $S(\cdot)$? There is also the
 question of estimating $N_c(tx)$, which can be solved only by executing the
 script for Turing--complete languages. It is known as the worst case execution
 time problem~\cite{Wilhelm2008}.  We leave the latter question beyond the scope of
-the paper, and answer the former below.
+the paper, and answer the former one below.
 
 \subsection{Choice of the relative values of $\alpha$, $\beta$, $S(state)$}
 
