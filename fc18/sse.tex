@@ -200,16 +200,17 @@ The paper is organized as follows. We put assumptions behind our model and its a
 
 We shape our model with the following assumptions:
 \begin{enumerate}[label=\textbf{A\arabic*. }]
-  \item All the fees for a block are going to just a miner like in Bitcoin.
-      There are proposals to share the rewards for a block within a group of
-      miners, for example in~\cite{eyal2016bitcoin,kogias2016enhancing}, and
-      they are out of scope of the paper. A notable difference is that if a single miner
-      is taking all the rewards, he can include his own transactions in it for free
+  % \item All the fees for a block are going to just a miner like in Bitcoin.
+  %    There are proposals to share the rewards for a block within a group of
+  %    miners, for example in~\cite{eyal2016bitcoin,kogias2016enhancing}, and
+  %    they are out of scope of the paper. A notable difference is that if a single miner
+  %    is taking all the rewards, he can include his own transactions in it for free
   \item We assume that a transaction does not change size of a validation state significantly
   \item For an implementation, we assume that validation state in in the form of unspent transaction outputs set, like in Bitcoin
-  \item For simplicity, we assume that a block is of a finite size but all the
-      transactions a miner has at a moment of block generation can be packed
-      into it, if otherwise is not stated explicitly
+  \item For an implementation, we assume that it is profitable for a miner to collect fees from unspent outputs. 
+  %\item For simplicity, we assume that a block is of a finite size but all the
+  %    transactions a miner has at a moment of block generation can be packed
+  %    into it, if otherwise is not stated explicitly
   \item We are considering minimal mandatory fees in the paper. All the nodes
       are checking that a fee paid by a transaction is not less than a minimum
       and rejecting the whole block if it contains a transaction violating fee
