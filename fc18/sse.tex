@@ -234,7 +234,7 @@ is limited resource. Blocks in the blockchain after processing are storing on a
 secondary storage, where a cost of a storage unit is low. In contrast, to validate a 
 transaction, some state is needed~(for example, unspent outputs set in Bitcoin is used 
 to validate a transaction), and this state should reside in expensive random-access memory.   
-An elegant solution has already been found recently, making state size growth irrelevant for 
+An elegant solution has already been found recently~\cite{reyzin2016improving}, making state size growth irrelevant for 
 a non-mining full-node, a mining node still needs to store the state in full though.
 
 Second, it becomes obvious, especially with the development of smart contracts,
@@ -267,11 +267,11 @@ bytes.
 
 Since the time for the data to reside in  the state is initially unknown,
 the right hand side of Eq.~\eqref{eq:max} cannot be deduced directly at
-transaction submission time. For this purpose the scheduled payment is
-intorduced. As the output remains in the state for some time, the latter
-argument in Eq.~\eqref{eq:max} becomes dominant. Starting at this moment, the
-fee applies at a constant rate (see Fig.~\ref{fig:max_t}). The possible
-formal implementation of this algorithm is described in Section 4.
+transaction submission time. For this purpose we introduce a proposal for 
+scheduled payments later in Section~\ref{sec:scheduled}. The latter
+argument in Eq.~\eqref{eq:max} becomes dominant with time. Starting at the moment when it happens, the
+fee is increasing at a constant rate (see Fig.~\ref{fig:max_t}). The possible
+formal implementation of this algorithm is described in Section~\ref{sec:scheduled}.
 \begin{figure}
     \centering
     \begin{subfigure}[b]{.45\textwidth}
@@ -399,6 +399,7 @@ $S^{-1}(S^*)$.
 \end{figure}
 
 \section{Scheduled Payments}
+\label{sec:scheduled}
 
 In this section we propose a concrete way to charge for state bytes consumed~(or released). There are few possible options for that. A user, for example, may specify lifetime for a coin during its creation and pay for it in advance, this is not very convenient for him though. Another option is to charge when coins are being spent, or allow to spend a coin~(by anyone, presumably, a miner) when its value is overweighted by space-time fee. As a drawback, if coin is associated with a big amount of tokens, it could live for very long, maybe without a reason. 
 
