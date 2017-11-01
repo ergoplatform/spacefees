@@ -299,15 +299,14 @@ the paper, and answer the former one below.
 
 \subsection{Choice of the relative values of $\alpha$, $\beta$, $S(state)$}
 
-Assume for now, that for every transaction we know the time the outputs will be
-stored in the state $T[tx]$. We will overcome this difficulty later. Based on
+Assume for now, that for every transaction we know for how long the outputs will be
+stored in the state. We will overcome this difficulty later. Based on
 Eq.~\eqref{eq:max}, we come up with the notion of space of transactions, which
 is three--dimensional in our case --- every transaction is defined by three
-numbers: $N_b(tx)$, $N_c(tx)$, $N_s(state,tx) = S(state)T[tx]$. Eq.~\eqref{eq:max} provides a
-prescription of splitting this space into three regions: network--oriented
-transactions, space--oriented transactions, and computation--oriented
-transactions (see Fig.~\ref{fig:max}). All the splitting is governed by the
-direction of vector $\vec{n}$ which defines the line $\alpha N_b=\beta N_c=N_s$.
+numbers: $N_b(tx)$, $N_c(tx)$, $N_s(state,tx) = \sum_i (B_i \cdot sT_i)$. Eq.~\eqref{eq:max} is splitting 
+this space into three regions: network--oriented transactions, space--oriented transactions, 
+and computation--oriented transactions (see Fig.~\ref{fig:max}). All the splitting 
+is governed by the direction of vector $\vec{n}$ which defines the line $\alpha N_b=\beta N_c=N_s$.
 Varying the coefficients $\alpha$ and $\beta$, one can change the direction of
 $\vec{n}$ adjusting the formal fee prescription to the sensible values.
 
