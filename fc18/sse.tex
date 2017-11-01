@@ -427,9 +427,9 @@ network. The network load parameter $N_b(tx)$ is a transaction size; the state
 load $\Delta(tx)$ can also be deduced from the blockchain by processing SSTORE
 and CREATE operations in transactions. To quantify the
 computational load $N_c(tx)$, the built-in Ethereum gas system was used. As the
-gas usage of the Ethereum transaction contains the base costб proportional to the
+gas usage of the Ethereum transaction contains the base cost proportional to the
 transaction size and the storage cost, proportional to number of SSTORE and CREATE
-operations, the corresponding gas has been substracted from computational load.
+operations, the corresponding gas has been subtracted from computational load.
 
 \begin{figure}[h]
     \centering
@@ -476,10 +476,10 @@ However, we consider the time delay between the data submission and its
 addressing to be the reliable parameter reflecting the needs of the users.
 Analysis of Ethereum blockchain showed that in a lot of cases data stored in the state
 was touched by other transactions in the same block or few blocks after insertion.
-We assumed that in this was not interesting to us blockchain as storage usecase
-and this data is not representative. Excluded such short-lived data from our analisys
+We assumed that in this was not interesting to us blockchain as storage use case
+and this data is not representative. Excluded such short-lived data from our analysis
 we estimated that average lifetime of a data in Ethereum is 23731 blocks or about 4 days
-regarding 15 seconds average time interal between blocks.
+regarding 15 seconds average time internal between blocks.
 
 This gives the following estimate on the ratio between the pricing coefficients for the expected state size:
 
