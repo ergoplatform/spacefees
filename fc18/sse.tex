@@ -174,10 +174,9 @@ month.
 
 In the paper we also consider an approach to combine fees charged for different resources consumed by a transaction:
 bandwidth, random-access memory to hold state, and processor cycles to process computations prescribed by the transaction.    
-We propose to charge only for a resource which consumed at most, so we can say about state-oriented, network-oriented or computation-oriented transactions. We provide an evaluation of Ethereum usage data which shows that splitting towards
-resource is possible in this cryptocurrency.
+We propose to charge only for a resource which consumed at most, so we can say about state-oriented, network-oriented or computation-oriented transactions. We provide an evaluation of Ethereum usage data which shows that it is possible for this cryptocurrency to determine transaction type.
 
-We propose a convenient way to charge for state memory consumption~(considering coin lifetime also). Our approach is convenient for users who often do not know for how long they would like to store their coins in the system, and also convenient for miners. The approach is called scheduled payments, as we propose to charge periodically for the bytes of memory consumed.
+We propose a convenient way to charge for state memory consumption~(considering output lifetime also). Our approach is convenient for users who often do not know for how long they would like to store their outputs in the system. The approach is called scheduled payments, as we propose to charge periodically for the bytes of memory consumed.
 
 
 
@@ -211,7 +210,8 @@ We shape our model with the following assumptions:
   %    miners, for example in~\cite{eyal2016bitcoin,kogias2016enhancing}, and
   %    they are out of scope of the paper. A notable difference is that if a single miner
   %    is taking all the rewards, he can include his own transactions in it for free
-  \item We assume that a transaction does not change size of a validation state significantly
+  \item Without loss of generality, we assume throughout the paper that a transaction creates new objects called outputs and spends outputs from previous transactions. Thus the state needed for transaction validation is about a set of outputs yet unspent. The size of the state then is the sum of sizes of all unspent outputs.  
+  \item We assume that a transaction does not change size of the state significantly
   \item For an implementation, we assume that validation state in in the form of unspent transaction outputs set, like in Bitcoin
   \item For an implementation, we assume that it is profitable for a miner to collect fees from unspent outputs. 
   %\item For simplicity, we assume that a block is of a finite size but all the
