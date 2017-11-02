@@ -73,15 +73,18 @@ to security issues, such as denial-of-service attacks. Only technical solutions,
 not economic, have been proposed to tackle this problem to the moment. In
 contrast, we propose to add a new component to a transaction fee scheme based on
 how much additional space will be needed for new objects created in result of
-transaction processing and for how long they will live in the state. \knote{write abt fee adjustment rule} 
+transaction processing and for how long they will live in the state. We propose how to 
+combine fees charged for different resources spent~(bandwidth, random-access state memory, processor cycles) 
+in a composite fee. We show a possible implementation for charging state-related fee .
+
 %We provide three possible options towards implementing the new fee component, namely
 %\textit{prepaid outputs}, \textit{postpaid outputs} and \textit{scheduled
 %payments}. We provide an analysis of the model with respect to all the three
 %options.
-\knote{rewrite further} 
- We show that the state growth could be bounded by a fee factor, miners
-are getting additional stable rewards and lost coins are being taken back into
-circulation eventually.    \knote{check this}
+%\knote{rewrite further} 
+% We show that the state growth could be bounded by a fee factor, miners
+%are getting additional stable rewards and lost coins are being taken back into
+%circulation eventually.    \knote{check this}
 
 \end{abstract}
 
@@ -210,13 +213,13 @@ We shape our model with the following assumptions:
   %    miners, for example in~\cite{eyal2016bitcoin,kogias2016enhancing}, and
   %    they are out of scope of the paper. A notable difference is that if a single miner
   %    is taking all the rewards, he can include his own transactions in it for free
-  \item Without loss of generality, we assume throughout the paper that a transaction creates new objects called outputs and spends outputs from previous transactions. Thus the state needed for transaction validation is about a set of outputs yet unspent. The size of the state then is the sum of sizes of all the unspent outputs.  
-  \item We assume that a transaction does not change size of the state significantly
-  \item For an implementation, we assume that it is profitable for a miner to collect fees from unspent outputs. 
+  \item \label{a:utxo} Without loss of generality, we assume throughout the paper that a transaction creates new objects called outputs and spends outputs from previous transactions. Thus the state needed for transaction validation is about a set of outputs yet unspent. The size of the state then is the sum of sizes of all the unspent outputs.  
+  \item \label{a:state} We assume that a transaction does not change size of the state significantly
+  \item \label{a:miner} For an implementation, we assume that it is profitable for a miner to collect fees from unspent outputs. 
   %\item For simplicity, we assume that a block is of a finite size but all the
   %    transactions a miner has at a moment of block generation can be packed
   %    into it, if otherwise is not stated explicitly
-  \item We are considering minimal mandatory fees in the paper. All the nodes
+  \item \label{a:minimal} We are considering minimal mandatory fees in the paper. All the nodes
       are checking that a fee paid by a transaction is not less than a minimum
       and rejecting the whole block if it contains a transaction violating fee
       rules. Thus a fee regime is considered as a part of consensus protocol in
@@ -472,18 +475,15 @@ transactions is split into three parts by the aforementioned vector $\mathbf{n}$
 with the endpoint at the first momentum of the distribution.
 
 Another parameter of interest is the storage time. Using it directly
-from the blockchain in weakly relevant to our scheme because the participants do
-not get any reward for removing it from the state earlier rather than later.
-However, we consider the time delay between the data submission and its
-addressing to be the reliable parameter reflecting the needs of the users.
+from the blockchain is weakly relevant to our scheme because the participants are not incentivized to remove data from the state earlier rather than later.
+However, we consider the delay between the data submission and a first request to be the reliable parameter reflecting the needs of the users.
 Analysis of Ethereum blockchain showed that in a lot of cases data stored in the state
 was touched by other transactions in the same block or few blocks after insertion.
-We assumed that in this was not interesting to us blockchain as storage use case
-and this data is not representative. Excluded such short-lived data from our analysis
-we estimated that average lifetime of a data in Ethereum is 23731 blocks or about 4 days
-regarding 15 seconds average time internal between blocks.
+We filter out such cases as they do not show using blockchain as a storage. Excluding such short-lived data from our analysis
+we estimate that average lifetime of a data object in Ethereum is 23,731 blocks~(or about 4 days
+considering 15 seconds average delay between blocks).
 
-This gives the following estimate on the ratio between the pricing coefficients for the expected state size:
+This gives the following estimation on the ratio between the pricing coefficients for the expected state size:
 
 \begin{align}
 \begin{split}
@@ -492,10 +492,9 @@ This gives the following estimate on the ratio between the pricing coefficients 
 \end{split}
 \end{align}
 
-where $S$ is the cost of the storage of byte of output in the state for one block and does
-not depend on state size in Ethereum. This estimations are quite approximate, while their
-changes won't affect fees for most of transactions, that can unambiguously be attributed
-to concrete type of the resource consumption.
+where $S$ is the cost of the storage of byte of output in the state for one block, which does
+not depend on state size in Ethereum. The estimations are quite approximate, while changing
+them do not affect fees for most of transactions unambiguously attributed by a concrete type of the resource consumption.
 
 \section{Conclusion}
 \label{sec:conslusion}
