@@ -145,10 +145,10 @@ nodes\cite{eth2016dos}. Similarly, in 2013 a denial-of-service attack against
 serialized transactions residing in a secondary storage~(HDD or SSD) was
 discovered in Bitcoin\cite{vasek2014empirical}.
 
-In all cryptocurrencies of today we are aware of, an element of the state once created 
+In all the cryptocurrencies of today we are aware of, an element of the state once created 
 lives possibly forever without paying anything for that. This leads to continuously increasing state~(we point
 to Bitcoin unspent transaction outputs~(UTXO) set size as an
-example~\cite{utxoChart}). Moreover, state may grow fast during spam attack, for
+example~\cite{utxoChart}). Moreover, state may grow fast during spam attacks, for
 example, 15 million outputs were quickly put into UTXO set during spam attacks
 against Bitcoin in July 2015~\cite{bitcoin2015flood}, and most of these outputs
 are not spent yet. The paper~\cite{reyzin2016improving} is proposing a technical
@@ -168,11 +168,17 @@ In this paper we propose an economic solution to the problem of unreasonable sta
 (such as spam attacks, or objects not being using anymore but still living in
 the blockchain). The solution is a new mandatory fee component. We state that a
 user should pay a fee based on both the additional space needed to store objects
-created by a transaction, and also for lifetime of new bytes. This model is
+created by a transaction, and also for lifetime of the new bytes. This model is
 usual for cloud storage services where users pay for gigabytes of data per
 month. 
 
-%We also consider a question how 
+In the paper we also consider an approach to combine fees charged for different resources consumed by a transaction:
+bandwidth, random-access memory to hold state, and processor cycles to process computations prescribed by the transaction.    
+We propose to charge only for a resource which consumed at most, so we can say about state-oriented, network-oriented or computation-oriented transactions. We provide an evaluation of Ethereum usage data which shows that splitting towards
+resource is possible in this cryptocurrency.
+
+We propose a convenient way to charge for state memory consumption~(considering coin lifetime also). Our approach is convenient for users who often do not know for how long they would like to store their coins in the system, and also convenient for miners. The approach is called scheduled payments, as we propose to charge periodically for the bytes of memory consumed.
+
 
 
 %We provide a possibility for miners to control their storage requirements by changing a fee factor. 
@@ -187,7 +193,7 @@ month.
 %Thus we call such an economy a {\em space-scarce economy}.
 
 \subsection{Structure of the paper}
-The paper is organized as follows. We put assumptions behind our model and its analysis into Section~\ref{sec:preliminaries}. Then we provide an algorithm for the fee assignment in Section~\ref{sec:algorithm}. \knote{todo: finish}
+The paper is organized as follows. We put assumptions behind our model and its analysis into Section~\ref{sec:preliminaries}. Then we provide an algorithm for a composite fee assignment in Section~\ref{sec:algorithm}. We propose a possible approach to charge for state memory consumption in Section~\ref{sec:scheduled}. We show results of Ethereum data evaluation in Section~\ref{sec:evaluation}. We conclude with Section~\ref{sec:conslusion}.
 
 %A design of our new fee component is
 %provided in Section~\ref{sec:model}. The model then is analyzed in
@@ -250,7 +256,7 @@ for synchronization.
 
 A transaction fee should incorporate all the three components stated above. We
 propose to charge for a component which demands more resources. That is,
-storage-oriented transactions should be charged for storage consumption, the
+state-oriented transactions should be charged for state memory consumption, the
 computation-oriented transactions should be charged for script execution, and
 all the others by the network load. This can be formalized as follows:
 \begin{equation}
