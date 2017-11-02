@@ -145,10 +145,8 @@ nodes\cite{eth2016dos}. Similarly, in 2013 a denial-of-service attack against
 serialized transactions residing in a secondary storage~(HDD or SSD) was
 discovered in Bitcoin\cite{vasek2014empirical}.
 
-The main purpose of this paper is to consider a new mandatory component in a
-transaction fee scheme reflecting state growth. In all known cryptocurrencies of
-today, an element of the state once created lives possibly forever without
-paying anything for that. This leads to continuously increasing state~(we point
+In all cryptocurrencies of today we are aware of, an element of the state once created 
+lives possibly forever without paying anything for that. This leads to continuously increasing state~(we point
 to Bitcoin unspent transaction outputs~(UTXO) set size as an
 example~\cite{utxoChart}). Moreover, state may grow fast during spam attack, for
 example, 15 million outputs were quickly put into UTXO set during spam attacks
@@ -166,25 +164,27 @@ without a cleaning procedure is not a viable option.
 
 \subsection{Our contributions}
 
-We propose an economic solution to the problem of unreasonable state growth
+In this paper we propose an economic solution to the problem of unreasonable state growth
 (such as spam attacks, or objects not being using anymore but still living in
 the blockchain). The solution is a new mandatory fee component. We state that a
-user should pay fee for both the additional space needed to store objects
+user should pay a fee based on both the additional space needed to store objects
 created by a transaction, and also for lifetime of new bytes. This model is
 usual for cloud storage services where users pay for gigabytes of data per
-month. We provide a possibility for miners to control their storage requirements
-by changing a fee factor. Later in this paper we will refer to this new fee
-component as to a {\em space-time fee}.
+month. 
 
-\knote{write abt fee adjustment rule}
+%We also consider a question how 
 
-Proposed fee regime is promoting money circulation in the blockchain economy.
-The limited lifetime of a state element also leads to lost coins being taken
-back into circulation~(supposedly by miners). 
 
-Summarizing, we study an economy where quick-access storage of a node in a
-massively-replicated system becomes the most scarce system resource eventually.
-Thus we call such an economy a {\em space-scarce economy}.
+%We provide a possibility for miners to control their storage requirements by changing a fee factor. 
+%Later in this paper we will refer to this new fee component as to a {\em space-time fee}.
+
+%Proposed fee regime is promoting money circulation in the blockchain economy.
+%The limited lifetime of a state element also leads to lost coins being taken
+%back into circulation~(supposedly by miners). 
+
+%Summarizing, we study an economy where quick-access storage of a node in a
+%massively-replicated system becomes the most scarce system resource eventually.
+%Thus we call such an economy a {\em space-scarce economy}.
 
 \subsection{Structure of the paper}
 The paper is organized as follows. We put assumptions behind our model and its analysis into Section~\ref{sec:preliminaries}. Then we provide an algorithm for the fee assignment in Section~\ref{sec:algorithm}. \knote{todo: finish}
