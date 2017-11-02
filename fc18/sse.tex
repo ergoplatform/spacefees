@@ -210,9 +210,8 @@ We shape our model with the following assumptions:
   %    miners, for example in~\cite{eyal2016bitcoin,kogias2016enhancing}, and
   %    they are out of scope of the paper. A notable difference is that if a single miner
   %    is taking all the rewards, he can include his own transactions in it for free
-  \item Without loss of generality, we assume throughout the paper that a transaction creates new objects called outputs and spends outputs from previous transactions. Thus the state needed for transaction validation is about a set of outputs yet unspent. The size of the state then is the sum of sizes of all unspent outputs.  
+  \item Without loss of generality, we assume throughout the paper that a transaction creates new objects called outputs and spends outputs from previous transactions. Thus the state needed for transaction validation is about a set of outputs yet unspent. The size of the state then is the sum of sizes of all the unspent outputs.  
   \item We assume that a transaction does not change size of the state significantly
-  \item For an implementation, we assume that validation state in in the form of unspent transaction outputs set, like in Bitcoin
   \item For an implementation, we assume that it is profitable for a miner to collect fees from unspent outputs. 
   %\item For simplicity, we assume that a block is of a finite size but all the
   %    transactions a miner has at a moment of block generation can be packed
@@ -222,7 +221,7 @@ We shape our model with the following assumptions:
       and rejecting the whole block if it contains a transaction violating fee
       rules. Thus a fee regime is considered as a part of consensus protocol in
       our work. A user can pay more than the minimum to have a higher priority
-      for a transaction of interest
+      for a transaction of interest.
 \end{enumerate}
 
 
