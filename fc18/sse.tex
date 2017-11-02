@@ -499,6 +499,24 @@ them do not affect fees for most of transactions unambiguously attributed by a c
 \section{Conclusion}
 \label{sec:conslusion}
 
+In the present work we addressed the problem of growth of the state size for the 
+blockchain systems. Proposed solution --- spacetime fees --- relies on the 
+economical factors rather than on solely the protocol itself. The idea of
+spacetime fees led us to the necessity of classification of the transactions by
+the type of resource consumption, and the simplest fee realization by
+$\max$-estimate caused the introduction of chain-based {\it scheduled payments}.
+It is shown that the described scheme can be fully implemented on the script
+level. The analysis of Ethereum blockchain evinced self-consistency of our 
+treatment, and gave the reference parameters for possible implementation. We
+argue that the proposed solution makes the state size more predictable, which is
+crucial for decentrslization, and it can be achieved even without rigid
+restriction on the maximal state size. A valuable side effect of the spacetime
+fees is recirculation of the lost UTXOs in a long-run. With these factors taken
+into account, the ready-to-implement system is provided, which is believed to
+slove (at least partially) the problem of uncontrollable state growth, and 
+recirculation of UTXOs by the same means, while preserving currently existing
+methods for transaction fees and code execution costs.
+
 \bibliographystyle{splncs03}
 \bibliography{sources.bib}
 
