@@ -98,14 +98,19 @@ meets its security goals as formal analysis~\cite{Garay2015} shows. For work
 done a miner is claiming a reward which consists of two parts. First, some
 constant number of bitcoins are created out of thin air according to a
 predefined and hard-coded token emission schedule. Second, a miner claims fees
-for all the transactions included into the block. A transaction fee is set by a
-user during transaction creation and are useful to limit miners
-resource usage and prevent spam.
+for all the transactions included into the block.
 
-\dnote{constant block reward is important because of carlsten2016instability}
+As shown in~\cite{carlsten2016instability} constant block reward is an important
+part of Bitcoin protocol. Once a predetermined number of coins will enter a circulation
+and miners will be rewarded by transaction fees only, their rational behaviour will
+dramatically differ from the default mining strategy. It is still an open question, whether
+Bitcoin will meets its security goals in such circumstances, but at least number of
+orphaned blocks will increase making Bitcoin less friendly for regular users.
 
-In most of blockchains users pays a fee proportional to transaction size,
-limiting minerw {\em network} utilization. A rational Bitcoin miner does not
+A transaction fee is set by a user during transaction creation and are
+useful to limit miners resource usage and prevent spam. In most of
+blockchains users pays a fee proportional to transaction size,
+limiting miners {\em network} utilization. A rational miner does not
 include all the valid transactions into blocks as, due to the increased
 chances of orphaning a block, the cost of adding transactions to a block
 could not be ignored~\cite{andersen2013,rizun2015transaction}. As shown
@@ -125,14 +130,14 @@ is strictly bounded and corresponding computational costs are not directly
 considered. In contrast, in cryptocurrencies supporting smart contract
 languages, such as~\cite{seijas2016scripting,tezosScript,solidity},
 transaction processing may require a lot of computations, and
-computational costs are included in transaction fee. This cost is specific
-to concrete transactional language and is out of scope of this paper.
-\dnote{link to qtum + loi luu may be useful here to show that this problem is somehow discussed in literature}
+computational costs are included in transaction fee. As the calculation
+of a cost of computational resources utilization may vary for different
+blockchain systems, its analisys is done only for concrete systems yet
+\cite{Earlz2017,luu2015demystifying} and is out of scope of this paper.
 
-Finally, transactions utilize miners {\em storage} resources.
+In the present work we addressed the problem of miners {\em storage} resources utilization.
 A regular transaction in Bitcoin fully spends outputs from previous transactions, and
 also creates new outputs of user-defined values and protecting scripts.
-/dnote{Do we need coinbase transaction here?}
 %A notable and the only
 %exception is a coinbase transaction of a block which creates fixed amount of
 %money out of thin air and also claims transaction fees without referring to any
