@@ -66,7 +66,7 @@
 
 In this paper we study transaction fees in massively replicated open
 blockchain systems. In these systems, such as Bitcoin, memory to hold a current
-state snapshot needed to validate transactions becomes the most scarce resource
+state snapshot needed to validate transactions becomes the most scarce resource \dnote{not the most, just one of}
 eventually. Uncontrolled state size growth could lead
 to security issues. 
 The problem is even more critical for blockchain systems used to store
@@ -189,7 +189,7 @@ month.
 
 In the paper we also consider an approach to combine fees charged for different resources consumed by a transaction:
 bandwidth, random-access memory to hold state, and processor cycles to process computations prescribed by the transaction.    
-We propose to charge only for a resource which consumed at most, so we can say about state-oriented, network-oriented or computation-oriented transactions. We provide an evaluation of Ethereum usage data which shows that it is possible for this cryptocurrency to determine transaction type.
+We propose to charge only for a resource which consumed at most, so we can say about storage-oriented, network-oriented or computation-oriented transactions. We provide an evaluation of Ethereum usage data which shows that it is possible for this cryptocurrency to determine transaction type.
 
 We propose a convenient way to charge for state memory consumption~(considering output lifetime also). Our approach is convenient for users who often do not know for how long they would like to store their outputs in the system. The approach is called scheduled payments, as we propose to charge periodically for the bytes of memory consumed.
 
@@ -273,7 +273,7 @@ it is demonstrated in~\cite{Earlz2017}, assigning the fee to the storage as if
 it was execution of some code can lead to significant disbalance for rich enough
 scripting language (for example, for the data being written with an opcode other
 than conventional storage one).  Thus, we propose to charge for a component
-which demands more resources. That is, state-oriented transactions should be
+which demands more resources. That is, storage-oriented transactions should be
 charged for state memory consumption, the computation-oriented transactions
 should be charged for script execution, and all the others by the network load.
 This can be formalized as follows:
@@ -510,27 +510,58 @@ where $S$ is the cost of the storage of byte of output in the state for one bloc
 not depend on state size in Ethereum. The estimations are quite approximate, while changing
 them do not affect fees for most of transactions unambiguously attributed by a concrete type of the resource consumption.
 
-\section{Conclusion}
+\section{Discussion}
 \label{sec:conslusion}
 
-\dnote{Other benefits like fixed reward and coin recirculation?}
-In the present work we addressed the problem of growth of the state size for the
-blockchain systems. Proposed solution --- spacetime fees --- relies on the 
-economical factors rather than on solely the protocol itself. The idea of
-spacetime fees led us to the necessity of classification of the transactions by
-the type of resource consumption, and the simplest fee realization by
-$\max$-estimate caused the introduction of chain-based {\it scheduled payments}.
-It is shown that the described scheme can be fully implemented on the script
-level. The analysis of Ethereum blockchain evinced self-consistency of our 
-treatment, and gave the reference parameters for possible implementation. We
-argue that the proposed solution makes the state size more predictable, which is
-crucial for decentrslization, and it can be achieved even without rigid
-restriction on the maximal state size. A valuable side effect of the spacetime
-fees is recirculation of the lost UTXOs in a long-run. With these factors taken
-into account, the ready-to-implement system is provided, which is believed to
-slove (at least partially) the problem of uncontrollable state growth, and 
-recirculation of UTXOs by the same means, while preserving currently existing
+In the present work we addressed the problem of transaction fees in cryptocurrencies.
+We proposed to devide fee into three parts depending on type of utilized resource:
+network, computation or storage. We proposed to charge only for a resource which
+consumed at most, thus deviding transactions into three categories: storage-oriented,
+network-oriented or computation-oriented. The analysis of Ethereum blockchain evinced
+self-consistency of our treatment, and gave the reference parameters for possible implementation.
+
+The main attention was paid to calculation of storage fees. We argue that in
+this fees should depend on space-time multiplication to make the state size
+more predictable and it can be achieved even without rigid restriction on the
+maximal state size. We proposed a concrete way to charge for state bytes consumed
+that can be fully implemented on the script level.
+
+Despite of the limitation of the state size growth, spacetime fees provides valuable side effects.
+Due to structure of this fees, coins with lost keys returns into circulation with constant rate.
+Although necessity of coin recirculation is still an open question, the need of lost coins recirculation
+has been widely discussed in the literature (e.g. \cite{gjermundrod2014recirculating,gjermundrod2016going})
+in regards with combat deflation that may eventually occur in cryptocurrencies with fixed supply and
+was even implemented in some cryptocurrencies\cite{freicoin}.
+
+Another important side effect of spacetime fee is that it provide static block reward
+for miners. Even when a predetermined number of coins will enter a circulation,
+spacetime fee will provide reward for miners, that does not depend on transaction
+fees, preventing destructive but profitable mining strategies described in
+~\cite{carlsten2016instability}.
+
+With these factors taken into account, the ready-to-implement system is provided,
+which is believed to slove the problem of uncontrollable state growth, provide some
+valuable side effecrs by the same means, while preserving currently existing
 methods for transaction fees and code execution costs.
+
+
+%In the present work we addressed the problem of growth of the state size for the
+%blockchain systems. Proposed solution --- spacetime fees --- relies on the
+%economical factors rather than on solely the protocol itself. The idea of
+%spacetime fees led us to the necessity of classification of the transactions by
+%the type of resource consumption, and the simplest fee realization by
+%$\max$-estimate caused the introduction of chain-based {\it scheduled payments}.
+%It is shown that the described scheme can be fully implemented on the script
+%level. The analysis of Ethereum blockchain evinced self-consistency of our
+%treatment, and gave the reference parameters for possible implementation. We
+%argue that the proposed solution makes the state size more predictable, which is
+%crucial for decentrslization, and it can be achieved even without rigid
+%restriction on the maximal state size. A valuable side effect of the spacetime
+%fees is recirculation of the lost UTXOs in a long-run. With these factors taken
+%into account, the ready-to-implement system is provided, which is believed to
+%slove (at least partially) the problem of uncontrollable state growth, and
+%recirculation of UTXOs by the same means, while preserving currently existing
+%methods for transaction fees and code execution costs.
 
 \bibliographystyle{splncs03}
 \bibliography{sources.bib}
