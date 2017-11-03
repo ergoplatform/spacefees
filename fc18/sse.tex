@@ -99,42 +99,47 @@ done a miner is claiming a reward which consists of two parts. First, some
 constant number of bitcoins are created out of thin air according to a
 predefined and hard-coded token emission schedule. Second, a miner claims fees
 for all the transactions included into the block. A transaction fee is set by a
-user during transaction creation. Transaction fees are useful for an existing
-cryptocurrency economy for two reasons:
+user during transaction creation and are useful to limit miners
+resource usage and prevent spam.
 
-\begin{enumerate}
-  \item{\em Incentivization of miners.} A rational Bitcoin miner does not
-      include all the valid transactions into blocks as, due to the increased
-      chances of orphaning a block, the cost of adding transactions to a block
-      could not be ignored~\cite{andersen2013,rizun2015transaction}. As shown
-      in~\cite{rizun2015transaction}, even in absence of block size limit,
-      Bitcoin fee market is healthy and the miners surplus is maximized at a
-      finite quantity of block space. Thus the miner is incentivized to produce
-      a block of a limited size. This means that only a subset of transactions
-      which provides enough value to a miner will be included in a block. A
-      paper~\cite{rizun2015transaction} provides a procedure to calculate
-      transaction fee based on block propagation time.
+\dnote{constant block reward is important because of carlsten2016instability}
 
-  \item{\em Limit resources usage and prevent spam. } Besides of network
-      utilization, transaction processing requires a miner to spend some
-      computational resources. For most of the cryptocurrencies, a transactional
-      language is limited~(with Bitcoin Script~\cite{script} being one of the
-      most limited), thus a number of CPU cycles needed to process a transaction
-      is strictly bounded and corresponding computational costs are not directly
-      considered. In contrast, in cryptocurrencies supporting smart contract
-      languages, such as~\cite{seijas2016scripting,tezosScript,solidity},
-      transaction processing may require a lot of computations, and
-      computational costs are included in transaction fee. This cost is specific
-      to concrete transactional language and is out of scope of this paper.
-\end{enumerate}
+In most of blockchains users pays a fee proportional to transaction size,
+limiting minerw {\em network} utilization. A rational Bitcoin miner does not
+include all the valid transactions into blocks as, due to the increased
+chances of orphaning a block, the cost of adding transactions to a block
+could not be ignored~\cite{andersen2013,rizun2015transaction}. As shown
+in~\cite{rizun2015transaction}, even in absence of block size limit,
+Bitcoin fee market is healthy and the miners surplus is maximized at a
+finite quantity of block space. Thus the miner is incentivized to produce
+a block of a limited size. This means that only a subset of transactions
+which provides enough value to a miner will be included in a block. A
+paper~\cite{rizun2015transaction} provides a procedure to calculate
+transaction fee based on block propagation time.
 
-A transaction in Bitcoin fully spends outputs from previous transactions, and
-also creates new outputs of user-defined values. A notable and the only
-exception is a coinbase transaction of a block which creates fixed amount of
-money out of thin air and also claims transaction fees without referring to any
-outputs~(a fee for a non-coinbase transaction is sum of claimed outputs values
-minus sum of values for created outputs). A node is checking a transaction in
-Bitcoin by using a set of unspent outputs. In other cryptocurrencies a
+Besides of network utilization, transaction processing requires a miner
+to spend some {\em computational} resources.
+In Bitcoin the transactional language\cite{script} is very limited, thus
+a number of CPU cycles needed to process a transaction
+is strictly bounded and corresponding computational costs are not directly
+considered. In contrast, in cryptocurrencies supporting smart contract
+languages, such as~\cite{seijas2016scripting,tezosScript,solidity},
+transaction processing may require a lot of computations, and
+computational costs are included in transaction fee. This cost is specific
+to concrete transactional language and is out of scope of this paper.
+\dnote{link to qtum + loi luu may be useful here to show that this problem is somehow discussed in literature}
+
+Finally, transactions utilize miners {\em storage} resources.
+A regular transaction in Bitcoin fully spends outputs from previous transactions, and
+also creates new outputs of user-defined values and protecting scripts.
+/dnote{Do we need coinbase transaction here?}
+%A notable and the only
+%exception is a coinbase transaction of a block which creates fixed amount of
+%money out of thin air and also claims transaction fees without referring to any
+%outputs~(a fee for a non-coinbase transaction is sum of claimed outputs values
+%minus sum of values for created outputs).
+A node is checking a transaction in
+Bitcoin by using a set of unspent outputs~(UTXO). In other cryptocurrencies a
 representation of a {\em state} needed to validate and process an arbitrary
 transaction could be different~(for example, in Ethereum~\cite{ethyp} such
 structure is called the {\em world state} and fixed by the protocol). To process
@@ -146,17 +151,17 @@ accounts to the state~(whose size was less than 1 million accounts before the
 attack) and then performed succesful denial-of-service attacks against the
 nodes\cite{eth2016dos}. Similarly, in 2013 a denial-of-service attack against
 serialized transactions residing in a secondary storage~(HDD or SSD) was
-discovered in Bitcoin\cite{vasek2014empirical}. 
+discovered in Bitcoin\cite{vasek2014empirical}.
 
 In all the cryptocurrencies of today we are aware of, an element of the state once created 
 lives possibly forever without paying anything for that. This leads to continuously increasing state~(we point
-to Bitcoin unspent transaction outputs~(UTXO) set size as an
+to Bitcoin UTXO size as an
 example~\cite{utxoChart}). Moreover, state may grow fast during spam attacks, for
 example, 15 million outputs were quickly put into UTXO set during spam attacks
 against Bitcoin in July 2015~\cite{bitcoin2015flood}, and most of these outputs
 are not spent yet. The paper~\cite{reyzin2016improving} is proposing a technical
 solution for non-mining nodes where only miners hold the full state~(assuming
-that they can invest money in  random-access memory of sufficiently big
+that they can invest money in random-access memory of sufficiently big
 capacity), while other nodes are checking proofs of state transformations
 generated by miners, and size of a proof (in average and also in a worst case)
 is about $log(|s|)$ in regards with a state size $|s|$. Nevertheless, big state
@@ -328,7 +333,7 @@ $\vec{n}$ adjusting the formal fee prescription to the sensible values.
 
 The simplest way of assigning the $S(state)$ value is by making it constant.
 %That is, specifying the price of storage of 1 byte of data per one day. 
-However, as it is shown in the Appendix~\ref{apx:statesize}, this does not fully solve
+However, as it is shown in the Appendix~\ref{apx:statesize} \dnote{do we keep appendix?}, this does not fully solve
 the problem of limiting the state size. What is being controlled in this case,
 that is the rate at which the data is being submitted, but not the state size
 itself. One could also manually define the maximal size of the state for the
@@ -416,7 +421,7 @@ $S^{-1}(S^*)$.
 
 In this section we propose a concrete way to charge for state bytes consumed~(or released). There are few possible options for that. A user, for example, may specify lifetime for a coin during its creation and pay for it in advance, this is not very convenient for him though. Another option is to charge when coin is spent, or allow to spend a coin~(by anyone, presumably, a miner) when its value is overweighted by state fee. As a drawback, if coin is associated with a big value, it could live for very long, maybe without a reason. 
 
-We propose more convenient method of charging; we name it {\em scheduled payments}. In this scheme a user must set special predefined script for a coin~(otherwise a transaction and also a block containing it are invalid), which contains a user-specific logic~(we call it {\em regular script}) and a spending condition which allows anyone~(presumably, a miner) to create a transaction claiming this output, necessarily creating a the coin with the same guarding condition and a value not less than original minus a state fee. These two parts~(regular script and a fee charging condition) are connected by using the $\lor$ conjecture. We assume that $\alpha$ and $\beta$ are fixed. We also assume that subsidized period $sT$ is to be stored along with the coin by each validating node. Then a guarding script for the coin would be like:
+We propose more convenient method of charging; we name it {\em scheduled payments}. In this scheme a user must set special predefined script for a coin~(otherwise a transaction and also a block containing it are invalid), which contains a user-specific logic~(we call it {\em regular script}) and a spending condition which allows anyone~(presumably, a miner) to create a transaction claiming this output, necessarily creating a the coin with the same guarding condition and a value not less than original minus a state fee. These two parts~(regular script and a fee charging condition) are connected by using the $\lor$ conjecture. We assume that $\alpha$ and $\beta$ are fixed. We also assume that subsidized period $sT$ \dnote{sT in eq.1 is not a subsidized period! we don not have subsidized period term for now} is to be stored along with the coin by each validating node. Then a guarding script for the coin would be like:
 
 \begin{align}
 \begin{split}
@@ -475,8 +480,8 @@ along the coordinate axis --- these are the transactions which can be
 unambiguously distinguished by their type of the resource consumption. Their
 presence confirms our expectations on the nature of resource consumption, and
 serves as a justification of the proposed classification scheme. The space of
-transactions is split into three parts by the aforementioned vector $\mathbf{n}$ \dnote{where was in mentioned?}
-with the endpoint at the first momentum of the distribution.
+transactions is split into three parts by the aforementioned vector $\mathbf{n}$
+with the endpoint at the first momentum of the distribution. \dnote{for transactions that are not on axises. How to write it?}
 
 Another parameter of interest is the storage time. Using it directly
 from the blockchain is weakly relevant to our scheme because the participants are not incentivized to remove data from the state earlier rather than later.
@@ -503,7 +508,8 @@ them do not affect fees for most of transactions unambiguously attributed by a c
 \section{Conclusion}
 \label{sec:conslusion}
 
-In the present work we addressed the problem of growth of the state size for the 
+\dnote{Other benefits like fixed reward and coin recirculation?}
+In the present work we addressed the problem of growth of the state size for the
 blockchain systems. Proposed solution --- spacetime fees --- relies on the 
 economical factors rather than on solely the protocol itself. The idea of
 spacetime fees led us to the necessity of classification of the transactions by
