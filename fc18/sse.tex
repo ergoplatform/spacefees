@@ -80,12 +80,12 @@ state snapshot needed to validate transactions becomes a scarce resource
 eventually. Uncontrolled state size growth could lead
 to security issues. 
 %The problem is even more critical for blockchain systems used to store data~(such as votes, certificates, logs).
-We propose to add a new component to a transaction fee scheme, which is based on
-how much additional space will be needed for new objects created in result of
-transaction processing and for how long they will live in the state.
+We propose to add a new component to a transaction fee, which is based on
+how much additional space will be needed for new objects created as a result of
+transaction processing and for how long will they live in the state.
 We propose how to combine fees charged for different resources spent~(bandwidth, random-access state memory, processor cycles)
 in a composite fee and argue that such separation is reasonable, based on statistics from Ethereum network.
-We show a possible implementation for state-related fee charge, with regular payments to be charged by miners.
+We show a possible implementation for state-related fee in a form of regular payments to miners.
 
 %We provide three possible options towards implementing the new fee component, namely
 %\textit{prepaid outputs}, \textit{postpaid outputs} and \textit{scheduled
@@ -103,8 +103,8 @@ We show a possible implementation for state-related fee charge, with regular pay
 Bitcoin~\cite{Nakamoto2008} was introduced in 2008 by S. Nakamoto as a purely
 peer-to-peer version of electronic cash with a ledger written into blockchain
 data structure securely replicated by each network node. Security of the cryptocurrency 
-is relied on its mining process. If majority of miners are honest, then Bitcoin
-meets its security goals as formal analysis~\cite{Garay2015} shows. For work
+relies on its mining process. If majority of miners are honest, then Bitcoin
+meets its security goals as formal analysis~\cite{Garay2015} shows. For the work
 done a miner is claiming a reward which consists of two parts. First, some
 constant number of bitcoins are created out of thin air according to a
 predefined and hard-coded token emission schedule. Second, a miner claims fees
@@ -123,7 +123,7 @@ limiting miners {\em network} utilization. A rational miner does not
 include all the valid transactions into blocks as, due to the increased
 chances of orphaning a block, the cost of adding transactions to a block
 could not be ignored~\cite{andersen2013,rizun2015transaction}. As shown
-in~\cite{rizun2015transaction}, even in absence of block size limit 
+in~\cite{rizun2015transaction}, even in the absence of block size limit
 Bitcoin fee market is healthy and the miners surplus is maximized at a
 finite size of a block. Thus the miner is incentivized to produce
 a block of a limited size. Thus only transactions providing enough value to a miner will be included in a block. The 
@@ -134,9 +134,9 @@ Besides network utilization, transaction processing requires a miner
 to spend some {\em computational} resources.
 In Bitcoin the transactional language\cite{script} is very limited, thus
 a number of CPU cycles needed to process a transaction
-is strictly bounded and corresponding computational costs are not directly
-considered. In contrast, in cryptocurrencies supporting smart contract
-languages, such as~\cite{seijas2016scripting,tezosScript,solidity},
+is strictly bounded and corresponding computational costs are not included in the fee.
+In contrast, in cryptocurrencies supporting smart contract
+languages, such as Solidity~\cite{solidity} and Michelson~\cite{tezosScript},
 transaction processing may require a lot of computations, and
 corresponding costs are included in transaction fee. Analysis of this fee component is done for concrete systems
 in \cite{Earlz2017,luu2015demystifying}, and is out of scope of this paper.
@@ -149,7 +149,7 @@ also creates new outputs of user-defined values and protecting scripts.
 %money out of thin air and also claims transaction fees without referring to any
 %outputs~(a fee for a non-coinbase transaction is sum of claimed outputs values
 %minus sum of values for created outputs).
-A node is checking a transaction in
+A node checks a transaction in
 Bitcoin by using a set of unspent outputs~(UTXO). In other cryptocurrencies a
 representation of a {\em state} needed to validate and process an arbitrary
 transaction could be different~(for example, in Ethereum~\cite{ethyp} such
@@ -164,40 +164,44 @@ nodes~\cite{eth2016dos}. Similarly, in 2013 a denial-of-service attack against
 serialized transactions residing in a secondary storage~(HDD or SSD) was
 discovered in Bitcoin~\cite{vasek2014empirical}.
 
-In all the cryptocurrencies of today we are aware of, an element of the state once created 
-lives possibly forever without paying anything for that. This leads to perpetually increasing state~(we point
-to Bitcoin UTXO size as an
-example~\cite{utxoChart}). Moreover, state may grow fast during spam attacks, for
-example, 15 million outputs were quickly put into UTXO set during spam attacks
+In all the cryptocurrencies we are aware of, an element of the state once created
+lives possibly forever without paying anything for that. This leads to perpetually increasing
+state~(e.g. the Bitcoin UTXO size~\cite{utxoChart}). Moreover, state may grow fast during spam attacks, for
+example, 15 million outputs were quickly put into the UTXO set during spam attacks
 against Bitcoin in July 2015~\cite{bitcoin2015flood}, and most of these outputs
 are not spent yet. The paper~\cite{reyzin2016improving} is proposing a technical
 solution for non-mining nodes where only miners hold the full state~(assuming
-that they can invest money in random-access memory of sufficiently big
+that they can invest money in random-access memory of sufficiently large
 capacity), while other nodes are checking proofs of state transformations
 generated by miners, and size of a proof (in average and also in a worst case)
-is about $log(|s|)$ in regards with a state size $|s|$. Nevertheless, big state
+is about $log(|s|)$, where $|s|$ is a state size. Nevertheless, big state
 could lead to centralization of mining or SPV mining~\cite{spvMining}, and these
 concerns should be addressed. The question of internalizing the costs of
 state load was raised in~\cite{Moeser2015}, but to the best of our knowledge there has not been any
 practical solution yet. Also, there is an increasing demand to use a
-blockchain as a data storage, and storing permanently objects in the state
+blockchain as a data storage, and permanently storing objects in the state
 without a cleaning procedure is not a viable option.
 
 \subsection{Our contribution}
 
 In this paper we propose an economic solution to the problem of unreasonable state growth
-(such as spam attacks, or objects not being using anymore but still living in
+(such as spam attacks, or objects not being used anymore but still living in
 the validation state). The solution is a new mandatory fee component. A 
 user should pay a fee based on both the additional space needed to store objects
 created by a transaction, and also for lifetime of the new bytes. This model is
 typical for cloud storage services where users pay for gigabytes of data per
 month. 
 
-In the paper we also consider an approach to combine fees charged for different resources consumed by a transaction:
+In this paper we also consider an approach to combine fees charged for different resources consumed by a transaction:
 bandwidth, random-access memory to hold state, and processor cycles to process computations prescribed by the transaction.    
-We propose to charge only for a resource which consumed at most, so we can say about storage-oriented, network-oriented or computation-oriented transactions. We provide an evaluation of Ethereum usage data which shows that it is possible for this cryptocurrency to determine transaction type.
+We propose to charge only for a resource which is consumed most of all, so we can talk about storage-oriented,
+network-oriented or computation-oriented transactions. We provide an evaluation of Ethereum usage data which shows
+that it is possible for this cryptocurrency to determine transaction type.
 
-We propose a convenient way to charge for state memory consumption~(considering output lifetime also). Our approach is convenient for users who often do not know for how long they would like to store their outputs in the system. The approach is called scheduled payments, as we propose to charge periodically for the bytes of memory consumed.
+We propose a convenient way to charge for state memory consumption~(considering output lifetime also).
+Our approach is convenient for users who do not know for how long they would like to store their
+outputs in the system. The approach is called ``scheduled payments'', as we propose to charge periodically
+for the bytes of memory consumed.
 
 
 
@@ -514,43 +518,42 @@ where $S$ is the cost of the storage of byte of output in the state for one bloc
 not depend on state size in Ethereum. The estimations are quite approximate, while changing
 them does not affect fees for most of transactions unambiguously attributed by a concrete type of the resource consumption.
 
-\section{Discussion}
+\section{Concluding remarks}
 \label{sec:conslusion}
 
-In this work we address the problem of transaction fees in cryptocurrencies.
-We proposed to divide fee into three parts depending on type of utilized resource:
-network, computation or storage, and to charge only for a resource which
-consumed at most, thus dividing transactions into three categories: network-oriented,
-computation-oriented or storage-oriented. The analysis of Ethereum blockchain showed,
-that the distribution of transactions in such 3-dimensional space extend along the
-coordinate axis, allowing to unambiguously distinguish transactions by their
-type of the resource consumption. This evinced self-consistency of our treatment,
-and gave the reference parameters for possible implementation.
+Blockchain technology relies on miners, that safeguard the integrity of the blockchain
+in exchange for a revenue, that usually consist of two parts: block reward and transaction fees.
+Transaction fees are useful to limit miners resource usage and prevent spam.
 
-%that parts of the distribution in Figure~\ref{fig:eth} extend
-% along the coordinate axis
+While in most of cryptocurrencies transaction fees are addressed as solid objects,
+in the current paper we have showed that it is reasonable to divide the fee into three
+parts depending on type of the utilized resource: network, computation or storage.
+The analysis of Ethereum blockchain showed that transactions in such a 3D space are
+distributed close to one of the 3 axese, allowing us to
+unambiguously classify transactions by their consumed resource.
 
-The main attention was paid to calculation of storage fees. We argue that
-these fees should depend on space-time multiplication to make the state size
-more predictable and it can be achieved even without rigid restriction on the
-maximal state size. We proposed a concrete way to charge for state bytes consumed
+Storage part of the fee is already discussed in literature as a
+necessary tool to limit miners storage consumption~\cite{Moeser2015,reyzin2016improving}.
+This fee is required to make the state size more predictable, but its implementation is
+challenging since transaction lifetime is not known at the time when the transaction is
+created. In current paper we have described the concrete method to charge for state bytes consumed
 that can be fully implemented on the script level.
 
-Despite of the limitation of the state size growth, spacetime fees provides valuable side effects.
-Due to structure of this fees, coins with lost keys returns into circulation with constant rate.
-Although necessity of coin recirculation is still an open question, the need of lost coins recirculation
-has been widely discussed in the literature (e.g. \cite{gjermundrod2014recirculating,gjermundrod2016going})
-in regards with combat deflation that may eventually occur in cryptocurrencies with fixed supply and
+Besides limiting the size of the state, storage fee provides valuable side effects.
+Due to the structure of this fee, it provides a way to return coins with lost keys into circulation.
+Although necessity of coin recirculation is still an open question, it
+has been widely discussed in literature (e.g. \cite{gjermundrod2014recirculating,gjermundrod2016going})
+in connection with the prevention of the deflation, which may eventually occur in cryptocurrencies with fixed supply. Coin recorculation
 was even implemented in some cryptocurrencies\cite{freicoin}.
 
-Another important side effect of spacetime fee is that it provides static block reward
-for miners. Even when a predetermined number of coins will enter a circulation,
-spacetime fee will provide reward for miners, that does not depend on transaction
-fees, preventing destructive but profitable mining strategies described in
-~\cite{carlsten2016instability}.
+Another important side effect of the storage fee is that it provides an additional block reward
+for miners. Even when all coins are emitted and fixed block reward goes to zero,
+storage fee will provide reward for miners, that does not depend on transactions included into block.
+%that only depends on the fact of block creation,
+This will make destructive mining strategies described in ~\cite{carlsten2016instability} less profitable.
 
 With these factors taken into account, the ready-to-implement system is provided,
-which is believed to slove the problem of uncontrollable state growth, provide some
+which is believed to solve the problem of uncontrollable state growth, provide some
 valuable side effects by the same means, while preserving currently existing
 methods for transaction fees and code execution costs.
 
