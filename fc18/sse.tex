@@ -573,55 +573,55 @@ methods for transaction fees and code execution costs.
 \bibliographystyle{splncs03}
 \bibliography{sources.bib}
 
-\appendix
-
-\section{State size dynamics}
-\label{apx:statesize}
-For the primary analysis we assume that participants act honestly: they submit
-data if they need to do so and it is affordable; they do not in the opposite
-case. For the sake of simplicity, suppose that the time of storage of data
-block is fixed, and equal to $T$. In order to reduce the discrete stochastic
-model to continuous deterministic one, assume that the number of participants
-is large, and the typical size of the submitted data chunk is much less than
-characteristic pricing curve variation scale. The amount of data submitted to
-the state is changing continuously. At every given moment of time the users
-submit the data at some rate (say, MB/s) $f$, which is defined by the current
-price (participants submit more when cheap, and less when expensive). The
-current price is fully determined by the current state load $x$. After time
-interval $T$ data is erased from the state. The data is written into the state
-at rate $f(x(t))$, and erased at rate $f(x(t-T))$. Under these assumptions,
-the evolution of the state load is defined by the following equation:
-\begin{equation}
-    \frac{dx}{dt} = f(x(t))-f(x(t-T))\,.
-    \label{eq:dde0}
-\end{equation}
-If one measures time in the data block TTL $T$, the equation takes the form
-\begin{equation}
-    \dot{x} = f(x(t))-f(x(t-1))\,.
-    \label{eq:dde1}
-\end{equation}
-The equations of this type are called delay differential equations (DDE), and have
-been studied widely for the vast amount of control problems.
-
-Now few words about the function $f$, and how to convert it to the miner's
-income. What participants know is the pricing curve $S(x)$. For every value $P$
-of this function there is amount of people $N(S)$ who want to submit data and
-can afford it at time interval $T$. The function $N(S)$ is non-increasing, and
-going to zero for sufficiently large $S$ (every participant has maximal price he
-is ready to pay, and will also try to submit something if current price is
-lower; for sufficiently large price no one is ready to pay). In these notations
-$f(x)=N(S(x))$ (see inset on Figure~\ref{fig:rewards}), and the profit rate which
-miners get from current submissions is $y(t) = S(x(t))f(x(t))$.
-
-\subsection{Constant storage price}
-\subsection{State-dependent storage price}
-\begin{figure}
-    \includestandalone[width=\textwidth]{figures/dynamics}
-    \caption{
-        \label{fig:dynamics} Dynamics of the state size for various initial
-        rates. The numbers above the curves are the miners reward rates with
-        respect to maximal possible stationary rewards.
-    }
-\end{figure}
+%\appendix
+%
+%\section{State size dynamics}
+%\label{apx:statesize}
+%For the primary analysis we assume that participants act honestly: they submit
+%data if they need to do so and it is affordable; they do not in the opposite
+%case. For the sake of simplicity, suppose that the time of storage of data
+%block is fixed, and equal to $T$. In order to reduce the discrete stochastic
+%model to continuous deterministic one, assume that the number of participants
+%is large, and the typical size of the submitted data chunk is much less than
+%characteristic pricing curve variation scale. The amount of data submitted to
+%the state is changing continuously. At every given moment of time the users
+%submit the data at some rate (say, MB/s) $f$, which is defined by the current
+%price (participants submit more when cheap, and less when expensive). The
+%current price is fully determined by the current state load $x$. After time
+%interval $T$ data is erased from the state. The data is written into the state
+%at rate $f(x(t))$, and erased at rate $f(x(t-T))$. Under these assumptions,
+%the evolution of the state load is defined by the following equation:
+%\begin{equation}
+%    \frac{dx}{dt} = f(x(t))-f(x(t-T))\,.
+%    \label{eq:dde0}
+%\end{equation}
+%If one measures time in the data block TTL $T$, the equation takes the form
+%\begin{equation}
+%    \dot{x} = f(x(t))-f(x(t-1))\,.
+%    \label{eq:dde1}
+%\end{equation}
+%The equations of this type are called delay differential equations (DDE), and have
+%been studied widely for the vast amount of control problems.
+%
+%Now few words about the function $f$, and how to convert it to the miner's
+%income. What participants know is the pricing curve $S(x)$. For every value $P$
+%of this function there is amount of people $N(S)$ who want to submit data and
+%can afford it at time interval $T$. The function $N(S)$ is non-increasing, and
+%going to zero for sufficiently large $S$ (every participant has maximal price he
+%is ready to pay, and will also try to submit something if current price is
+%lower; for sufficiently large price no one is ready to pay). In these notations
+%$f(x)=N(S(x))$ (see inset on Figure~\ref{fig:rewards}), and the profit rate which
+%miners get from current submissions is $y(t) = S(x(t))f(x(t))$.
+%
+%\subsection{Constant storage price}
+%\subsection{State-dependent storage price}
+%\begin{figure}
+%    \includestandalone[width=\textwidth]{figures/dynamics}
+%    \caption{
+%        \label{fig:dynamics} Dynamics of the state size for various initial
+%        rates. The numbers above the curves are the miners reward rates with
+%        respect to maximal possible stationary rewards.
+%    }
+%\end{figure}
 
 \end{document}
