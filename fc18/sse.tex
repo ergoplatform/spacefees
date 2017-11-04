@@ -438,7 +438,7 @@ We propose more convenient method of charging; we name it {\em scheduled payment
 &\qquad tx.has\_output(value = out.value - S_c \cdot B \cdot sT, script = out.script))),
 \end{split}
 \end{align}
-where $height$ is a height of a block which contains a spending transaction, $out.height$ is a height when the output was created, $out.height$ and $out.script$ contain the output's value and spending script respectively, predicate $tx.has\_output()$ checks whether a spending transaction has an output with conditions given as the predicate arguments, and $S_c$ is the value of $S(state)$ when the coin created. As in Section~\ref{sec:algorithm}, constant $B$ is the output size.     
+where $height$ is a height of a block which contains a spending transaction; $out.height$ is a height when the output was created; $out.height$ and $out.script$ contain value and spending script of the output, respectively; $tx.has\_output()$ checks whether a spending transaction has an output with conditions given as the predicate arguments, and $S_c$ is the value of $S(state)$ when the coin created. As in Section~\ref{sec:algorithm}, constant $B$ is the output size.     
 
 
 \section{Evaluation}
@@ -521,8 +521,8 @@ in exchange for a revenue, that usually consist of two parts: block reward and t
 Transaction fees are useful to limit miners resource usage and prevent spam.
 
 While in most of cryptocurrencies a transaction fee is addressed as an atomic concept,
-in this paper we have shown that it is reasonable to divide the fee into three
-parts depending on type of the utilized resource: network, computation or storage.
+in this paper we have shown that it is reasonable to introduce the three
+components of a fee associated with resources utilized: network, computation or storage.
 The analysis of Ethereum blockchain shows that transactions in such a three-dimensional space are
 distributed close to one of the 3 axes, allowing us to
 unambiguously classify transactions by consumed resource.
