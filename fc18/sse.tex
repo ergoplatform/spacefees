@@ -283,13 +283,13 @@ should be charged for script execution, and all the others by the network load.
 This can be formalized as follows:
 \begin{equation}
     \operatorname{Fee}(tx) = \max\left(\alpha \cdot N_b(tx), \beta \cdot N_c(tx),
-    S(state) \cdot \sum_i (B_i \cdot sT_i) \right)\,.
+    S(state) \cdot \sum_i (B_i \cdot L_i) \right)\,.
     \label{eq:max}
 \end{equation}
 Here $\alpha$ and $\beta$ are the pricing coefficients, $N_b(tx)$ is the number
 of bytes in the transaction, which defines the network load, $N_c(tx)$ is the
 estimate of the computational cost of transaction, $S(state)$ is the cost of the
-storage of byte of output in the state for the unit of time, $sT_i$ is the time
+storage of byte of output in the state for the unit of time, $L_i$ is the time
 for which the output $i$ is being stored in the state, and $B_i$ is its size in
 bytes.
 
