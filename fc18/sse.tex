@@ -257,7 +257,7 @@ Second, it becomes obvious, especially with the development of smart contracts,
 that a transactional ``cost'' for the node can be more than just a storage:
 transactions can contain relatively complicated scripts which are meant to be
 executed by all the nodes in the network. The extreme and most famous example is
-the Ethereum network implementing the concept of the ``World Computer''~\cite{ethyp}. 
+the Ethereum network implementing the concept of the ``world computer''~\cite{ethyp}. 
 
 Third, there is the network load created by every transaction. If an output is
 created in one block and spent right in the next one, it provides almost zero
@@ -280,7 +280,7 @@ This can be formalized as follows:
 \end{equation}
 Here $\alpha$ and $\beta$ are the pricing coefficients, $N_b(tx)$ is the number
 of bytes in the transaction, which defines the network load, $N_c(tx)$ is the
-estimate of the computational cost of transaction, $S(state)$ is the cost of the
+estimation of the computational cost of transaction, $S(state)$ is the cost of the
 storage of byte of output in the state for the unit of time, $L_i$ is the time
 for which the output $i$ is being stored in the state, and $B_i$ is its size in
 bytes.
@@ -289,7 +289,7 @@ Since the time for the data to reside in the state is usually unknown,
 the right hand side of Eq.~\eqref{eq:max} cannot be deduced directly at
 transaction submission time. For this purpose we introduce a proposal for 
 scheduled payments later in Section~\ref{sec:scheduled}. The latter
-argument in Eq.~\eqref{eq:max} becomes dominant with time. Starting at the moment when it happens, the
+argument in Eq.~\eqref{eq:max} becomes dominant with time. Starting at the moment $sT$ since transaction when it happens, the
 fee is increasing at a constant rate (see Fig.~\ref{fig:max_t}). The possible implementation of this 
 algorithm is described in Section~\ref{sec:scheduled}.
 \begin{figure}
@@ -323,7 +323,7 @@ Assume for now, that for every transaction we know for how long the outputs will
 stored in the state. We will overcome this difficulty later. Based on
 Eq.~\eqref{eq:max}, we come up with the notion of space of transactions, which
 is three--dimensional in our case --- every transaction is defined by three
-numbers: $N_b(tx)$, $N_c(tx)$, $N_s(state,tx) = \sum_i (B_i \cdot sT_i)$. Eq.~\eqref{eq:max} is splitting 
+numbers: $N_b(tx)$, $N_c(tx)$, $N_s(state,tx) = \sum_i (B_i \cdot L_i)$. Eq.~\eqref{eq:max} is splitting 
 this space into three regions: network--oriented transactions, space--oriented transactions, 
 and computation--oriented transactions (see Figure~\ref{fig:max}). All the splitting 
 is governed by the direction of vector $\vec{n}$ which defines the line $\alpha N_b=\beta N_c=N_s$.
@@ -334,8 +334,8 @@ $\vec{n}$ adjusting the formal fee prescription to the sensible values.
 
 The simplest way of assigning the $S(state)$ value is by making it constant.
 %That is, specifying the price of storage of 1 byte of data per one day. 
-However, as it is shown in the Appendix~\ref{apx:statesize} \dnote{do we keep appendix?}, this does not fully solve
-the problem of limiting the state size. What is being controlled in this case,
+However, %as it is shown in the Appendix~\ref{apx:statesize} \dnote{do we keep appendix?}, 
+this does not fully solve the problem of limiting the state size. What is being controlled in this case,
 that is the rate at which the data is being submitted, but not the state size
 itself. One could also manually define the maximal size of the state for the
 network. This solution, in turn, has its own caveats. For example, once the
@@ -394,8 +394,9 @@ to be the same for all the network. To impose an upper bound on the state
 size, one can choose the pricing curve formally going to infinity at some finite
 state size. The rigid boundary can be provided by divergence higher than
 $1/(x_{max}-x)$. One can also try to estimate the optimal state size for a given
-differentiable pricing curve. In the continual with the assumptions
-described in the appendix, the data submission rate $N(S(x))$ is fully defined by the
+differentiable pricing curve. 
+%In the continual with the assumptions described in the appendix, 
+The data submission rate $N(S(x))$ is fully defined by the
 current storage price $S(x)$.  Rewards rate obtained by the miners for stable
 state size at price $S$ is given by $y = S \cdot N(S)$. An example is provided in
 Figure~\ref{fig:rewards}. First, it provides a possible method of measuring
