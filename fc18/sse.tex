@@ -100,26 +100,24 @@ constant number of bitcoins are created out of thin air according to a
 predefined and hard-coded token emission schedule. Second, a miner claims fees
 for all the transactions included into the block.
 
-As shown in~\cite{carlsten2016instability} constant block reward is an important
-part of Bitcoin protocol. Once a predetermined number of coins will enter a circulation
-and miners will be rewarded by transaction fees only, their rational behaviour will
+As shown in~\cite{carlsten2016instability} constant block rewards is an important
+part of the Bitcoin protocol. Once a predetermined number of coins will enter a circulation
+and miners will be rewarded by transaction fees only, their rational behavior will
 dramatically differ from the default mining strategy. It is still an open question, whether
 Bitcoin will meets its security goals in such circumstances, but at least number of
 orphaned blocks will increase making Bitcoin less friendly for regular users.
 
-A transaction fee is set by a user during transaction creation and are
-useful to limit miners resource usage and prevent spam. In most of
-blockchains users pays a fee proportional to transaction size,
+A transaction fee, which is set by a user during transaction creation, is
+useful to limit miners resource usage and prevent spam. In most cases a user pays a fee proportional to transaction size,
 limiting miners {\em network} utilization. A rational miner does not
 include all the valid transactions into blocks as, due to the increased
 chances of orphaning a block, the cost of adding transactions to a block
 could not be ignored~\cite{andersen2013,rizun2015transaction}. As shown
-in~\cite{rizun2015transaction}, even in absence of block size limit,
+in~\cite{rizun2015transaction}, even in absence of block size limit 
 Bitcoin fee market is healthy and the miners surplus is maximized at a
-finite quantity of block space. Thus the miner is incentivized to produce
-a block of a limited size. This means that only a subset of transactions
-which provides enough value to a miner will be included in a block. A
-paper~\cite{rizun2015transaction} provides a procedure to calculate
+finite size of a block. Thus the miner is incentivized to produce
+a block of a limited size. Thus only transactions providing enough value to a miner will be included in a block. The 
+paper~\cite{rizun2015transaction} provides a procedure to estimate
 transaction fee based on block propagation time.
 
 Besides of network utilization, transaction processing requires a miner
@@ -130,12 +128,10 @@ is strictly bounded and corresponding computational costs are not directly
 considered. In contrast, in cryptocurrencies supporting smart contract
 languages, such as~\cite{seijas2016scripting,tezosScript,solidity},
 transaction processing may require a lot of computations, and
-computational costs are included in transaction fee. As the calculation
-of a cost of computational resources utilization may vary for different
-blockchain systems, its analisys is done only for concrete systems yet
-\cite{Earlz2017,luu2015demystifying} and is out of scope of this paper.
+corresponding costs are included in transaction fee. Analysis of this fee component is done for concrete systems
+in \cite{Earlz2017,luu2015demystifying}, and is out of scope of this paper.
 
-In the present work we addressed the problem of miners {\em storage} resources utilization.
+In this work we address a problem of miners {\em storage} resources utilization.
 A regular transaction in Bitcoin fully spends outputs from previous transactions, and
 also creates new outputs of user-defined values and protecting scripts.
 %A notable and the only
@@ -153,7 +149,7 @@ random-access memory. Once it becomes too big to fit into RAM an attacker can
 perform denial-of-service attacks against cryptocurrency nodes. For example,
 during attacks on Ethereum in Autumn, 2016, an attacker added about 18 million
 accounts to the state~(whose size was less than 1 million accounts before the
-attack) and then performed succesful denial-of-service attacks against the
+attack) and then performed successful denial-of-service attacks against the
 nodes\cite{eth2016dos}. Similarly, in 2013 a denial-of-service attack against
 serialized transactions residing in a secondary storage~(HDD or SSD) was
 discovered in Bitcoin\cite{vasek2014empirical}.
