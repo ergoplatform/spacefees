@@ -449,11 +449,10 @@ In this section we experimentally study what could be the real-world
 ratio between the pricing coefficients $\alpha, \beta, S(state)$. To extract the realistic 
 values, and to verify validity of described transaction classification, the
 data from the Ethereum network is taken. We consider Ethereum as a good example,
-since all three components of the resource consumption are present in this cryptocurrency. The network load parameter $N_b(tx)$ is simply a transaction size; the state
-load $\Delta(tx)$ can be deduced from the blockchain by processing SSTORE
-and CREATE operations in transactions. To determine the
-computational load $N_c(tx)$, we count Ethereum gas consumed by transaction processing minus its storage cost and
-base cost, that is proportional to the transaction size.
+since all the three fee components are presented in this cryptocurrency. The network load parameter $N_b(tx)$ is simply a transaction size; the state
+load $\Delta(tx)$ can be deduced from the blockchain by extracting SSTORE
+and CREATE operations from the transaction $tx$~\footnote{Information on these operations can be found in the Ethereum Yellow Paper~\cite{ethyp}.}. To determine the
+computational load $N_c(tx)$, we count Ethereum gas consumed by transaction processing minus its storage cost and so-called base cost, which is proportional to the transaction size.
 
 \begin{figure}[h]
     \centering
@@ -486,17 +485,16 @@ base cost, that is proportional to the transaction size.
 The results of processing first $2\cdot10^6$ blocks in Ethereum network are presented in Figure~\ref{fig:eth}.
 Each point corresponds to a transaction.
 One can notice that parts of the distribution in Figure~\ref{fig:eth} extend
-along the coordinate axis --- these are the transactions which can be
+along the coordinate axis; these are the transactions which can be
 unambiguously distinguished by their type of the resource consumption. Their
 presence confirms our expectations on the nature of resource consumption, and
 serves as a justification of the proposed classification scheme. The space of
 transactions is split into three parts by the aforementioned vector $\mathbf{n}$
 with the endpoint at the first momentum of the transactions with at least 2
-non-zero components, and thus not evident affiliation to a concrete type.
+non-zero components. %, and thus not evident affiliation to a concrete type.
 
-Another parameter of interest is the storage time. Using it directly
-from the blockchain is weakly relevant to our scheme because the participants are not incentivized to remove data from the state earlier rather than later.
-However, we consider the delay between the data submission and a first request to be the reliable parameter reflecting the needs of the users.
+Another parameter of interest is a storage object lifetime. Associate it directly
+with smart contract data lifetime is weakly relevant to our scheme as the users are not incentivized to remove data from the state earlier rather than later. Thus we consider the delay between the data submission and a first request to be the reliable parameter reflecting the needs of the users.
 Analysis of Ethereum blockchain showed that in a lot of cases data stored in the state
 was touched by other transactions in the same block or few blocks after insertion.
 We filter out such cases as they do not show using blockchain as a storage. Excluding such short-lived data from our analysis
