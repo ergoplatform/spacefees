@@ -250,7 +250,7 @@ We shape our model with the following assumptions:
 As mentioned in the introduction, we develop a fee regime with having two goals
 in mind, namely incentivization of miners and spam prevention.  In this chapter
 we reason about the guiding  principles for the fee assignment, and end up with
-the example of a practical fee assignment rule.
+an example of a practical fee assignment rule.
 
 The evolution of the blockchain networks has demonstrated the main resources
 being used. First and the most important so far, the memory of the network nodes 
@@ -260,7 +260,7 @@ transaction, some state is needed~(for example, unspent outputs set in Bitcoin i
 to validate a transaction), and this state should reside in expensive random-access memory.   
 
 Second, it becomes obvious, especially with the development of smart contracts,
-that a transactional ``cost'' for the node can be more than just a storage:
+that a cost to process a transaction can be more than just a storage cost:
 transactions can contain relatively complicated scripts which are meant to be
 executed by all the nodes in the network. The extreme and most famous example is
 the Ethereum network implementing the concept of the ``world computer''~\cite{ethyp}. 
@@ -284,17 +284,16 @@ This can be formalized as follows:
     S(state) \cdot \sum_i (B_i \cdot L_i) \right)\,.
     \label{eq:max}
 \end{equation}
-Here $\alpha$ and $\beta$ are the pricing coefficients, $N_b(tx)$ is the number
-of bytes in the transaction, which defines the network load, $N_c(tx)$ is the
-estimation of the computational cost of transaction, $S(state)$ is the cost of the
-storage of byte of output in the state for the unit of time, $L_i$ is the time
-for which the output $i$ is being stored in the state, and $B_i$ is its size in
-bytes.
+Here $\alpha$ and $\beta$ are the pricing coefficients, $N_b(tx)$ is transaction size 
+which defines the network load, $N_c(tx)$ is the estimation of the computational 
+cost of transaction, $S(state)$ is the cost of the storage of byte of output in the 
+state for the unit of time, $L_i$ is the time for which the output $i$ is being stored 
+in the state, and $B_i$ is its size in bytes.
 
 Since the time for the data to reside in the state is usually unknown,
-the right hand side of Eq.~\eqref{eq:max} cannot be deduced directly at
+the third argument of $max()$ in Eq.~\eqref{eq:max} cannot be deduced directly at
 transaction submission time. For this purpose we introduce a proposal for 
-scheduled payments later in Section~\ref{sec:scheduled}. The latter
+scheduled payments later in Section~\ref{sec:scheduled}. The third
 argument in Eq.~\eqref{eq:max} becomes dominant with time. Starting at the moment $sT$ since transaction when it happens, the
 fee is increasing at a constant rate (see Fig.~\ref{fig:max_t}). The possible implementation of this 
 algorithm is described in Section~\ref{sec:scheduled}.
