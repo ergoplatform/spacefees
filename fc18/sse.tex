@@ -525,32 +525,31 @@ Blockchain technology relies on miners, that safeguard the integrity of the bloc
 in exchange for a revenue, that usually consist of two parts: block reward and transaction fees.
 Transaction fees are useful to limit miners resource usage and prevent spam.
 
-While in most of cryptocurrencies transaction fees are addressed as solid objects,
-in the current paper we have showed that it is reasonable to divide the fee into three
+While in most of cryptocurrencies a transaction fee is addressed as an atomic concept,
+in this paper we have shown that it is reasonable to divide the fee into three
 parts depending on type of the utilized resource: network, computation or storage.
-The analysis of Ethereum blockchain showed that transactions in such a 3D space are
-distributed close to one of the 3 axese, allowing us to
-unambiguously classify transactions by their consumed resource.
+The analysis of Ethereum blockchain shows that transactions in such a 3D space are
+distributed close to one of the 3 axes, allowing us to
+unambiguously classify transactions by consumed resource.
 
 Storage part of the fee is already discussed in literature as a
 necessary tool to limit miners storage consumption~\cite{Moeser2015,reyzin2016improving}.
-This fee is required to make the state size more predictable, but its implementation is
+This fee component is required to make the state size more predictable, but its implementation is
 challenging since transaction lifetime is not known at the time when the transaction is
 created. In current paper we have described the concrete method to charge for state bytes consumed
 that can be fully implemented on the script level.
 
 Besides limiting the size of the state, storage fee provides valuable side effects.
-Due to the structure of this fee, it provides a way to return coins with lost keys into circulation.
+In particular, it provides a way to return coins with lost keys into circulation.
 Although necessity of coin recirculation is still an open question, it
-has been widely discussed in literature (e.g. \cite{gjermundrod2014recirculating,gjermundrod2016going})
-in connection with the prevention of the deflation, which may eventually occur in cryptocurrencies with fixed supply. Coin recorculation
-was even implemented in some cryptocurrencies\cite{freicoin}.
+has been widely discussed in literature (e.g.~\cite{gjermundrod2014recirculating,gjermundrod2016going})
+in connection with the prevention of the deflation, which may eventually occur in cryptocurrencies with fixed supply. Enforced coin recirculation has been implemented in some cryptocurrencies~\cite{freicoin}.
 
 Another important side effect of the storage fee is that it provides an additional block reward
 for miners. Even when all coins are emitted and fixed block reward goes to zero,
 storage fee will provide reward for miners, that does not depend on transactions included into block.
 %that only depends on the fact of block creation,
-This will make destructive mining strategies described in ~\cite{carlsten2016instability} less profitable.
+This will make destructive mining strategies described in~\cite{carlsten2016instability} less profitable.
 
 With these factors taken into account, the ready-to-implement system is provided,
 which is believed to solve the problem of uncontrollable state growth, provide some
