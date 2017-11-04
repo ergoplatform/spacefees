@@ -21,6 +21,8 @@
 
 \usepackage{enumitem}
 
+\usepackage{float}
+
 \def\shownotes{1}
 \def\notesinmargins{0}
 
@@ -297,7 +299,7 @@ scheduled payments later in Section~\ref{sec:scheduled}. The third
 argument in Eq.~\eqref{eq:max} becomes dominant with time. Starting at a moment $sT$ since transaction when it happens, the
 fee is increasing at a constant rate (see Fig.~\ref{fig:max_t}). The possible implementation of this 
 algorithm is described in Section~\ref{sec:scheduled}.
-\begin{figure}
+\begin{figure}[h]
     \centering
     \begin{subfigure}[b]{.45\textwidth}
     \includestandalone[width=\textwidth]{figures/subsid}
@@ -370,7 +372,7 @@ nothing. As usual, a maximal outcome is in between.  The pricing policies
 described above are two particular cases of pricing curve (see
 Figure~\ref{fig:steps}). That is, we assume that the price of data storage in the
 state $S(state)$ varies with the current state load $x$. 
-\begin{figure} 
+\begin{figure}[h]
     \hfill 
     \begin{tikzpicture} 
         \draw[thick,-stealth] (0,0) -- (0,3) node [right]{$S(state)$}; 
@@ -416,7 +418,7 @@ allows the first ones to optimize signing strategy, and with this given the
 state size is automatically adjusted to the relatively predictable level
 $S^{-1} \cdot S^*$.
 
-\begin{figure}
+\begin{figure}[H]
     \includestandalone[width=\textwidth]{figures/rewards}
     \caption{
         \label{fig:rewards} Example of the rewards curve.
