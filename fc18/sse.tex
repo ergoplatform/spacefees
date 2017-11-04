@@ -145,17 +145,17 @@ representation of a {\em state} needed to validate and process an arbitrary
 transaction could be different~(for example, in Ethereum~\cite{ethyp} such
 structure is called the {\em world state} and fixed by the protocol). To process
 a transaction quickly, the state~(or most accessed part of it) should reside in
-random-access memory. Once it becomes too big to fit into RAM an attacker can
+expensive random-access memory. Once it becomes too big to fit into RAM an attacker can
 perform denial-of-service attacks against cryptocurrency nodes. For example,
 during attacks on Ethereum in Autumn, 2016, an attacker added about 18 million
 accounts to the state~(whose size was less than 1 million accounts before the
 attack) and then performed successful denial-of-service attacks against the
-nodes\cite{eth2016dos}. Similarly, in 2013 a denial-of-service attack against
+nodes~\cite{eth2016dos}. Similarly, in 2013 a denial-of-service attack against
 serialized transactions residing in a secondary storage~(HDD or SSD) was
-discovered in Bitcoin\cite{vasek2014empirical}.
+discovered in Bitcoin~\cite{vasek2014empirical}.
 
 In all the cryptocurrencies of today we are aware of, an element of the state once created 
-lives possibly forever without paying anything for that. This leads to continuously increasing state~(we point
+lives possibly forever without paying anything for that. This leads to perpetually increasing state~(we point
 to Bitcoin UTXO size as an
 example~\cite{utxoChart}). Moreover, state may grow fast during spam attacks, for
 example, 15 million outputs were quickly put into UTXO set during spam attacks
@@ -173,7 +173,7 @@ practical solution appeared yet. Also, there is an increasing demand to use a
 blockchain as a data storage, and storing permanently objects in the state
 without a cleaning procedure is not a viable option.
 
-\subsection{Our contributions}
+\subsection{Our contribution}
 
 In this paper we propose an economic solution to the problem of unreasonable state growth
 (such as spam attacks, or objects not being using anymore but still living in
