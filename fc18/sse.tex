@@ -480,7 +480,8 @@ operations.
     \label{fig:eth}
 \end{figure}
 
-The results of processing first $2\cdot10^6$ blocks in Ethereum network are presented in Figure~\ref{fig:eth}. Each point corresponds to a transaction.  One can notice that parts of the distribution in Figure~\ref{fig:eth} extend
+The results of processing first $2\cdot10^6$ blocks in Ethereum network are presented in Figure~\ref{fig:eth}. Each point corresponds to a transaction.
+One can notice that parts of the distribution in Figure~\ref{fig:eth} extend
 along the coordinate axis --- these are the transactions which can be
 unambiguously distinguished by their type of the resource consumption. Their
 presence confirms our expectations on the nature of resource consumption, and
@@ -515,10 +516,16 @@ them do not affect fees for most of transactions unambiguously attributed by a c
 
 In the present work we addressed the problem of transaction fees in cryptocurrencies.
 We proposed to devide fee into three parts depending on type of utilized resource:
-network, computation or storage. We proposed to charge only for a resource which
-consumed at most, thus deviding transactions into three categories: storage-oriented,
-network-oriented or computation-oriented. The analysis of Ethereum blockchain evinced
-self-consistency of our treatment, and gave the reference parameters for possible implementation.
+network, computation or storage, and to charge only for a resource which
+consumed at most, thus deviding transactions into three categories: network-oriented,
+computation-oriented or storage-oriented. The analysis of Ethereum blockchain showed,
+that the distribution of transactions in such 3-dimentional space extend along the
+coordinate axis, allowing to unambiguously distinguish transactions by their
+type of the resource consumption. This evinced self-consistency of our treatment,
+and gave the reference parameters for possible implementation.
+
+%that parts of the distribution in Figure~\ref{fig:eth} extend
+% along the coordinate axis
 
 The main attention was paid to calculation of storage fees. We argue that in
 this fees should depend on space-time multiplication to make the state size
