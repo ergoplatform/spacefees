@@ -452,9 +452,8 @@ data from the Ethereum network was taken. We consider Ethereum a good example,
 since all three components of the resource consumption are present in this cryptocurrency. The network load parameter $N_b(tx)$ is simply a transaction size; the state
 load $\Delta(tx)$ can be deduced from the blockchain by processing SSTORE
 and CREATE operations in transactions. To determine the
-computational load $N_c(tx)$, we count Ethereum gas consumed by transaction processing minus base cost proportional to the
-transaction size and the storage cost, which is proportional to number of SSTORE and CREATE
-operations.
+computational load $N_c(tx)$, we count Ethereum gas consumed by transaction processing minus its storage cost and
+base cost, that is proportional to the transaction size.
 
 \begin{figure}[h]
     \centering
@@ -484,14 +483,16 @@ operations.
     \label{fig:eth}
 \end{figure}
 
-The results of processing first $2\cdot10^6$ blocks in Ethereum network are presented in Figure~\ref{fig:eth}. Each point corresponds to a transaction.
+The results of processing first $2\cdot10^6$ blocks in Ethereum network are presented in Figure~\ref{fig:eth}.
+Each point corresponds to a transaction.
 One can notice that parts of the distribution in Figure~\ref{fig:eth} extend
 along the coordinate axis --- these are the transactions which can be
 unambiguously distinguished by their type of the resource consumption. Their
 presence confirms our expectations on the nature of resource consumption, and
 serves as a justification of the proposed classification scheme. The space of
 transactions is split into three parts by the aforementioned vector $\mathbf{n}$
-with the endpoint at the first momentum of the distribution. \dnote{for transactions that are not on axises. How to write it?}
+with the endpoint at the first momentum of the transactions with at least 2
+non-zero components, and thus not evident affiliation to a concrete type.
 
 Another parameter of interest is the storage time. Using it directly
 from the blockchain is weakly relevant to our scheme because the participants are not incentivized to remove data from the state earlier rather than later.
