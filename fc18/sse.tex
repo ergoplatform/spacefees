@@ -495,8 +495,8 @@ non-zero components. %, and thus not evident affiliation to a concrete type.
 
 Another parameter of interest is a storage object lifetime. Associate it directly
 with smart contract data lifetime is weakly relevant to our scheme as the users are not incentivized to remove data from the state earlier rather than later. Thus we consider the delay between the data submission and a first request to be the reliable parameter reflecting the needs of the users.
-Analysis of Ethereum blockchain showed that in a lot of cases data stored in the state
-was touched by other transactions in the same block or few blocks after insertion.
+Analysis of Ethereum blockchain shows that in a lot of cases data stored in the world state
+is touched by other transactions in the same block or few blocks after creation.
 We filter out such cases as they do not show using blockchain as a storage. Excluding such short-lived data from our analysis
 we estimate that average lifetime of a data object in Ethereum is 23,731 blocks~(or about 4 days
 considering 15 seconds average delay between blocks).
@@ -506,23 +506,23 @@ This gives the following estimation on the ratio between the pricing coefficient
 \begin{align}
 \begin{split}
 &\frac{\alpha}{\beta} \approx 7.7\cdot10^{-3} \\
-&\frac{\alpha}{S} \approx 6.7\cdot10^{-4}
+&\frac{\alpha}{S} \approx 6.7\cdot10^{-4},
 \end{split}
 \end{align}
 
 where $S$ is the cost of the storage of byte of output in the state for one block, which does
-not depend on state size in Ethereum. The estimations are quite approximate, while changing
+not depend on the state size in Ethereum. The estimations are quite approximate, while changing
 them do not affect fees for most of transactions unambiguously attributed by a concrete type of the resource consumption.
 
 \section{Discussion}
 \label{sec:conslusion}
 
-In the present work we addressed the problem of transaction fees in cryptocurrencies.
-We proposed to devide fee into three parts depending on type of utilized resource:
+In this work we address the problem of transaction fees in cryptocurrencies.
+We proposed to divide fee into three parts depending on type of utilized resource:
 network, computation or storage, and to charge only for a resource which
-consumed at most, thus deviding transactions into three categories: network-oriented,
+consumed at most, thus dividing transactions into three categories: network-oriented,
 computation-oriented or storage-oriented. The analysis of Ethereum blockchain showed,
-that the distribution of transactions in such 3-dimentional space extend along the
+that the distribution of transactions in such 3-dimensional space extend along the
 coordinate axis, allowing to unambiguously distinguish transactions by their
 type of the resource consumption. This evinced self-consistency of our treatment,
 and gave the reference parameters for possible implementation.
@@ -550,8 +550,8 @@ fees, preventing destructive but profitable mining strategies described in
 ~\cite{carlsten2016instability}.
 
 With these factors taken into account, the ready-to-implement system is provided,
-which is believed to slove the problem of uncontrollable state growth, provide some
-valuable side effecrs by the same means, while preserving currently existing
+which is believed to solve the problem of uncontrollable state growth, provide some
+valuable side effects by the same means, while preserving currently existing
 methods for transaction fees and code execution costs.
 
 
