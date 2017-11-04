@@ -74,7 +74,7 @@
 
 In this paper we study transaction fees in massively replicated open
 blockchain systems. In these systems, such as Bitcoin, memory to hold a current
-state snapshot needed to validate transactions becomes the most scarce resource \dnote{not the most, just one of}
+state snapshot needed to validate transactions becomes a scarce resource 
 eventually. Uncontrolled state size growth could lead
 to security issues. 
 The problem is even more critical for blockchain systems used to store
@@ -100,34 +100,32 @@ Finally, we provide an analysis on Ethereum network data which shows that clear 
 
 Bitcoin~\cite{Nakamoto2008} was introduced in 2008 by S. Nakamoto as a purely
 peer-to-peer version of electronic cash with a ledger written into blockchain
-data structure securely replicated by each network node. Security of the scheme
-is relied on mining process. If majority of miners are honest, then Bitcoin
+data structure securely replicated by each network node. Security of the cryptocurrency 
+is relied on its mining process. If majority of miners are honest, then Bitcoin
 meets its security goals as formal analysis~\cite{Garay2015} shows. For work
 done a miner is claiming a reward which consists of two parts. First, some
 constant number of bitcoins are created out of thin air according to a
 predefined and hard-coded token emission schedule. Second, a miner claims fees
 for all the transactions included into the block.
 
-As shown in~\cite{carlsten2016instability} constant block reward is an important
-part of Bitcoin protocol. Once a predetermined number of coins will enter a circulation
-and miners will be rewarded by transaction fees only, their rational behaviour will
+As shown in~\cite{carlsten2016instability} constant block rewards is an important
+part of the Bitcoin protocol. Once a predetermined number of coins will enter a circulation
+and miners will be rewarded by transaction fees only, their rational behavior will
 dramatically differ from the default mining strategy. It is still an open question, whether
 Bitcoin will meets its security goals in such circumstances, but at least number of
 orphaned blocks will increase making Bitcoin less friendly for regular users.
 
-A transaction fee is set by a user during transaction creation and are
-useful to limit miners resource usage and prevent spam. In most of
-blockchains users pays a fee proportional to transaction size,
+A transaction fee, which is set by a user during transaction creation, is
+useful to limit miners resource usage and prevent spam. In most cases a user pays a fee proportional to transaction size,
 limiting miners {\em network} utilization. A rational miner does not
 include all the valid transactions into blocks as, due to the increased
 chances of orphaning a block, the cost of adding transactions to a block
 could not be ignored~\cite{andersen2013,rizun2015transaction}. As shown
-in~\cite{rizun2015transaction}, even in absence of block size limit,
+in~\cite{rizun2015transaction}, even in absence of block size limit 
 Bitcoin fee market is healthy and the miners surplus is maximized at a
-finite quantity of block space. Thus the miner is incentivized to produce
-a block of a limited size. This means that only a subset of transactions
-which provides enough value to a miner will be included in a block. A
-paper~\cite{rizun2015transaction} provides a procedure to calculate
+finite size of a block. Thus the miner is incentivized to produce
+a block of a limited size. Thus only transactions providing enough value to a miner will be included in a block. The 
+paper~\cite{rizun2015transaction} provides a procedure to estimate
 transaction fee based on block propagation time.
 
 Besides of network utilization, transaction processing requires a miner
@@ -138,12 +136,10 @@ is strictly bounded and corresponding computational costs are not directly
 considered. In contrast, in cryptocurrencies supporting smart contract
 languages, such as~\cite{seijas2016scripting,tezosScript,solidity},
 transaction processing may require a lot of computations, and
-computational costs are included in transaction fee. As the calculation
-of a cost of computational resources utilization may vary for different
-blockchain systems, its analisys is done only for concrete systems yet
-\cite{Earlz2017,luu2015demystifying} and is out of scope of this paper.
+corresponding costs are included in transaction fee. Analysis of this fee component is done for concrete systems
+in \cite{Earlz2017,luu2015demystifying}, and is out of scope of this paper.
 
-In the present work we addressed the problem of miners {\em storage} resources utilization.
+In this work we address a problem of miners {\em storage} resources utilization.
 A regular transaction in Bitcoin fully spends outputs from previous transactions, and
 also creates new outputs of user-defined values and protecting scripts.
 %A notable and the only
@@ -157,17 +153,17 @@ representation of a {\em state} needed to validate and process an arbitrary
 transaction could be different~(for example, in Ethereum~\cite{ethyp} such
 structure is called the {\em world state} and fixed by the protocol). To process
 a transaction quickly, the state~(or most accessed part of it) should reside in
-random-access memory. Once it becomes too big to fit into RAM an attacker can
+expensive random-access memory. Once it becomes too big to fit into RAM an attacker can
 perform denial-of-service attacks against cryptocurrency nodes. For example,
 during attacks on Ethereum in Autumn, 2016, an attacker added about 18 million
 accounts to the state~(whose size was less than 1 million accounts before the
-attack) and then performed succesful denial-of-service attacks against the
-nodes\cite{eth2016dos}. Similarly, in 2013 a denial-of-service attack against
+attack) and then performed successful denial-of-service attacks against the
+nodes~\cite{eth2016dos}. Similarly, in 2013 a denial-of-service attack against
 serialized transactions residing in a secondary storage~(HDD or SSD) was
-discovered in Bitcoin\cite{vasek2014empirical}.
+discovered in Bitcoin~\cite{vasek2014empirical}.
 
 In all the cryptocurrencies of today we are aware of, an element of the state once created 
-lives possibly forever without paying anything for that. This leads to continuously increasing state~(we point
+lives possibly forever without paying anything for that. This leads to perpetually increasing state~(we point
 to Bitcoin UTXO size as an
 example~\cite{utxoChart}). Moreover, state may grow fast during spam attacks, for
 example, 15 million outputs were quickly put into UTXO set during spam attacks
@@ -179,20 +175,20 @@ capacity), while other nodes are checking proofs of state transformations
 generated by miners, and size of a proof (in average and also in a worst case)
 is about $log(|s|)$ in regards with a state size $|s|$. Nevertheless, big state
 could lead to centralization of mining or SPV mining~\cite{spvMining}, and these
-concerns should be addressed. Question of internalizing the costs of
-state load was raised in~\cite{Moeser2015}, but to our knowledge no
+concerns should be addressed. The question of internalizing the costs of
+state load was raised in~\cite{Moeser2015}, but to the best of our knowledge no
 practical solution appeared yet. Also, there is an increasing demand to use a
 blockchain as a data storage, and storing permanently objects in the state
 without a cleaning procedure is not a viable option.
 
-\subsection{Our contributions}
+\subsection{Our contribution}
 
 In this paper we propose an economic solution to the problem of unreasonable state growth
 (such as spam attacks, or objects not being using anymore but still living in
-the blockchain). The solution is a new mandatory fee component. We state that a
+the validation state). The solution is a new mandatory fee component. A 
 user should pay a fee based on both the additional space needed to store objects
 created by a transaction, and also for lifetime of the new bytes. This model is
-usual for cloud storage services where users pay for gigabytes of data per
+typical for cloud storage services where users pay for gigabytes of data per
 month. 
 
 In the paper we also consider an approach to combine fees charged for different resources consumed by a transaction:
