@@ -294,7 +294,7 @@ Since the time for the data to reside in the state is usually unknown,
 the third argument of $max()$ in Eq.~\eqref{eq:max} cannot be deduced directly at
 transaction submission time. For this purpose we introduce a proposal for 
 scheduled payments later in Section~\ref{sec:scheduled}. The third
-argument in Eq.~\eqref{eq:max} becomes dominant with time. Starting at the moment $sT$ since transaction when it happens, the
+argument in Eq.~\eqref{eq:max} becomes dominant with time. Starting at a moment $sT$ since transaction when it happens, the
 fee is increasing at a constant rate (see Fig.~\ref{fig:max_t}). The possible implementation of this 
 algorithm is described in Section~\ref{sec:scheduled}.
 \begin{figure}
@@ -361,12 +361,12 @@ is below 10MB, but some astronomical price for the luxury of storage above 10MB.
 So, formally it will be possible, but in fact, hardly ever used, with every
 usage bringing significant profit to miners. The generalization of this idea is
 to form the explicit dependence of price on the state load (it will referred to
-as ``pricing curve''). The good pricing curve must provide at least one stable
+as ``pricing curve''). A good pricing curve should provide at least one stable
 equilibrium of the state size; the minimal dependence on initial conditions (if
 possible), and high rewards for miners. The latter could serve as good
-optimization parameter. Extreme cases are zero price -- huge data submission --
-miners get nothing; and infinite price -- zero data submission -- miners get
-nothing. As usual, a maximal outcome is in between.  The pricing policies
+optimization parameter. Extreme cases are zero price with huge data submission and
+miners get nothing; and infinite price with zero data submission and miners get
+nothing. As usually, a maximal outcome is in between.  The pricing policies
 described above are two particular cases of pricing curve (see
 Figure~\ref{fig:steps}). That is, we assume that the price of data storage in the
 state $S(state)$ varies with the current state load $x$. 
