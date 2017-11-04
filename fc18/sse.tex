@@ -258,8 +258,6 @@ is limited resource. Blocks in the blockchain after processing are storing on a
 secondary storage, where a cost of a storage unit is low. In contrast, to validate a 
 transaction, some state is needed~(for example, unspent outputs set in Bitcoin is used 
 to validate a transaction), and this state should reside in expensive random-access memory.   
-An elegant solution has already been found recently~\cite{reyzin2016improving}, making state size growth irrelevant for 
-a non-mining full-node, a mining node still needs to store the state in full though.
 
 Second, it becomes obvious, especially with the development of smart contracts,
 that a transactional ``cost'' for the node can be more than just a storage:
