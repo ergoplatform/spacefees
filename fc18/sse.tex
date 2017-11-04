@@ -77,13 +77,13 @@ blockchain systems. In these systems, such as Bitcoin, memory to hold a current
 state snapshot needed to validate transactions becomes a scarce resource 
 eventually. Uncontrolled state size growth could lead
 to security issues. 
-The problem is even more critical for blockchain systems used to store
-data~(such as votes, certificates, logs). We propose to add a new component to a transaction fee scheme, which is based on
+%The problem is even more critical for blockchain systems used to store data~(such as votes, certificates, logs).
+We propose to add a new component to a transaction fee scheme, which is based on
 how much additional space will be needed for new objects created in result of
-transaction processing and for how long they will live in the state. We propose how to 
-combine fees charged for different resources spent~(bandwidth, random-access state memory, processor cycles) 
-in a composite fee. We show a possible implementation for charging state-related fee, with regular payments to be charged by miners.
-Finally, we provide an analysis on Ethereum network data which shows that clear separation by fee type is possible for this cryptocurrency.
+transaction processing and for how long they will live in the state.
+We propose how to combine fees charged for different resources spent~(bandwidth, random-access state memory, processor cycles)
+in a composite fee and argue that such a separation is reasonable based on statistics from Ethereum network.
+We show a possible implementation for charging state-related fee, with regular payments to be charged by miners.
 
 %We provide three possible options towards implementing the new fee component, namely
 %\textit{prepaid outputs}, \textit{postpaid outputs} and \textit{scheduled
