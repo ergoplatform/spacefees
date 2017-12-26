@@ -185,7 +185,7 @@ In this paper we propose an economic solution to the problem of unreasonable sta
 (such as spam attacks or objects not being used anymore but still living in
 the validation state). The solution is a new mandatory fee component. A 
 user should pay a fee based on both the additional space needed to store objects
-created by a transaction, and also for  the lifetime of the new bytes. This model is
+created by a transaction, and also for the lifetime of the new bytes. This model is
 typical for cloud storage services where users pay for gigabytes of data per
 month. 
 
@@ -275,9 +275,9 @@ for synchronization.
 
 A transaction fee should incorporate all the three components stated above.  As
 it is demonstrated in~\cite{Earlz2017}, assigning the fee to the storage as if
-it was execution of some code can lead to significant disbalance for rich enough
+it was an execution of some code can lead to significant disbalance for a rich enough
 scripting language (for example, for the data being written with an opcode other
-than conventional storage one).  Thus, we propose to charge for a component
+than the conventional storage one). Thus, we propose to charge for a component
 which demands more resources. That is, storage-oriented transactions should be
 charged for state memory consumption, the computation-oriented transactions
 should be charged for script execution, and all the others by the network load.
@@ -297,7 +297,7 @@ Since the time for the data to reside in the state is usually unknown,
 the third argument of $max()$ in Eq.~\eqref{eq:max} cannot be deduced directly at
 transaction submission time. For this purpose we introduce a proposal for 
 scheduled payments later in Section~\ref{sec:scheduled}. The third
-argument in Eq.~\eqref{eq:max} becomes dominant with time. Starting at a moment $sT$ since transaction when it happens, the
+argument in Eq.~\eqref{eq:max} becomes dominant with time. Starting from the moment $sT$ when the transaction happens, the
 fee is increasing at a constant rate (see Fig.~\ref{fig:max_t}). The possible implementation of this 
 algorithm is described in Section~\ref{sec:scheduled}.
 \begin{figure}[h]
@@ -351,13 +351,13 @@ state is kept (almost) full by the participants, it can be (almost) impossible
 to submit the transaction increasing the state size.  The time till it becomes
 possible is hardly predictable. 
 
-Preferable properties of the current state size could be formulated as follows:
+The desired properties of the current state size are the following:
 it should be predictable, stable, and below some externally given value (an upper
 bound on state size, being unique for the whole network). 
 
 Another natural question arising is whether the rigid state size restriction is
 necessary?  It is easy to imagine the situation where the formal possibility of
-exceeding the state is still present, but hardly ever being used. For example,
+exceeding the max state size is still present, but hardly ever being used. For example,
 if one wants to constrain the state size to 10MB, the possible solution is to
 set normal price for submitting data to store if the state size after submission
 is below 10MB, but some astronomical price for the luxury of storage above 10MB.
@@ -411,7 +411,8 @@ Figure~\ref{fig:rewards}. First, it provides a possible method of measuring
 explicit form of the function $N(S)$ in the model: one has to set up the price,
 and observe the static rewards. Second, one may wonder about the price $S^*$,
 optimal for the miners in terms of rewards. Obviously, it satisfies
-$N(S^*)+S^* \cdot N'(S^*)=0$, where prime is derivative with respect to price. As
+$N(S^*)+S^* \cdot N'(S^*)=0$, where prime %what is "prime" here?
+is derivative with respect to price. As
 usual, the optimal price here does not depend on the pricing policy, but rather
 the implicit property of the network. Having the price varying freely can be
 considered beneficial both for miners and for network as a whole, since it
@@ -429,9 +430,10 @@ $S^{-1} \cdot S^*$.
 \section{Scheduled Payments}
 \label{sec:scheduled}
 
-In this section we propose a concrete way to charge for state bytes consumed~(or released). There are few possible options for that. A user, for example, may specify lifetime for a coin during its creation and pay for it in advance, this is not very convenient for him though. Another option is to charge when coin is spent, or allow to spend a coin~(by anyone, presumably, a miner) when its value is overweighted by state fee. As a drawback, if coin is associated with a big value, it could live for very long time, maybe without a reason.
+In this section we propose a concrete method to charge for state bytes consumed~(or released). There is a couple of possible options for that. A user, for example, may specify lifetime for a coin during its creation and pay for it in advance, this is not very convenient for him though. Another option is to charge when coin is spent, or allow to spend a coin~(by anyone, presumably, a miner) when its value is overweighted by the state fee. As a drawback, if coin is associated with a big value, it could live for very long time, maybe without a reason.
 
-We propose more convenient method of charging; we name it {\em scheduled payments}. In this scheme a user must set special predefined script for a coin~(otherwise a transaction and also a block containing it are invalid), which contains a user-specific logic~(we call it a {\em regular script}) and a spending condition which allows anyone~(presumably, a miner) to create a transaction claiming this output, necessarily creating a the coin with the same guarding condition and a value not less than original minus a state fee. These two parts~(regular script and a fee charging condition) are connected by using the $\lor$ conjecture. We assume that $\alpha$ and $\beta$ are fixed. We also assume that subsidized period $sT$ is to be stored along with the coin by each validating node. Then a guarding script for the coin would be like:
+We propose more convenient method of charging; we name it {\em scheduled payments}. In this scheme a user must set a special predefined script for a coin~(otherwise a transaction and also a block containing it are invalid), which contains a user-specific logic~(we call it a {\em regular script}) and a spending condition which allows anyone~(presumably, a miner) to create a transaction claiming this output, necessarily creating a coin with the same guarding condition and a value not less than original minus a state fee. These two parts~(regular script and a fee charging condition) are connected by using the $\lor$ conjecture. We assume that $\alpha$ and $\beta$ are fixed. 
+We also assume that subsidized period $sT$ is to be stored along with the coin by each validating node. Then a guarding script for the coin would be like:
 
 \begin{align}
 \begin{split}
@@ -440,7 +442,9 @@ We propose more convenient method of charging; we name it {\em scheduled payment
 &\qquad tx.has\_output(value = out.value - S_c \cdot B \cdot sT, script = out.script))),
 \end{split}
 \end{align}
-where $height$ is a height of a block which contains a spending transaction; $out.height$ is a height when the output was created; $out.height$ and $out.script$ contain value and spending script of the output, respectively; $tx.has\_output()$ checks whether a spending transaction has an output with conditions given as the predicate arguments, and $S_c$ is the value of $S(state)$ when the coin created. As in Section~\ref{sec:algorithm}, constant $B$ is the output size.     
+where $height$ is a height of a block which contains a spending transaction; $out.height$ is a height when the output was created; $out.height$ and $out.script$ contain value and spending script of the output, respectively; $tx.has\_output()$ checks whether a spending transaction has an output with conditions given as the predicate arguments, and $S_c$ is the value of $S(state)$ when the coin is
+% or was???
+created. As in the Section~\ref{sec:algorithm}, the $B$ constant is the output size.     
 
 
 \section{Evaluation}
@@ -448,12 +452,12 @@ where $height$ is a height of a block which contains a spending transaction; $ou
 
 In this section we experimentally study what could be the real-world
 ratio between the pricing coefficients $\alpha, \beta, S(state)$. To extract the realistic 
-values, and to verify validity of described transaction classification, the
+values, and to verify the validity of the described transaction classification, the
 data from the Ethereum network is taken. We consider Ethereum as a good example,
-since all the three fee components are presented in this cryptocurrency. The network load parameter $N_b(tx)$ is simply a transaction size; the state
+since all the three fee components are present in this cryptocurrency. The network load parameter $N_b(tx)$ is simply a transaction size; the state
 load $\Delta(tx)$ can be deduced from the blockchain by extracting SSTORE
 and CREATE operations from the transaction $tx$~\footnote{Information on these operations can be found in the Ethereum Yellow Paper~\cite{ethyp}.}. To determine the
-computational load $N_c(tx)$, we count Ethereum gas consumed by transaction processing minus its storage cost and so-called base cost, which is proportional to the transaction size.
+computational load $N_c(tx)$, we count Ethereum gas consumed by the transaction processing minus its storage cost and the so-called base cost, which is proportional to the transaction size.
 
 \begin{figure}[h]
     \centering
@@ -479,7 +483,7 @@ computational load $N_c(tx)$, we count Ethereum gas consumed by transaction proc
         \label{fig:b}
     \end{subfigure}
 
-    \caption{Ethereum transactions differentiation by resource consumption}
+    \caption{Ethereum transactions classification by resource consumption}
     \label{fig:eth}
 \end{figure}
 
