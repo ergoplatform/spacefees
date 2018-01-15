@@ -176,8 +176,8 @@ could lead to centralization of mining or SPV mining~\cite{spvMining}, and these
 concerns should be addressed. The question of internalizing the costs of
 state load was raised in~\cite{Moeser2015}, but to the best of our knowledge there has not been any
 practical solution proposed yet. Also, there is an increasing demand to use a
-blockchain as a data storage, and permanently storing objects in the state
-without a cleaning procedure is not a viable option.
+blockchain as a data provider, and permanently storing objects in the state
+without a cleaning procedure in such a case is not a viable option.
 
 \subsection{Our contribution}
 
@@ -189,7 +189,7 @@ created by a transaction, and also for lifetime of the new bytes. This model is
 typical for cloud storage services where users pay for gigabytes of data per
 month. 
 
-In this paper we also consider an approach to combine fees charged for different resources consumed by a transaction:
+We also consider an approach to combine fees charged for different resources consumed by a transaction:
 bandwidth, random-access memory to hold state, and processor cycles to process computations prescribed by the transaction.    
 We propose to charge only for a resource which is consumed most of all, so we can talk about storage-oriented,
 network-oriented or computation-oriented transactions. We provide an evaluation of Ethereum usage data which shows
