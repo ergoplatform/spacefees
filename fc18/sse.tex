@@ -109,8 +109,8 @@ for all the transactions included into the block.
 
 As shown in~\cite{carlsten2016instability} constant block rewards are an important
 part of the Bitcoin protocol. Once a predetermined number of coins will enter the circulation
-and miners will be rewarded by transaction fees only, their rational behavior will
-dramatically differ from the default mining strategy. It is still an open question, whether
+and miners will be rewarded by transaction fees only, their rational behavior could be
+different from the default mining strategy. It is still an open question whether
 Bitcoin will meet its security goals in such circumstances, but at least number of
 orphaned blocks will increase making Bitcoin less friendly for regular users.
 
@@ -239,7 +239,7 @@ We shape our model with the following assumptions:
   %    is taking all the rewards, he can include his own transactions in it for free
   \item \label{a:utxo} a transaction creates new objects called outputs and spends outputs from previous transactions. Thus the state needed for transaction validation consists of an unspent outputs. The size of the state then is the sum of sizes of all the unspent outputs.
   \item \label{a:state} single transaction does not change size of the state significantly
-  \item \label{a:miner} it is profitable for a miner to collect fees from unspent outputs. 
+  \item \label{a:miner} it is always profitable for a miner to collect fees from unspent outputs. 
   %\item For simplicity, we assume that a block is of a finite size but all the
   %    transactions a miner has at a moment of block generation can be packed
   %    into it, if otherwise is not stated explicitly
@@ -255,9 +255,9 @@ We shape our model with the following assumptions:
 \section{An algorithm for the fee assignment}
 \label{sec:algorithm}
 
-As mentioned in the introduction, we develop a fee regime having two goals
+As mentioned in the introduction, we develop a fee regime with two goals
 in mind, namely incentivization of miners and spam prevention.  In this chapter
-we reason about the guiding  principles for the fee assignment, and end up with
+we reason about the guiding  principles for the fee assignment and end up with
 an example of a practically useful fee assignment rule.
 
 The evolution of blockchain networks has demonstrated the main resources
@@ -293,7 +293,7 @@ This can be formalized as follows:
     \label{eq:max}
 \end{equation}
 Here $\alpha$ and $\beta$ are the pricing coefficients, $N_b(tx)$ is transaction size 
-which defines the network load, $N_c(tx)$ is the estimation of the computational 
+which defines the network load, $N_c(tx)$ is the estimate of the computational 
 cost of transaction, $S(state)$ is the cost of the storing one byte in the 
 state for the unit of time~(a block), $L_i$ is the time for which the output $i$ is being stored 
 in the state, and $B_i$ is its size in bytes.
@@ -302,7 +302,8 @@ Since the time for the data to reside in the state is usually unknown,
 the third argument of $\max()$ in Eq.~\eqref{eq:max} cannot be deduced directly at
 transaction submission time. For this purpose we introduce a notion of 
 scheduled payments later in Section~\ref{sec:scheduled}. The third
-argument in Eq.~\eqref{eq:max} becomes dominant over time. Starting from the moment $sT$ when the transaction happens, the
+argument in Eq.~\eqref{eq:max} becomes dominant over time. Starting from the
+moment $sT$ since the transaction happened, the
 fee is increasing at a constant rate (see Fig.~\ref{fig:max_t}). The possible implementation of this 
 algorithm is described in Section~\ref{sec:scheduled}.
 \begin{figure}[h]
@@ -323,7 +324,7 @@ algorithm is described in Section~\ref{sec:scheduled}.
         \caption{Fee differentiation by resource consumption}
 \end{figure}
 
-The remaining questions here are the following. First, what are the guiding principles for
+The remaining questions here are the following. First, what are guiding principles for
 choosing $\alpha$, $\beta$ and $S(\cdot)$? Second, how can one estimate $N_c(tx)$?
 For Turing--complete languages second can only be solved by executing
 script in general case. The problem is known as the worst case execution
@@ -332,18 +333,18 @@ first question is answered below.
 
 \subsection{Choice of the relative values of $\alpha$, $\beta$, $S(state)$}
 
-Assume for now, that for every transaction we know the duration of outputs'
-storage in the state. We will overcome this difficulty later. Based on
-Eq.~\eqref{eq:max}, one can introduce the space of transactions, which
-is three--dimensional in our case --- every transaction is defined by three
+Assume for now that for every transaction we know for how long its outputs will
+be stored in the state. We will overcome this difficulty later. Based on
+Eq.~\eqref{eq:max}, one can introduce the space of transactions, which is
+three--dimensional in our case --- every transaction is defined by three
 numbers: $N_b(tx)$, $N_c(tx)$, $N_s(state,tx) = \sum_i (B_i \cdot L_i)$.
-Eq.~\eqref{eq:max} divides
-this space into three regions: network--oriented transactions, space--oriented transactions, 
-and computation--oriented transactions (see Figure~\ref{fig:max}). The splitting
-is governed by the direction of vector $\vec{n}$ which defines the line $\alpha
-N_b=\beta N_c=S(state)N_s$.
-Varying the coefficients $\alpha$ and $\beta$, one can change the direction of
-$\vec{n}$ adjusting the formal fee prescription to the sensible values.
+Eq.~\eqref{eq:max} divides this space into three regions: network--oriented
+transactions, space--oriented transactions, and computation--oriented
+transactions (see Figure~\ref{fig:max}). The splitting is governed by the
+direction of vector $\vec{n}$ which defines the line $\alpha N_b=\beta
+N_c=S(state)N_s$.  Varying the coefficients $\alpha$ and $\beta$, one can change
+the direction of $\vec{n}$ adjusting the formal fee prescription to the sensible
+values.
 
 \subsection{Choice of $S(state)$}
 
